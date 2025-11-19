@@ -47,7 +47,7 @@ export default function VerifyEmailPage() {
             </Link>
             
             <p className="text-xs text-center text-muted-foreground">
-              Didn't receive the email? Check your spam folder or contact support.
+              Didn&apos;t receive the email? Check your spam folder or contact support.
             </p>
           </CardFooter>
         </Card>

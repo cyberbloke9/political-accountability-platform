@@ -5,13 +5,11 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { 
   LogIn, 
   UserPlus, 
   LogOut, 
-  User, 
   LayoutDashboard,
   Scale,
   Users,
