@@ -18,8 +18,6 @@ export function useRealtimeVoting(verificationId: string) {
   useEffect(() => {
     if (!verificationId) return
 
-    let channel: RealtimeChannel
-
     const fetchVotes = async () => {
       try {
         const { data, error } = await supabase
@@ -51,7 +49,7 @@ export function useRealtimeVoting(verificationId: string) {
     fetchVotes()
 
     // Subscribe to realtime vote updates
-    channel = supabase
+    const channel: RealtimeChannel = supabase
       .channel(`votes-${verificationId}`)
       .on(
         'postgres_changes',
@@ -62,7 +60,6 @@ export function useRealtimeVoting(verificationId: string) {
           filter: `verification_id=eq.${verificationId}`,
         },
         (payload) => {
-          console.log('New vote:', payload)
           const newVote = payload.new as { vote_type: string }
           
           setVoteCount((prev) => ({

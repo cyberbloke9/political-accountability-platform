@@ -44,7 +44,7 @@ export function useAuth(): UseAuthReturn {
 
   const signUp = async (email: string, password: string, username: string) => {
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -66,7 +66,7 @@ export function useAuth(): UseAuthReturn {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
@@ -84,7 +84,7 @@ export function useAuth(): UseAuthReturn {
       await supabase.auth.signOut()
       router.push('/')
     } catch (error) {
-      console.error('Sign out error:', error)
+      // Sign out error
     }
   }
 
