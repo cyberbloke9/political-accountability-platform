@@ -1,0 +1,119 @@
+@startuml Political Accountability Platform - Component Architecture
+
+!define RECTANGLE class
+
+skinparam component {
+  BackgroundColor<<service>> LightBlue
+  BackgroundColor<<database>> LightGreen
+  BackgroundColor<<external>> LightYellow
+  BorderColor Black
+}
+
+package "Frontend Layer" {
+  [Next.js Web Application] <<frontend>> as WebApp
+}
+
+package "Backend Services Layer" {
+  [Authentication Service] <<service>> as AuthService
+  [Promise Management Service] <<service>> as PromiseService
+  [Verification Pipeline Service] <<service>> as VerificationService
+  [Quality Assessment Service] <<service>> as QualityService
+  [Citizen Scoring Service] <<service>> as ScoringService
+  [Fraud Detection Service] <<service>> as FraudService
+  [Community Voting Service] <<service>> as VotingService
+  [Evidence Storage Service] <<service>> as StorageService
+  [Notification Service] <<service>> as NotificationService
+}
+
+package "Data Layer" {
+  database "PostgreSQL Database" <<database>> as PostgresDB {
+    [Users Table]
+    [Promises Table]
+    [Verifications Table]
+    [Votes Table]
+    [Evidence Files Table]
+    [Activity Logs Table]
+    [Materialized Views]
+  }
+}
+
+package "External Services" {
+  cloud "Cloudflare R2" <<external>> as R2Storage
+  cloud "Google Vision API" <<external>> as VisionAPI
+  cloud "SendGrid API" <<external>> as SendGrid
+}
+
+' Frontend to Backend connections
+WebApp --> AuthService : JWT Authentication
+WebApp --> PromiseService : CRUD Operations
+WebApp --> VerificationService : Submit/Review
+WebApp --> VotingService : Cast Votes
+WebApp --> ScoringService : Fetch Citizen Scores
+
+' Service to Service dependencies
+AuthService --> PostgresDB : User Auth Data
+AuthService --> NotificationService : Send Verification Emails
+
+PromiseService --> PostgresDB : Promise CRUD
+PromiseService --> ScoringService : Update User Points
+
+VerificationService --> PostgresDB : Verification Data
+VerificationService --> QualityService : Assess Quality
+VerificationService --> FraudService : Fraud Check
+VerificationService --> StorageService : Store Evidence
+VerificationService --> VotingService : Manage Votes
+VerificationService --> ScoringService : Update Scores
+
+QualityService --> PostgresDB : Quality Metrics
+QualityService --> VerificationService : Quality Score
+
+FraudService --> VisionAPI : Reverse Image Search
+FraudService --> PostgresDB : Fraud Flags
+FraudService --> NotificationService : Alert Admins
+
+VotingService --> PostgresDB : Vote Records
+VotingService --> ScoringService : Vote Weight Calculation
+
+ScoringService --> PostgresDB : Read/Write Scores
+ScoringService --> NotificationService : Score Milestones
+
+StorageService --> R2Storage : Upload/Retrieve Media
+StorageService --> PostgresDB : File Metadata
+
+NotificationService --> SendGrid : Send Emails
+NotificationService --> PostgresDB : Notification Logs
+
+' Legend
+legend right
+  |= Symbol |= Description |
+  | <<service>> | Backend Service Component |
+  | <<database>> | PostgreSQL Database |
+  | <<external>> | External Third-Party Service |
+  | <<frontend>> | Next.js Frontend Application |
+endlegend
+
+note right of PostgresDB
+  PostgreSQL with:
+  - JSONB for flexible metadata
+  - Materialized views for scoring
+  - GIN indexes for full-text search
+  - 10-minute refresh for scores
+end note
+
+note right of FraudService
+  Rule-based fraud detection:
+  - Velocity limits
+  - Coordinated voting detection
+  - Image verification via Vision API
+  - Duplicate content detection
+end note
+
+note right of ScoringService
+  Citizen Scoring Logic:
+  - Batch updates every 10 minutes
+  - Title progression system
+  - Anti-gaming mechanisms
+  - Weighted voting calculation
+end note
+
+@enduml

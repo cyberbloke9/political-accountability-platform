@@ -1,0 +1,214 @@
+sequenceDiagram
+    participant Client
+    participant API as Backend API
+    participant DB as PostgreSQL
+    participant Email as SendGrid
+    participant TOTP as TOTP Provider
+
+    %% Flow 1: User Registration
+    Note over Client,Email: Flow 1: User Registration
+
+    Client->>API: POST /api/v1/auth/register<br/>{email, username, password}
+    
+    activate API
+    API->>API: Validate input (Zod schema)
+    API->>DB: Check if email exists
+    
+    alt Email already exists
+        DB-->>API: User found
+        API-->>Client: 409 Conflict<br/>{error: "Email already registered"}
+    else Email available
+        DB-->>API: No existing user
+        API->>API: Hash password (Argon2)
+        API->>DB: INSERT INTO users<br/>(email, username, password_hash)
+        DB-->>API: User created (UUID returned)
+        
+        API->>API: Generate verification token (JWT, 1hr expiry)
+        API->>Email: Send verification email<br/>with magic link
+        Email-->>API: Email sent
+        
+        API-->>Client: 201 Created<br/>{message: "Check email for verification"}
+    end
+    deactivate API
+
+    %% Flow 2: Email Verification
+    Note over Client,Email: Email Verification (part of registration)
+    
+    Client->>API: GET /api/v1/auth/verify-email?token=xxx
+    activate API
+    API->>API: Verify JWT token
+    
+    alt Invalid or expired token
+        API-->>Client: 401 Unauthorized<br/>{error: "Invalid token"}
+    else Valid token
+        API->>DB: UPDATE users SET is_verified=true
+        DB-->>API: User verified
+        API-->>Client: 200 OK<br/>{message: "Email verified successfully"}
+    end
+    deactivate API
+
+    %% Flow 3: Login with JWT
+    Note over Client,DB: Flow 2: Login (Standard JWT)
+
+    Client->>API: POST /api/v1/auth/login<br/>{email, password}
+    
+    activate API
+    API->>DB: SELECT user WHERE email=?
+    DB-->>API: User record
+    
+    alt User not found
+        API-->>Client: 401 Unauthorized<br/>{error: "Invalid credentials"}
+    else User found
+        API->>API: Verify password (Argon2)
+        
+        alt Password incorrect
+            API->>DB: Log failed attempt
+            API-->>Client: 401 Unauthorized<br/>{error: "Invalid credentials"}
+        else Password correct
+            alt Email not verified
+                API-->>Client: 403 Forbidden<br/>{error: "Email not verified"}
+            else Email verified
+                API->>API: Generate Access Token<br/>(JWT, 15min expiry)
+                API->>API: Generate Refresh Token<br/>(JWT, 7day expiry)
+                API->>DB: Store refresh token hash
+                DB-->>API: Token stored
+                
+                API-->>Client: 200 OK<br/>{accessToken, refreshToken, user}
+            end
+        end
+    end
+    deactivate API
+
+    %% Flow 4: Token Refresh
+    Note over Client,DB: Flow 3: Token Refresh
+
+    Client->>API: POST /api/v1/auth/refresh<br/>{refreshToken}
+    
+    activate API
+    API->>API: Verify refresh token (JWT)
+    
+    alt Invalid or expired token
+        API-->>Client: 401 Unauthorized<br/>{error: "Invalid refresh token"}
+    else Valid token
+        API->>DB: Check if token exists in DB
+        
+        alt Token not found or revoked
+            DB-->>API: Token invalid
+            API-->>Client: 401 Unauthorized<br/>{error: "Token revoked"}
+        else Token valid
+            DB-->>API: Token found
+            API->>API: Generate new Access Token<br/>(JWT, 15min expiry)
+            API->>API: Generate new Refresh Token<br/>(JWT, 7day expiry)
+            API->>DB: Replace old refresh token
+            DB-->>API: Token updated
+            
+            API-->>Client: 200 OK<br/>{accessToken, refreshToken}
+        end
+    end
+    deactivate API
+
+    %% Flow 5: MFA Enrollment
+    Note over Client,TOTP: Flow 4: MFA Enrollment (TOTP)
+
+    Client->>API: POST /api/v1/auth/mfa/enroll<br/>Header: Authorization Bearer <accessToken>
+    
+    activate API
+    API->>API: Verify access token
+    
+    alt Token invalid
+        API-->>Client: 401 Unauthorized
+    else Token valid
+        API->>TOTP: Generate TOTP secret
+        TOTP-->>API: Secret key
+        
+        API->>API: Generate QR code (base32 secret)
+        API->>DB: Store MFA secret (encrypted)
+        DB-->>API: Secret stored
+        
+        API-->>Client: 200 OK<br/>{qrCodeUrl, secret, backupCodes[]}
+    end
+    deactivate API
+
+    Client->>API: POST /api/v1/auth/mfa/verify-enrollment<br/>{totpCode}
+    
+    activate API
+    API->>TOTP: Verify TOTP code
+    
+    alt Code invalid
+        TOTP-->>API: Invalid
+        API-->>Client: 400 Bad Request<br/>{error: "Invalid code"}
+    else Code valid
+        TOTP-->>API: Valid
+        API->>DB: UPDATE users SET mfa_enabled=true
+        DB-->>API: MFA activated
+        API-->>Client: 200 OK<br/>{message: "MFA enabled"}
+    end
+    deactivate API
+
+    %% Flow 6: Login with MFA
+    Note over Client,TOTP: Flow 5: Login with MFA
+
+    Client->>API: POST /api/v1/auth/login<br/>{email, password}
+    
+    activate API
+    API->>DB: SELECT user WHERE email=?
+    DB-->>API: User with mfa_enabled=true
+    
+    API->>API: Verify password (Argon2)
+    
+    alt Password correct
+        API->>API: Generate temporary session token
+        API-->>Client: 200 OK<br/>{requiresMfa: true, sessionToken}
+    end
+    deactivate API
+
+    Client->>API: POST /api/v1/auth/mfa/verify<br/>{sessionToken, totpCode}
+    
+    activate API
+    API->>API: Verify session token
+    API->>DB: Get user MFA secret
+    DB-->>API: MFA secret
+    
+    API->>TOTP: Verify TOTP code
+    
+    alt Code invalid
+        TOTP-->>API: Invalid
+        API-->>Client: 401 Unauthorized<br/>{error: "Invalid MFA code"}
+    else Code valid
+        TOTP-->>API: Valid
+        API->>API: Generate Access + Refresh Tokens
+        API->>DB: Store refresh token
+        DB-->>API: Token stored
+        
+        API-->>Client: 200 OK<br/>{accessToken, refreshToken, user}
+    end
+    deactivate API
+
+    %% Password Reset Flow
+    Note over Client,Email: Bonus: Password Reset Flow
+
+    Client->>API: POST /api/v1/auth/forgot-password<br/>{email}
+    activate API
+    API->>DB: Check if user exists
+    alt User exists
+        DB-->>API: User found
+        API->>API: Generate reset token (JWT, 1hr)
+        API->>Email: Send reset link
+        Email-->>API: Email sent
+    end
+    API-->>Client: 200 OK<br/>{message: "Check email"}
+    deactivate API
+
+    Client->>API: POST /api/v1/auth/reset-password<br/>{token, newPassword}
+    activate API
+    API->>API: Verify reset token
+    alt Valid token
+        API->>API: Hash new password (Argon2)
+        API->>DB: UPDATE users SET password_hash=?
+        DB-->>API: Password updated
+        API->>DB: Revoke all refresh tokens
+        API-->>Client: 200 OK<br/>{message: "Password reset"}
+    else Invalid token
+        API-->>Client: 401 Unauthorized
+    end
+    deactivate API
