@@ -22,8 +22,6 @@ export function useRealtimeLeaderboard(limit: number = 100) {
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    let channel: RealtimeChannel
-
     const fetchLeaderboard = async () => {
       try {
         const { data, error } = await supabase
@@ -46,7 +44,7 @@ export function useRealtimeLeaderboard(limit: number = 100) {
     fetchLeaderboard()
 
     // Subscribe to realtime updates
-    channel = supabase
+    const channel: RealtimeChannel = supabase
       .channel('leaderboard-changes')
       .on(
         'postgres_changes',
@@ -55,8 +53,7 @@ export function useRealtimeLeaderboard(limit: number = 100) {
           schema: 'public',
           table: 'citizen_scores_mv',
         },
-        (payload) => {
-          console.log('Leaderboard update:', payload)
+        () => {
           // Refetch leaderboard on any change
           fetchLeaderboard()
         }
