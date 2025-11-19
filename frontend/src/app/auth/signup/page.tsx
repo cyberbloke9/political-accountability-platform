@@ -13,7 +13,7 @@ import { Footer } from '@/components/layout/Footer'
 import { toast } from 'sonner'
 import { Scale, Loader2 } from 'lucide-react'
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter()
   const { signIn } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
@@ -166,9 +166,9 @@ export default function LoginPage() {
               </Button>
 
               <p className="text-sm text-center text-muted-foreground">
-                Don't have an account?{' '}
-                <Link href="/auth/signup" className="text-primary hover:underline font-medium">
-                  Sign up
+                Already have an account?{' '}
+                <Link href="/auth/login" className="text-primary hover:underline font-medium">
+                  Sign in
                 </Link>
               </p>
             </CardFooter>
