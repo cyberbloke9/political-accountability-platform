@@ -1,0 +1,40 @@
+{
+  "name": "political-accountability-platform",
+  "version": "1.0.0",
+  "description": "A citizen-driven platform to track political promises with multi-dimensional community verification and gamification for transparent political accountability across India",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "build": "npm run build --workspaces",
+    "build:frontend": "npm run build --workspace=frontend",
+    "build:backend": "npm run build --workspace=backend",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "clean": "npm run clean --workspaces && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "keywords": [
+    "political-accountability",
+    "civic-tech",
+    "promise-tracking",
+    "india",
+    "transparency",
+    "verification"
+  ],
+  "author": "Prithvi Putta",
+  "license": "MIT"
+}
