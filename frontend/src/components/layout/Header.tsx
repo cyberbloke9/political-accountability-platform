@@ -1,24 +1,34 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
-import { 
-  LogIn, 
-  UserPlus, 
-  LogOut, 
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import {
+  LogIn,
+  UserPlus,
+  LogOut,
   LayoutDashboard,
   Scale,
   Users,
-  TrendingUp
+  TrendingUp,
+  Menu
 } from 'lucide-react'
 
 export function Header() {
   const pathname = usePathname()
   const { user, isAuthenticated, signOut, loading } = useAuth()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const navigation = [
     { name: 'Promises', href: '/promises', icon: Scale },
@@ -30,17 +40,20 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
+      <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <Scale className="h-6 w-6 text-primary" />
           <span className="font-bold text-lg hidden sm:inline-block">
             Accountability
           </span>
+          <span className="font-bold text-lg sm:hidden">
+            PAP
+          </span>
         </Link>
 
-        {/* Navigation */}
-        <nav className="flex items-center space-x-6 ml-8 flex-1">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-6 flex-1 ml-8">
           {navigation.map((item) => {
             const Icon = item.icon
             return (
@@ -56,8 +69,8 @@ export function Header() {
           })}
         </nav>
 
-        {/* Auth Section */}
-        <div className="flex items-center space-x-4">
+        {/* Desktop Auth Section */}
+        <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
           {loading ? (
             <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
           ) : isAuthenticated && user ? (
@@ -65,14 +78,14 @@ export function Header() {
               {/* Dashboard Link */}
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm">
-                  <LayoutDashboard className="h-4 w-4 mr-2" />
-                  Dashboard
+                  <LayoutDashboard className="h-4 w-4 lg:mr-2" />
+                  <span className="hidden lg:inline">Dashboard</span>
                 </Button>
               </Link>
 
               {/* User Menu */}
               <Separator orientation="vertical" className="h-6" />
-              
+
               <Link href="/profile" className="flex items-center space-x-2">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary text-primary-foreground">
@@ -87,27 +100,139 @@ export function Header() {
                 onClick={signOut}
                 className="text-muted-foreground hover:text-foreground"
               >
-                <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
+                <LogOut className="h-4 w-4 lg:mr-2" />
+                <span className="hidden lg:inline">Sign Out</span>
               </Button>
             </>
           ) : (
             <>
               <Link href="/auth/login">
                 <Button variant="ghost" size="sm">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Login
+                  <LogIn className="h-4 w-4 lg:mr-2" />
+                  <span className="hidden lg:inline">Login</span>
                 </Button>
               </Link>
               <Link href="/auth/signup">
                 <Button size="sm">
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  Sign Up
+                  <UserPlus className="h-4 w-4 lg:mr-2" />
+                  <span className="hidden lg:inline">Sign Up</span>
                 </Button>
               </Link>
             </>
           )}
         </div>
+
+        {/* Mobile Menu Button */}
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="sm">
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <SheetHeader>
+              <SheetTitle className="flex items-center space-x-2">
+                <Scale className="h-6 w-6 text-primary" />
+                <span>Accountability</span>
+              </SheetTitle>
+            </SheetHeader>
+
+            <div className="flex flex-col space-y-6 mt-6">
+              {/* Mobile Navigation Links */}
+              <nav className="flex flex-col space-y-4">
+                {navigation.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={'text-base font-medium transition-colors hover:text-primary flex items-center space-x-3 p-2 rounded-md ' + (isActive(item.href) ? 'bg-muted text-foreground' : 'text-muted-foreground')}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span>{item.name}</span>
+                    </Link>
+                  )
+                })}
+              </nav>
+
+              <Separator />
+
+              {/* Mobile Auth Section */}
+              <div className="flex flex-col space-y-4">
+                {loading ? (
+                  <div className="h-10 w-full rounded-md bg-muted animate-pulse" />
+                ) : isAuthenticated && user ? (
+                  <>
+                    {/* User Info */}
+                    <Link
+                      href="/profile"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center space-x-3 p-3 rounded-md hover:bg-muted"
+                    >
+                      <Avatar className="h-10 w-10">
+                        <AvatarFallback className="bg-primary text-primary-foreground">
+                          {user.email?.[0].toUpperCase() || 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium">Profile</span>
+                        <span className="text-xs text-muted-foreground">{user.email}</span>
+                      </div>
+                    </Link>
+
+                    {/* Dashboard */}
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button variant="outline" className="w-full justify-start" size="lg">
+                        <LayoutDashboard className="h-5 w-5 mr-3" />
+                        Dashboard
+                      </Button>
+                    </Link>
+
+                    {/* Sign Out */}
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={() => {
+                        signOut()
+                        setMobileMenuOpen(false)
+                      }}
+                      className="w-full justify-start text-muted-foreground"
+                    >
+                      <LogOut className="h-5 w-5 mr-3" />
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button variant="outline" size="lg" className="w-full justify-start">
+                        <LogIn className="h-5 w-5 mr-3" />
+                        Login
+                      </Button>
+                    </Link>
+                    <Link
+                      href="/auth/signup"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button size="lg" className="w-full justify-start">
+                        <UserPlus className="h-5 w-5 mr-3" />
+                        Sign Up
+                      </Button>
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   )
