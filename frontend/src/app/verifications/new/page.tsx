@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { Header } from '@/components/layout/Header'
@@ -19,7 +20,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
-import { Loader2, Upload, X, FileText, Plus, ExternalLink } from 'lucide-react'
+import { Loader2, Upload, X, FileText, Plus } from 'lucide-react'
 
 const VERDICTS = [
   {
@@ -71,10 +72,11 @@ export default function NewVerificationPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   // Redirect if not authenticated
-  if (!isAuthenticated) {
-    router.push('/auth/login')
-    return null
-  }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/auth/login')
+    }
+  }, [isAuthenticated, router])
 
   // Fetch promises for selection
   useEffect(() => {
@@ -263,7 +265,7 @@ export default function NewVerificationPage() {
       ]
 
       // Insert verification
-      const { data: verification, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from('verifications')
         .insert({
           promise_id: formData.promise_id,
@@ -314,7 +316,7 @@ export default function NewVerificationPage() {
               <CardHeader>
                 <CardTitle>Verification Details</CardTitle>
                 <CardDescription>
-                  Submit evidence and your verdict on a promise's status
+                  Submit evidence and your verdict on a promise&apos;s status
                 </CardDescription>
               </CardHeader>
 
@@ -463,10 +465,15 @@ export default function NewVerificationPage() {
                       {evidenceFiles.map((file, index) => (
                         <div key={index} className="relative border rounded-lg p-2">
                           {evidenceFilePreviews[index] ? (
-                            <img
-                              src={evidenceFilePreviews[index]}
-                              alt={file.name}
-                              className="w-full h-32 object-cover rounded"
+                            <div className="relative w-full h-32">
+                              <Image
+                                src={evidenceFilePreviews[index]}
+                                alt={file.name}
+                                fill
+                                className="object-cover rounded"
+                                unoptimized
+                              />
+                            </div>
                             />
                           ) : (
                             <div className="w-full h-32 bg-muted rounded flex items-center justify-center">
