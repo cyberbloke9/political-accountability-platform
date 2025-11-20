@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar, Eye, FileText, ExternalLink } from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
 
 interface PromiseCardProps {
   promise: {

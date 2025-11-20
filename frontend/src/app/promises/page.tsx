@@ -1,28 +1,35 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { PromiseCard } from '@/components/promises/PromiseCard'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Search, Filter, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
+interface Promise {
+  id: string
+  politician_name: string
+  promise_text: string
+  promise_date: string
+  category?: string
+  status: string
+  view_count?: number
+  verification_count?: number
+  created_at: string
+}
+
 export default function PromisesPage() {
-  const [promises, setPromises] = useState<any[]>([])
+  const [promises, setPromises] = useState<Promise[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
 
-  useEffect(() => {
-    fetchPromises()
-  }, [statusFilter])
-
-  const fetchPromises = async () => {
+  const fetchPromises = useCallback(async () => {
     setLoading(true)
     try {
       let query = supabase
@@ -43,7 +50,11 @@ export default function PromisesPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [statusFilter])
+
+  useEffect(() => {
+    fetchPromises()
+  }, [fetchPromises])
 
   const filteredPromises = promises.filter((promise) =>
     promise.politician_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
