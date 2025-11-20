@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/button'
@@ -168,7 +169,7 @@ export default function PromiseDetailPage() {
             <Scale className="h-16 w-16 text-muted-foreground mx-auto" />
             <h2 className="text-2xl font-bold">Promise not found</h2>
             <p className="text-muted-foreground">
-              The promise you're looking for doesn't exist or has been removed
+              The promise you&apos;re looking for doesn&apos;t exist or has been removed
             </p>
             <Button onClick={() => router.push('/promises')}>
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -223,11 +224,13 @@ export default function PromiseDetailPage() {
             <CardContent className="space-y-6">
               {/* Promise Image */}
               {promise.image_url && (
-                <div className="rounded-lg overflow-hidden">
-                  <img
+                <div className="rounded-lg overflow-hidden relative w-full h-96">
+                  <Image
                     src={promise.image_url}
                     alt="Promise related image"
-                    className="w-full h-auto max-h-96 object-cover"
+                    fill
+                    className="object-cover"
+                    unoptimized
                   />
                 </div>
               )}

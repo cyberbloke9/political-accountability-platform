@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { Header } from '@/components/layout/Header'
@@ -433,11 +434,13 @@ export default function NewPromisePage() {
                       </p>
                     </div>
                   ) : (
-                    <div className="relative">
-                      <img
+                    <div className="relative w-full h-64">
+                      <Image
                         src={imagePreview}
                         alt="Preview"
-                        className="w-full h-64 object-cover rounded-lg"
+                        fill
+                        className="object-cover rounded-lg"
+                        unoptimized
                       />
                       <Button
                         type="button"
