@@ -51,7 +51,7 @@ interface PromiseData {
   promise_text: string
 }
 
-export default function NewVerificationPage() {
+function NewVerificationPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user, isAuthenticated } = useAuth()
@@ -546,5 +546,20 @@ export default function NewVerificationPage() {
 
       <Footer />
     </div>
+  )
+}
+
+export default function NewVerificationPageWrapper() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    }>
+      <NewVerificationPage />
+    </Suspense>
   )
 }
