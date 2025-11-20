@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -29,33 +29,27 @@ export default function DebugPage() {
   const testSupabaseConnection = async () => {
     setConnectionTest({ status: 'testing' })
     try {
-      console.log('Testing Supabase connection...')
-      console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
-      console.log('Has anon key:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-
       // Try to fetch from a public table
       const { data, error } = await supabase.from('users').select('count').limit(1)
 
       if (error) {
-        console.error('Supabase error:', error)
         setConnectionTest({
           status: 'error',
           message: 'Connection failed',
           error: error.message,
         })
       } else {
-        console.log('Supabase connection successful!', data)
         setConnectionTest({
           status: 'success',
-          message: 'Successfully connected to Supabase!',
+          message: `Successfully connected to Supabase! Found ${data?.length || 0} records.`,
         })
       }
-    } catch (err: any) {
-      console.error('Connection test error:', err)
+    } catch (err) {
+      const error = err as Error
       setConnectionTest({
         status: 'error',
         message: 'Unexpected error',
-        error: err.message || String(err),
+        error: error.message || String(err),
       })
     }
   }
