@@ -45,7 +45,7 @@ const VERDICTS = [
   },
 ]
 
-interface Promise {
+interface PromiseData {
   id: string
   politician_name: string
   promise_text: string
@@ -59,7 +59,7 @@ export default function NewVerificationPage() {
   const [evidenceFiles, setEvidenceFiles] = useState<File[]>([])
   const [evidenceFilePreviews, setEvidenceFilePreviews] = useState<string[]>([])
 
-  const [promises, setPromises] = useState<Promise[]>([])
+  const [promises, setPromises] = useState<PromiseData[]>([])
   const [loadingPromises, setLoadingPromises] = useState(true)
 
   const [formData, setFormData] = useState({
