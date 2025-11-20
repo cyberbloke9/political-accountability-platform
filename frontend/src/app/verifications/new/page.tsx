@@ -476,7 +476,6 @@ export default function NewVerificationPage() {
                                 unoptimized
                               />
                             </div>
-                            />
                           ) : (
                             <div className="w-full h-32 bg-muted rounded flex items-center justify-center">
                               <FileText className="h-8 w-8 text-muted-foreground" />
