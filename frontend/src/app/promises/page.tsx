@@ -17,7 +17,7 @@ interface Promise {
   promise_text: string
   promise_date: string
   category?: string
-  status: string
+  status: 'pending' | 'in_progress' | 'fulfilled' | 'broken' | 'stalled'
   view_count?: number
   verification_count?: number
   created_at: string
