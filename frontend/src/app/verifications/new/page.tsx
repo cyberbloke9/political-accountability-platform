@@ -279,8 +279,6 @@ export default function NewVerificationPage() {
           evidence_urls: allEvidenceUrls.length > 0 ? allEvidenceUrls : null,
           status: 'pending',
         })
-        .select()
-        .single()
 
       if (insertError) {
         toast.error('Failed to submit verification: ' + insertError.message)
