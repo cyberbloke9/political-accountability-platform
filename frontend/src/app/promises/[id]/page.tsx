@@ -119,7 +119,7 @@ export default function PromiseDetailPage() {
     } finally {
       setLoadingVerifications(false)
     }
-  }, [params.id])
+  }, [params.id, fetchVerifications])
 
   useEffect(() => {
     const fetchPromise = async () => {
@@ -168,7 +168,7 @@ export default function PromiseDetailPage() {
     }
 
     fetchPromise()
-  }, [params.id])
+  }, [params.id, fetchVerifications])
 
   const handleShare = async () => {
     const url = window.location.href
