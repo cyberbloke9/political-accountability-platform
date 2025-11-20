@@ -119,7 +119,7 @@ export default function PromiseDetailPage() {
     } finally {
       setLoadingVerifications(false)
     }
-  }, [params.id, fetchVerifications])
+  }, [params.id])
 
   useEffect(() => {
     const fetchPromise = async () => {
