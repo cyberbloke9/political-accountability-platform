@@ -12,7 +12,7 @@ import { Scale, TrendingUp, FileText, Vote, Trophy, Activity, Plus } from 'lucid
 import Link from 'next/link'
 
 export default function DashboardPage() {
-  const { user, isAuthenticated, loading } = useAuth()
+  const { isAuthenticated, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
