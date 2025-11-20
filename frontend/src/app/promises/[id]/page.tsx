@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
+import { VerificationCard } from '@/components/verifications/VerificationCard'
 
 interface Promise {
   id: string
@@ -40,6 +41,21 @@ interface Promise {
   created_by: string
   creator?: {
     username: string
+  }
+}
+
+interface Verification {
+  id: string
+  verdict: 'fulfilled' | 'broken' | 'in_progress' | 'stalled'
+  evidence_text: string
+  evidence_urls?: string[]
+  status: 'pending' | 'approved' | 'rejected'
+  created_at: string
+  upvotes: number
+  downvotes: number
+  submitter?: {
+    username: string
+    citizen_score: number
   }
 }
 
@@ -77,6 +93,33 @@ export default function PromiseDetailPage() {
   const [promise, setPromise] = useState<Promise | null>(null)
   const [loading, setLoading] = useState(true)
   const [verificationCount, setVerificationCount] = useState(0)
+  const [verifications, setVerifications] = useState<Verification[]>([])
+  const [loadingVerifications, setLoadingVerifications] = useState(false)
+
+  const fetchVerifications = useCallback(async () => {
+    if (!params.id) return
+
+    setLoadingVerifications(true)
+    try {
+      const { data, error } = await supabase
+        .from('verifications')
+        .select(`
+          *,
+          submitter:users!submitted_by(username, citizen_score)
+        `)
+        .eq('promise_id', params.id)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+
+      setVerifications(data || [])
+    } catch (error) {
+      console.error('Error fetching verifications:', error)
+      toast.error('Failed to load verifications')
+    } finally {
+      setLoadingVerifications(false)
+    }
+  }, [params.id])
 
   useEffect(() => {
     const fetchPromise = async () => {
@@ -114,6 +157,8 @@ export default function PromiseDetailPage() {
           .update({ view_count: (promiseData.view_count || 0) + 1 })
           .eq('id', params.id)
 
+        // Fetch verifications
+        fetchVerifications()
       } catch (error) {
         toast.error('Failed to load promise')
         console.error('Error fetching promise:', error)
@@ -376,10 +421,22 @@ export default function PromiseDetailPage() {
                       </Button>
                     </Link>
                   </div>
-                  {/* Verification list will be added in Phase 4 */}
-                  <p className="text-sm text-muted-foreground py-8 text-center">
-                    Verification details coming soon...
-                  </p>
+
+                  {loadingVerifications ? (
+                    <div className="flex justify-center py-12">
+                      <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+                    </div>
+                  ) : (
+                    <div className="space-y-4 mt-6">
+                      {verifications.map((verification) => (
+                        <VerificationCard
+                          key={verification.id}
+                          verification={verification}
+                          onVoteChange={fetchVerifications}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </CardContent>
