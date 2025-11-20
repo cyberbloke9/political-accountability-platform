@@ -101,6 +101,10 @@ export default function NewVerificationPage() {
     fetchPromises()
   }, [])
 
+  if (!isAuthenticated) {
+    return null
+  }
+
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}
 
