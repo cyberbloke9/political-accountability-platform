@@ -1,10 +1,19 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { CheckCircle2, XCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { CheckCircle2, XCircle, Loader2 } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 
 export default function DebugPage() {
+  const [connectionTest, setConnectionTest] = useState<{
+    status: 'idle' | 'testing' | 'success' | 'error'
+    message?: string
+    error?: string
+  }>({ status: 'idle' })
+
   const envVars = {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -17,18 +26,51 @@ export default function DebugPage() {
     return { status: 'configured', color: 'text-success', icon: CheckCircle2 }
   }
 
+  const testSupabaseConnection = async () => {
+    setConnectionTest({ status: 'testing' })
+    try {
+      console.log('Testing Supabase connection...')
+      console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+      console.log('Has anon key:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+
+      // Try to fetch from a public table
+      const { data, error } = await supabase.from('users').select('count').limit(1)
+
+      if (error) {
+        console.error('Supabase error:', error)
+        setConnectionTest({
+          status: 'error',
+          message: 'Connection failed',
+          error: error.message,
+        })
+      } else {
+        console.log('Supabase connection successful!', data)
+        setConnectionTest({
+          status: 'success',
+          message: 'Successfully connected to Supabase!',
+        })
+      }
+    } catch (err: any) {
+      console.error('Connection test error:', err)
+      setConnectionTest({
+        status: 'error',
+        message: 'Unexpected error',
+        error: err.message || String(err),
+      })
+    }
+  }
+
   return (
     <div className="container py-16 max-w-4xl">
       <h1 className="text-4xl font-bold mb-8">Environment Variables Debug</h1>
 
       <Alert className="mb-8">
         <AlertDescription>
-          This page shows the actual environment variables loaded in your browser.
-          If any are missing or show placeholder values, the deployment needs to be rebuilt.
+          This page shows the actual environment variables loaded in your browser and tests the Supabase connection.
         </AlertDescription>
       </Alert>
 
-      <div className="space-y-4">
+      <div className="space-y-4 mb-8">
         {Object.entries(envVars).map(([key, value]) => {
           const { status, color, icon: Icon } = getStatus(value)
           return (
@@ -63,7 +105,51 @@ export default function DebugPage() {
         })}
       </div>
 
-      <Card className="mt-8 border-primary">
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Supabase Connection Test</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Click the button below to test if your app can actually connect to Supabase.
+          </p>
+
+          <Button
+            onClick={testSupabaseConnection}
+            disabled={connectionTest.status === 'testing'}
+            className="w-full"
+          >
+            {connectionTest.status === 'testing' && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            {connectionTest.status === 'testing' ? 'Testing...' : 'Test Connection'}
+          </Button>
+
+          {connectionTest.status === 'success' && (
+            <Alert className="border-success">
+              <CheckCircle2 className="h-4 w-4 text-success" />
+              <AlertDescription className="text-success">
+                {connectionTest.message}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {connectionTest.status === 'error' && (
+            <Alert className="border-destructive">
+              <XCircle className="h-4 w-4 text-destructive" />
+              <AlertDescription>
+                <div className="space-y-2">
+                  <div className="font-semibold text-destructive">{connectionTest.message}</div>
+                  <div className="text-sm">{connectionTest.error}</div>
+                  <div className="text-xs mt-2">Check the browser console for more details.</div>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card className="border-primary">
         <CardHeader>
           <CardTitle>Expected Values</CardTitle>
         </CardHeader>
@@ -79,22 +165,6 @@ export default function DebugPage() {
           </div>
         </CardContent>
       </Card>
-
-      <Alert className="mt-8 border-warning">
-        <AlertDescription>
-          <strong>If values are missing or incorrect:</strong>
-          <ol className="list-decimal ml-6 mt-2 space-y-1">
-            <li>Go to Vercel Dashboard → Your Project → Settings → Environment Variables</li>
-            <li>Verify all three variables are set correctly</li>
-            <li>Go to Deployments tab</li>
-            <li>Click the three dots on the latest deployment</li>
-            <li>Select Redeploy</li>
-            <li>UNCHECK Use existing Build Cache</li>
-            <li>Click Redeploy</li>
-            <li>Wait for deployment to complete, then refresh this page</li>
-          </ol>
-        </AlertDescription>
-      </Alert>
     </div>
   )
 }
