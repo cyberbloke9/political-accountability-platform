@@ -11,23 +11,55 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { toast } from 'sonner'
-import { Scale, Loader2 } from 'lucide-react'
+import { Scale, Loader2, Check, X } from 'lucide-react'
 
 export default function SignupPage() {
   const router = useRouter()
-  const { signIn } = useAuth()
+  const { signUp } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
+    username: '',
     password: '',
+    confirmPassword: '',
   })
   const [errors, setErrors] = useState({
     email: '',
+    username: '',
     password: '',
+    confirmPassword: '',
   })
 
+  const getPasswordStrength = (password: string): number => {
+    let strength = 0
+    if (password.length >= 8) strength++
+    if (password.length >= 12) strength++
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++
+    if (/[0-9]/.test(password)) strength++
+    if (/[^a-zA-Z0-9]/.test(password)) strength++
+    return strength
+  }
+
+  const getPasswordStrengthLabel = (strength: number): string => {
+    const labels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong']
+    return labels[strength] || 'Very Weak'
+  }
+
+  const getPasswordStrengthColor = (strength: number): string => {
+    const colors = [
+      'bg-destructive',
+      'bg-orange-500',
+      'bg-yellow-500',
+      'bg-lime-500',
+      'bg-green-500',
+    ]
+    return colors[strength] || 'bg-destructive'
+  }
+
+  const passwordStrength = getPasswordStrength(formData.password)
+
   const validateForm = () => {
-    const newErrors = { email: '', password: '' }
+    const newErrors = { email: '', username: '', password: '', confirmPassword: '' }
     let isValid = true
 
     // Email validation
@@ -39,12 +71,33 @@ export default function SignupPage() {
       isValid = false
     }
 
+    // Username validation
+    if (!formData.username) {
+      newErrors.username = 'Username is required'
+      isValid = false
+    } else if (formData.username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters'
+      isValid = false
+    } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+      newErrors.username = 'Username can only contain letters, numbers, and underscores'
+      isValid = false
+    }
+
     // Password validation
     if (!formData.password) {
       newErrors.password = 'Password is required'
       isValid = false
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters'
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters'
+      isValid = false
+    }
+
+    // Confirm password validation
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = 'Please confirm your password'
+      isValid = false
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match'
       isValid = false
     }
 
@@ -54,7 +107,7 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
@@ -62,13 +115,13 @@ export default function SignupPage() {
     setIsLoading(true)
 
     try {
-      const { error } = await signIn(formData.email, formData.password)
+      const { error } = await signUp(formData.email, formData.password, formData.username)
 
       if (error) {
-        toast.error(error.message || 'Failed to sign in')
+        toast.error(error.message || 'Failed to sign up')
       } else {
-        toast.success('Welcome back!')
-        router.push('/dashboard')
+        toast.success('Account created! Please check your email to verify.')
+        router.push('/auth/verify-email')
       }
     } catch (error) {
       toast.error('An unexpected error occurred')
@@ -89,7 +142,7 @@ export default function SignupPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      
+
       <main className="flex-1 flex items-center justify-center py-12 px-4">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1 flex flex-col items-center">
@@ -97,13 +150,13 @@ export default function SignupPage() {
               <Scale className="h-6 w-6" />
             </div>
             <CardTitle className="text-2xl font-bold text-center">
-              Welcome Back
+              Create Account
             </CardTitle>
             <CardDescription className="text-center">
-              Sign in to your account to continue
+              Join our platform to track political accountability
             </CardDescription>
           </CardHeader>
-          
+
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -124,15 +177,39 @@ export default function SignupPage() {
               </div>
 
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/auth/reset-password"
-                    className="text-sm text-primary hover:underline"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  name="username"
+                  type="text"
+                  placeholder="your_username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  className={errors.username ? 'border-destructive' : ''}
+                />
+                {errors.username && (
+                  <p className="text-sm text-destructive">{errors.username}</p>
+                )}
+                {!errors.username && formData.username && (
+                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                    {/^[a-zA-Z0-9_]+$/.test(formData.username) && formData.username.length >= 3 ? (
+                      <>
+                        <Check className="h-3 w-3 text-green-500" />
+                        Valid username
+                      </>
+                    ) : (
+                      <>
+                        <X className="h-3 w-3 text-destructive" />
+                        Use only letters, numbers, and underscores (min 3 chars)
+                      </>
+                    )}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   name="password"
@@ -146,22 +223,64 @@ export default function SignupPage() {
                 {errors.password && (
                   <p className="text-sm text-destructive">{errors.password}</p>
                 )}
+                {formData.password && (
+                  <div className="space-y-2">
+                    <div className="flex gap-1">
+                      {[0, 1, 2, 3, 4].map((index) => (
+                        <div
+                          key={index}
+                          className={`h-1 flex-1 rounded-full transition-colors ${
+                            index < passwordStrength
+                              ? getPasswordStrengthColor(passwordStrength)
+                              : 'bg-muted'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Strength: {getPasswordStrengthLabel(passwordStrength)}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  className={errors.confirmPassword ? 'border-destructive' : ''}
+                />
+                {errors.confirmPassword && (
+                  <p className="text-sm text-destructive">{errors.confirmPassword}</p>
+                )}
+                {!errors.confirmPassword && formData.confirmPassword && formData.password === formData.confirmPassword && (
+                  <p className="text-xs text-green-500 flex items-center gap-1">
+                    <Check className="h-3 w-3" />
+                    Passwords match
+                  </p>
+                )}
               </div>
             </CardContent>
 
             <CardFooter className="flex flex-col space-y-4">
-              <Button 
-                type="submit" 
-                className="w-full" 
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing in...
+                    Creating account...
                   </>
                 ) : (
-                  'Sign In'
+                  'Create Account'
                 )}
               </Button>
 
