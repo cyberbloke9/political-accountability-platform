@@ -63,6 +63,18 @@ export default function NewPromisePage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   // Redirect if not authenticated
+  // Show loading state while checking auth
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   if (!isAuthenticated) {
     router.push('/auth/login')
     return null
