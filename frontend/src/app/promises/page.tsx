@@ -34,7 +34,7 @@ export default function PromisesPage() {
     try {
       let query = supabase
         .from('promises')
-        .select('*, verification_count:verifications(count)')
+        .select('*')
         .order('created_at', { ascending: false })
 
       if (statusFilter !== 'all') {
@@ -44,7 +44,23 @@ export default function PromisesPage() {
       const { data, error } = await query
 
       if (error) throw error
-      setPromises(data || [])
+
+      // Fetch verification counts separately
+      const promisesWithCounts = await Promise.all(
+        (data || []).map(async (promise) => {
+          const { count } = await supabase
+            .from('verifications')
+            .select('*', { count: 'exact', head: true })
+            .eq('promise_id', promise.id)
+
+          return {
+            ...promise,
+            verification_count: count || 0
+          }
+        })
+      )
+
+      setPromises(promisesWithCounts)
     } catch (error) {
       console.error('Error fetching promises:', error)
     } finally {
