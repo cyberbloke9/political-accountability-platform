@@ -45,7 +45,7 @@ const CATEGORIES = [
 
 export default function NewPromisePage() {
   const router = useRouter()
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated, loading } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string>('')
