@@ -1,11 +1,16 @@
+'use client'
+
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Scale, Users, TrendingUp, CheckCircle2, Shield, Eye } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function HomePage() {
+  const { isAuthenticated, loading } = useAuth()
+
   const features = [
     {
       icon: Scale,
@@ -62,11 +67,13 @@ export default function HomePage() {
             </div>
             
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Link href="/auth/signup">
-                <Button size="lg" className="w-full sm:w-auto">
-                  Get Started
-                </Button>
-              </Link>
+              {!loading && !isAuthenticated && (
+                <Link href="/auth/signup">
+                  <Button size="lg" className="w-full sm:w-auto">
+                    Get Started
+                  </Button>
+                </Link>
+              )}
               <Link href="/promises">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto">
                   Browse Promises
