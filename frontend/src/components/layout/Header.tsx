@@ -1,4 +1,5 @@
 'use client'
+import { useEffect } from 'react'
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -9,6 +10,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import {
   Sheet,
+import { supabase } from '@/lib/supabase'
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -27,6 +29,15 @@ import {
 
 export function Header() {
   const pathname = usePathname()
+  const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    if (user) {
+      supabase.from('users').select('username').eq('auth_id', user.id).single().then(({ data }) => {
+        if (data) setUsername(data.username)
+      })
+    }
+  }, [user])
   const { user, isAuthenticated, signOut, loading } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -86,7 +97,7 @@ export function Header() {
               {/* User Menu */}
               <Separator orientation="vertical" className="h-6" />
 
-              <Link href="/profile" className="flex items-center space-x-2">
+              <Link href={username ?  : '/dashboard'} className="flex items-center space-x-2">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary text-primary-foreground">
                     {user.email?.[0].toUpperCase() || 'U'}
@@ -167,7 +178,7 @@ export function Header() {
                   <>
                     {/* User Info */}
                     <Link
-                      href="/profile"
+                      href={username ? "/profile/" + username : "/dashboard"}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center space-x-3 p-3 rounded-md hover:bg-muted"
                     >
