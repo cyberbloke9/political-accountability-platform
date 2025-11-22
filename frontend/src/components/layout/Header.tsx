@@ -1,8 +1,10 @@
 'use client'
+import { Shield } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
+import { useAdmin } from '@/hooks/useAdmin'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
@@ -28,6 +30,7 @@ import {
 export function Header() {
   const pathname = usePathname()
   const { user, isAuthenticated, signOut, loading } = useAuth()
+  const admin = useAdmin()
   const [username, setUsername] = useState('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -91,6 +94,18 @@ export function Header() {
                   <span className="hidden lg:inline">Dashboard</span>
                 </Button>
               </Link>
+
+              {/* Admin Badge */}
+              {admin.isAdmin && (
+                <Link href="/admin">
+                  <Button variant="outline" size="sm" className="border-primary text-primary">
+                    <Shield className="h-4 w-4 lg:mr-2" />
+                    <span className="hidden lg:inline">
+                      {admin.isSuperAdmin ? 'SuperAdmin' : admin.isModerator ? 'Moderator' : 'Reviewer'}
+                    </span>
+                  </Button>
+                </Link>
+              )}
 
               {/* User Menu */}
               <Separator orientation="vertical" className="h-6" />
