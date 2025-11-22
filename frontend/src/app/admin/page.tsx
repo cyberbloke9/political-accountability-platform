@@ -8,9 +8,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useAdmin } from '@/hooks/useAdmin'
 import { supabase } from '@/lib/supabase'
-import { Shield, FileText, Users, Flag, TrendingUp, CheckCircle, XCircle, Clock } from 'lucide-react'
+import { Shield, FileText, Users, TrendingUp, CheckCircle, XCircle, Clock, AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { getFraudStats } from '@/lib/fraudDetection'
 
 interface DashboardStats {
   pendingVerifications: number
@@ -19,6 +20,8 @@ interface DashboardStats {
   recentActions: number
   approvedToday: number
   rejectedToday: number
+  fraudFlags: number
+  criticalFlags: number
 }
 
 export default function AdminDashboard() {
@@ -29,7 +32,9 @@ export default function AdminDashboard() {
     totalUsers: 0,
     recentActions: 0,
     approvedToday: 0,
-    rejectedToday: 0
+    rejectedToday: 0,
+    fraudFlags: 0,
+    criticalFlags: 0
   })
   const [loading, setLoading] = useState(true)
 
@@ -67,13 +72,18 @@ export default function AdminDashboard() {
         .eq('status', 'rejected')
         .gte('updated_at', today.toISOString())
 
+      // Fraud detection stats
+      const fraudStats = await getFraudStats()
+
       setStats({
         pendingVerifications: pendingCount || 0,
-        flaggedContent: 0, // TODO: Implement flagging system
+        flaggedContent: fraudStats.pending || 0,
         totalUsers: usersCount || 0,
         recentActions: (approvedCount || 0) + (rejectedCount || 0),
         approvedToday: approvedCount || 0,
-        rejectedToday: rejectedCount || 0
+        rejectedToday: rejectedCount || 0,
+        fraudFlags: fraudStats.pending || 0,
+        criticalFlags: fraudStats.bySeverity.critical || 0
       })
     } catch (error) {
       console.error('Error fetching dashboard stats:', error)
@@ -92,12 +102,12 @@ export default function AdminDashboard() {
       href: '/admin/verifications'
     },
     {
-      title: 'Flagged Content',
-      value: stats.flaggedContent,
-      icon: Flag,
+      title: 'Fraud Flags',
+      value: stats.fraudFlags,
+      icon: AlertTriangle,
       color: 'text-red-600',
       bgColor: 'bg-red-100',
-      href: '/admin/reports'
+      href: '/admin/fraud'
     },
     {
       title: 'Total Users',
@@ -124,6 +134,13 @@ export default function AdminDashboard() {
       icon: FileText,
       href: '/admin/verifications',
       permission: 'approve_verification'
+    },
+    {
+      title: 'Fraud Detection',
+      description: 'Review fraud flags and suspicious activity',
+      icon: AlertTriangle,
+      href: '/admin/fraud',
+      permission: 'manage_fraud'
     },
     {
       title: 'Manage Users',
@@ -232,7 +249,7 @@ export default function AdminDashboard() {
             {/* Quick Actions */}
             <div>
               <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-              <div className="grid gap-4 md:grid-cols-3">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {quickActions.map((action) => {
                   const Icon = action.icon
                   const hasAccess = admin.hasPermission(action.permission)
