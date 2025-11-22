@@ -150,23 +150,25 @@ export default function HomePage() {
         </section>
 
         {/* CTA Section */}
-        <section className="border-t bg-primary py-16">
-          <div className="container">
-            <div className="mx-auto max-w-3xl text-center space-y-6">
-              <h2 className="text-3xl font-bold tracking-tighter text-primary-foreground sm:text-4xl">
-                Ready to Make a Difference?
-              </h2>
-              <p className="text-lg text-primary-foreground/90">
-                Join our community of engaged citizens working toward greater political accountability
-              </p>
-              <Link href="/auth/signup">
-                <Button size="lg" variant="secondary" className="mt-4">
-                  Create Your Account
-                </Button>
-              </Link>
+        {!loading && !isAuthenticated && (
+          <section className="border-t bg-primary py-16">
+            <div className="container">
+              <div className="mx-auto max-w-3xl text-center space-y-6">
+                <h2 className="text-3xl font-bold tracking-tighter text-primary-foreground sm:text-4xl">
+                  Ready to Make a Difference?
+                </h2>
+                <p className="text-lg text-primary-foreground/90">
+                  Join our community of engaged citizens working toward greater political accountability
+                </p>
+                <Link href="/auth/signup">
+                  <Button size="lg" variant="secondary" className="mt-4">
+                    Create Your Account
+                  </Button>
+                </Link>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
 
       <Footer />
