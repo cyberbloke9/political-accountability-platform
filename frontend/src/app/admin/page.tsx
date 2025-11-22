@@ -157,6 +157,13 @@ export default function AdminDashboard() {
       permission: 'manage_admins'
     },
     {
+      title: 'Auto-Approval',
+      description: 'Configure auto-approval (HARSH rules)',
+      icon: CheckCircle,
+      href: '/admin/auto-approval',
+      permission: 'manage_admins'
+    },
+    {
       title: 'Manage Users',
       description: 'View users, assign roles, issue bans',
       icon: Users,
