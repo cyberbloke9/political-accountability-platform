@@ -115,9 +115,11 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">
             © {currentYear} Political Accountability Platform. Built with transparency.
           </p>
-          <p className="text-sm text-muted-foreground">
-            Empowering citizens through open verification
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
+            <span>Built by 🦅 <span className="font-semibold">hawkEyE</span></span>
+            <span className="hidden sm:inline">•</span>
+            <span>Powered by 🤖 <a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer" className="font-semibold hover:text-primary transition-colors">Claude Code</a></span>
+          </div>
         </div>
       </div>
     </footer>
