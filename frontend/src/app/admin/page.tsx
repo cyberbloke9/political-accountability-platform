@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useAdmin } from '@/hooks/useAdmin'
 import { supabase } from '@/lib/supabase'
-import { Shield, FileText, Users, TrendingUp, CheckCircle, XCircle, Clock, AlertTriangle } from 'lucide-react'
+import { Shield, FileText, Users, TrendingUp, CheckCircle, XCircle, Clock, AlertTriangle, Award } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { getFraudStats } from '@/lib/fraudDetection'
@@ -148,6 +148,13 @@ export default function AdminDashboard() {
       icon: TrendingUp,
       href: '/admin/vote-patterns',
       permission: 'manage_fraud'
+    },
+    {
+      title: 'Reputation Settings',
+      description: 'Configure reputation rules and scoring',
+      icon: Award,
+      href: '/admin/reputation',
+      permission: 'manage_admins'
     },
     {
       title: 'Manage Users',
