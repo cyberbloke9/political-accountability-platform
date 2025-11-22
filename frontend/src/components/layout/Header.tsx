@@ -1,16 +1,14 @@
 'use client'
-import { useEffect } from 'react'
-
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
+import { supabase } from '@/lib/supabase'
 import {
   Sheet,
-import { supabase } from '@/lib/supabase'
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -29,7 +27,9 @@ import {
 
 export function Header() {
   const pathname = usePathname()
+  const { user, isAuthenticated, signOut, loading } = useAuth()
   const [username, setUsername] = useState('')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -38,8 +38,6 @@ export function Header() {
       })
     }
   }, [user])
-  const { user, isAuthenticated, signOut, loading } = useAuth()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const navigation = [
     { name: 'Promises', href: '/promises', icon: Scale },
@@ -97,7 +95,7 @@ export function Header() {
               {/* User Menu */}
               <Separator orientation="vertical" className="h-6" />
 
-              <Link href={username ?  : '/dashboard'} className="flex items-center space-x-2">
+              <Link href={username ? "/profile/" + username : '/dashboard'} className="flex items-center space-x-2">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary text-primary-foreground">
                     {user.email?.[0].toUpperCase() || 'U'}
