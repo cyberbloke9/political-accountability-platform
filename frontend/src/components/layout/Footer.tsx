@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Scale, Github, Twitter, Mail } from 'lucide-react'
+import { Scale, Github, Mail } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 
 export function Footer() {
@@ -40,21 +40,14 @@ export function Footer() {
             </p>
             <div className="flex space-x-4">
               <Link 
-                href="https://github.com" 
+                href="https://github.com/cyberbloke9/political-accountability-platform" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="GitHub"
               >
                 <Github className="h-5 w-5" />
               </Link>
               <Link 
-                href="https://twitter.com" 
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-5 w-5" />
-              </Link>
-              <Link 
-                href="/contact" 
+                href="mailto:papsupport@gmail.com" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="Contact"
               >
