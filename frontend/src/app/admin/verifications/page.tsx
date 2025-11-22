@@ -8,6 +8,9 @@ import { VerificationReviewCard } from '@/components/admin/VerificationReviewCar
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
+import { RejectDialog } from '@/components/admin/RejectDialog'
+import { useToast } from '@/hooks/use-toast'
+import { approveVerification, rejectVerification } from '@/lib/moderationActions'
 import { supabase } from '@/lib/supabase'
 import { FileText, Loader2 } from 'lucide-react'
 
@@ -17,6 +20,10 @@ type SortBy = 'newest' | 'oldest' | 'most_voted' | 'most_controversial'
 export default function VerificationsPage() {
   const [verifications, setVerifications] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [actionLoading, setActionLoading] = useState(false)
+  const { toast } = useToast()
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
+  const [selectedVerificationId, setSelectedVerificationId] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('pending')
   const [sortBy, setSortBy] = useState<SortBy>('newest')
   const [totalCount, setTotalCount] = useState(0)
@@ -89,14 +96,42 @@ export default function VerificationsPage() {
     }
   }
 
-  const handleApprove = (id: string) => {
-    console.log('Approve:', id)
-    // Will implement in next task
+  const handleApprove = async (id: string) => {
+    setActionLoading(true)
+    try {
+      const result = await approveVerification(id)
+      if (result.success) {
+        toast({ title: 'Success', description: 'Verification approved successfully' })
+        fetchVerifications()
+      } else {
+        toast({ title: 'Error', description: result.error || 'Failed to approve', variant: 'destructive' })
+      }
+    } finally {
+      setActionLoading(false)
+    }
   }
 
   const handleReject = (id: string) => {
-    console.log('Reject:', id)
-    // Will implement in next task
+    setSelectedVerificationId(id)
+    setRejectDialogOpen(true)
+  }
+
+  const handleRejectConfirm = async (reason: string) => {
+    if (!selectedVerificationId) return
+    setActionLoading(true)
+    try {
+      const result = await rejectVerification(selectedVerificationId, reason)
+      if (result.success) {
+        toast({ title: 'Success', description: 'Verification rejected' })
+        setRejectDialogOpen(false)
+        setSelectedVerificationId(null)
+        fetchVerifications()
+      } else {
+        toast({ title: 'Error', description: result.error || 'Failed', variant: 'destructive' })
+      }
+    } finally {
+      setActionLoading(false)
+    }
   }
 
   return (
@@ -168,6 +203,7 @@ export default function VerificationsPage() {
         </main>
         <Footer />
       </div>
+    <RejectDialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen} onConfirm={handleRejectConfirm} loading={actionLoading} />
     </AdminGuard>
   )
 }
