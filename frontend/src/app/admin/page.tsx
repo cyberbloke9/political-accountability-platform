@@ -143,6 +143,13 @@ export default function AdminDashboard() {
       permission: 'manage_fraud'
     },
     {
+      title: 'Vote Patterns',
+      description: 'Detect partisan bias and coordinated voting',
+      icon: TrendingUp,
+      href: '/admin/vote-patterns',
+      permission: 'manage_fraud'
+    },
+    {
       title: 'Manage Users',
       description: 'View users, assign roles, issue bans',
       icon: Users,
