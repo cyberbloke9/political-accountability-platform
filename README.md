@@ -1,177 +1,185 @@
-# Political Accountability Platform
+# Political Accountability Platform 🏛️
 
-A citizen-driven platform to track political promises with multi-dimensional community verification and gamification for transparent political accountability across India.
+> A citizen-driven platform to track political promises with community verification and transparent accountability across India.
 
-## Overview
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)](https://supabase.com/)
 
-This platform enables citizens to:
-- Track political promises made by elected officials
-- Submit verifications with evidence (images, videos)
-- Vote on verification accuracy with weighted community consensus
-- Earn citizen scores and titles through quality contributions
-- Discover promises via search, filtering, and categorization
-- View leaderboards showcasing top contributors
+## 🎯 Mission
 
-## Technology Stack
+Break the cycle of broken promises. Empower citizens to hold political leaders accountable through transparent, evidence-based tracking of political commitments.
 
-### Frontend
-- **Framework:** Next.js 14 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS with Shadcn/ui components
-- **State Management:** Zustand + React Query
-- **Validation:** Zod
+## ✨ Features
 
-### Backend
-- **Runtime:** Node.js 20 LTS
-- **Framework:** Express.js 4.x
-- **Language:** TypeScript
-- **Database:** PostgreSQL 15+ with Prisma ORM
-- **Authentication:** JWT with optional TOTP MFA
-- **Storage:** Cloudflare R2
-- **Email:** SendGrid
-- **Fraud Detection:** Google Cloud Vision API
+### 🔍 Promise Tracking
+- **Submit Promises**: Document political promises with sources and context
+- **Browse & Search**: Filter by politician, party, category, status, constituency
+- **Real-time Status**: Track promises as pending, in-progress, fulfilled, or broken
 
-## Project Structure
+### ✅ Community Verification
+- **Evidence Submission**: Upload documents, images, news articles as proof
+- **Voting System**: Community votes on verification accuracy  
+- **Reputation Scores**: Earn citizen points for quality contributions
 
-```
-political-accountability-platform/
-├── frontend/          # Next.js application
-├── backend/           # Express.js API server
-├── docs/             # Documentation and diagrams
-├── api/              # OpenAPI specifications
-├── config/           # Shared configuration
-└── scripts/          # Utility scripts
-```
+### 🏆 Gamification
+- **Citizen Titles**: Progress from Citizen → Watchdog → Guardian → Champion
+- **Leaderboard**: Showcase top contributors
+- **Badges & Achievements**: Recognize quality participation
 
-## Getting Started
+### 📊 Transparency
+- **Open Source**: Every line of code is publicly auditable
+- **No Ads**: Completely ad-free platform
+- **No Data Selling**: Your data stays with you
+- **Public Verifications**: All votes and evidence are publicly visible
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 20+ and npm 10+
-- PostgreSQL 15+
-- Git
+- **Node.js** 18+ and npm 9+
+- **Supabase** account ([sign up free](https://supabase.com))
+- **Git** for version control
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd political-accountability-platform
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/cyberbloke9/political-accountability-platform.git
+   cd political-accountability-platform
+   ```
+
+2. **Install dependencies**
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+3. **Set up Supabase**
+   - Create a new project at [supabase.com](https://supabase.com)
+   - Run the database migrations from `database/migrations/` in order:
+     1. `001_initial_schema.sql`
+     2. `002_reputation_system.sql`
+
+4. **Configure environment variables**
+   ```bash
+   cp .env.example frontend/.env.local
+   ```
+   
+   Edit `frontend/.env.local` and add your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+For detailed setup instructions, see [docs/SETUP.md](./docs/SETUP.md)
+
+## 🏗️ Project Structure
+
+```
+political-accountability-platform/
+├── frontend/                # Next.js 14 application
+│   ├── src/
+│   │   ├── app/            # App router pages
+│   │   ├── components/     # React components
+│   │   ├── hooks/          # Custom React hooks
+│   │   └── lib/            # Utilities and configs
+│   └── public/             # Static assets
+├── database/
+│   └── migrations/         # SQL migration files
+├── supabase/               # Supabase config
+└── docs/                   # Documentation
 ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+## 🛠️ Technology Stack
 
-3. Set up environment variables:
-```bash
-# Copy example files
-cp .env.example .env
-cp frontend/.env.local.example frontend/.env.local
-cp backend/.env.example backend/.env
-```
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | Next.js 14 (App Router), React 18, TypeScript |
+| **Styling** | Tailwind CSS, shadcn/ui |
+| **Backend** | Supabase (PostgreSQL + Auth + Storage) |
+| **Deployment** | Vercel (Frontend), Supabase (Backend) |
+| **State** | React Hooks, Context API |
 
-4. Configure your database connection in `backend/.env`:
-```
-DATABASE_URL=postgresql://user:password@localhost:5432/political_accountability_db
-```
+## 📖 How It Works
 
-5. Run database migrations:
-```bash
-cd backend
-npm run db:migrate
-```
+1. **Discover Promises** - Browse political promises with filters and search
+2. **Submit a Promise** - Add new promises with credible sources
+3. **Verify Progress** - Upload evidence about promise fulfillment
+4. **Community Voting** - Vote on verification accuracy
+5. **Earn Reputation** - Build citizen score through quality contributions
+6. **Track Accountability** - Monitor promise status transparently
 
-### Development
+For the detailed workflow, see [How It Works](https://your-deployment-url.vercel.app/how-it-works)
 
-Run both frontend and backend concurrently:
-```bash
-npm run dev
-```
+## 🤝 Contributing
 
-Or run them separately:
-```bash
-# Terminal 1 - Frontend (http://localhost:3000)
-npm run dev:frontend
+We welcome contributions from developers, designers, and citizens passionate about political accountability!
 
-# Terminal 2 - Backend (http://localhost:3001)
-npm run dev:backend
-```
+**Ways to contribute:**
+- 🐛 Report bugs and issues
+- 💡 Suggest new features
+- 🔧 Submit pull requests
+- 📖 Improve documentation
+- 🌐 Add translations (Hindi support coming soon!)
 
-### Building for Production
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 
-```bash
-npm run build
-```
+## 📋 Roadmap
 
-## Key Features
+See [NEXT_PHASES.md](./NEXT_PHASES.md) for the complete development roadmap.
 
-### Promise Tracking
-- Submit political promises with metadata (politician, party, date, location)
-- Categorize promises (infrastructure, healthcare, education, etc.)
-- Track promise status (pending, in-progress, fulfilled, broken)
+**Completed:**
+- ✅ Phase 1-6: Foundation, Core Pages, Promise Management, Verification, Voting, User Profiles
 
-### Verification System
-- Three-stage verification: submission → community review → expert panel (post-MVP)
-- Multi-dimensional ratings: completion, quality, timeline, budget, impact
-- Evidence upload with automatic compression and fraud detection
+**In Progress:**
+- 🚧 Phase 7: Advanced Search & Filtering
 
-### Citizen Scoring
-- Earn points for quality contributions
-- Progress through titles: Citizen → Watchdog → Guardian → Champion → Sentinel
-- Weighted voting power based on reputation
-- Anti-gaming mechanisms and fraud detection
+**Upcoming:**
+- Phase 8: Admin Panel & Moderation
+- Phase 9: Notifications System
+- Phase 10: Comments & Discussions
+- Phase 11: Analytics & Insights
+- Phase 12: Mobile App
+- Phase 13: AI/ML Features
 
-### Security
-- Argon2 password hashing
-- JWT tokens (15-min access, 7-day refresh)
-- Email verification required
-- Optional TOTP MFA for high-reputation users
-- Rate limiting and IP-based abuse prevention
+## 🔒 Privacy & Security
 
-## Architecture
+- **No Data Selling**: We never sell your data
+- **No Ads**: Completely ad-free experience  
+- **No Tracking**: No cross-site tracking or analytics surveillance
+- **Open Source**: Transparent, auditable code
+- **Encrypted**: HTTPS/SSL for all data transmission
+- **Secure Auth**: Supabase authentication with bcrypt password hashing
 
-See `docs/diagrams/` for:
-- Component architecture diagram
-- Database ERD
-- Authentication flow sequence
-- Verification workflow
+See our [Privacy Policy](https://your-deployment-url.vercel.app/privacy) for details.
 
-## API Documentation
+## 📞 Contact & Support
 
-OpenAPI specification: `api/openapi.yaml`
+- **Email**: [papsupport@gmail.com](mailto:papsupport@gmail.com)
+- **Phone**: [+91 9959311144](tel:+919959311144)
+- **Issues**: [GitHub Issues](https://github.com/cyberbloke9/political-accountability-platform/issues)
 
-View with Swagger UI or import into Postman.
+## 📄 License
 
-## Contributing
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+## 🙏 Acknowledgments
 
-## License
+Built with the mission to bring transparency and accountability to political promises across India.
 
-MIT License - see [LICENSE](./LICENSE)
-
-## Cost Projections
-
-**10K Active Users:** ~$100-200/month
-- PostgreSQL: $25
-- Cloudflare R2: $15
-- SendGrid: $15
-- Google Vision API: $50
-- Domain: $2
-
-## Roadmap
-
-- **Phase 1 (Months 1-3):** MVP with core features
-- **Phase 2 (Months 4-6):** Hindi UI, mobile optimization
-- **Phase 3 (Months 7-12):** Expert panel, advanced analytics
-- **Phase 4 (Year 2+):** International expansion
-
-## Support
-
-For issues and questions, please use the GitHub issue tracker.
+Special thanks to all contributors who believe in the power of citizen engagement and democratic accountability.
 
 ---
 
-**Built with the mission to bring transparency and accountability to political promises across India.**
+**Made with ❤️ for the citizens of India**
+
+[Website](https://your-deployment-url.vercel.app) • [GitHub](https://github.com/cyberbloke9/political-accountability-platform) • [Documentation](./docs)
