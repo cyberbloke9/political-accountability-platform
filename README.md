@@ -33,6 +33,16 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
 - **No Ads**: Completely ad-free platform
 - **No Data Selling**: Your data stays with you
 - **Public Verifications**: All votes and evidence are publicly visible
+- **Public Audit Log**: All admin actions visible at `/transparency` (no login required)
+
+### 🛡️ Admin & Moderation (Phase 8)
+- **Role-Based Access**: Reviewer (L1) → Moderator (L2) → SuperAdmin (L3)
+- **Fraud Detection**: Automated detection of similarity, vote manipulation, fake sources
+- **Vote Pattern Analysis**: Detect partisan bias and coordinated voting
+- **Reputation Engine**: Dynamic scoring based on contribution quality
+- **Auto-Approval**: Trusted users (250+ score) skip manual review
+- **Ban Management**: Temporary/permanent bans with appeals system
+- **Complete Transparency**: All mod actions publicly logged
 
 ## 🚀 Quick Start
 
@@ -59,8 +69,17 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
 3. **Set up Supabase**
    - Create a new project at [supabase.com](https://supabase.com)
    - Run the database migrations from `database/migrations/` in order:
-     1. `001_initial_schema.sql`
-     2. `002_reputation_system.sql`
+     1. `001_initial_schema.sql` - Core tables
+     2. `004_admin_system.sql` - Admin roles & permissions
+     3. `005_moderation_system_fixed.sql` - Moderation & audit log
+     4. `006_fraud_detection_fixed.sql` - Fraud detection
+     5. `007_vote_pattern_analysis.sql` - Vote patterns
+     6. `008_reputation_scoring.sql` - Reputation rules
+     7. `009_reputation_calculation_engine.sql` - Reputation engine
+     8. `010_auto_approval_system.sql` - Auto-approval (HARSH rules)
+     9. `011_ban_management_system.sql` - Ban system with appeals
+
+   Each migration has detailed instructions in `RUN_MIGRATION_XXX_INSTRUCTIONS.md`
 
 4. **Configure environment variables**
    ```bash
@@ -139,17 +158,23 @@ See [NEXT_PHASES.md](./NEXT_PHASES.md) for the complete development roadmap.
 
 **Completed:**
 - ✅ Phase 1-6: Foundation, Core Pages, Promise Management, Verification, Voting, User Profiles
-
-**In Progress:**
-- 🚧 Phase 7: Advanced Search & Filtering
+- ✅ Phase 7: Advanced Search & Filtering
+- ✅ Phase 8: Complete Admin Moderation System
+  - Admin roles & permissions (Reviewer, Moderator, SuperAdmin)
+  - Fraud detection algorithms
+  - Vote pattern analysis
+  - Reputation calculation engine
+  - Auto-approval system (HARSH rules)
+  - Ban management (temporary/permanent)
+  - Public transparency log
+  - Complete audit trail
 
 **Upcoming:**
-- Phase 8: Admin Panel & Moderation
-- Phase 9: Notifications System
+- Phase 9: Notifications & Real-time Updates
 - Phase 10: Comments & Discussions
-- Phase 11: Analytics & Insights
-- Phase 12: Mobile App
-- Phase 13: AI/ML Features
+- Phase 11: Analytics & Insights Dashboard
+- Phase 12: Mobile Application
+- Phase 13: AI/ML Features (Promise categorization, sentiment analysis)
 
 ## 🔒 Privacy & Security
 
