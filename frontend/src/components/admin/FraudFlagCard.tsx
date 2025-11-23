@@ -116,11 +116,11 @@ export function FraudFlagCard({ flag, onConfirm, onDismiss, loading }: FraudFlag
               <div className="bg-muted p-3 rounded-md space-y-2">
                 <p className="text-sm">
                   <span className="font-medium">Promise:</span>{' '}
-                  {flag.verification.promise.title}
+                  {flag.verification.promise.promise_text}
                 </p>
                 <p className="text-sm">
                   <span className="font-medium">Politician:</span>{' '}
-                  {flag.verification.promise.politician.name}
+                  {flag.verification.promise.politician_name}
                 </p>
                 <p className="text-sm">
                   <span className="font-medium">Verdict:</span>{' '}
@@ -134,7 +134,7 @@ export function FraudFlagCard({ flag, onConfirm, onDismiss, loading }: FraudFlag
                 <div className="mt-2">
                   <p className="text-sm font-medium mb-1">Evidence:</p>
                   <p className="text-sm text-muted-foreground line-clamp-3">
-                    {flag.verification.evidence}
+                    {flag.verification.evidence_text}
                   </p>
                 </div>
               </div>

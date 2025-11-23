@@ -19,13 +19,11 @@ export interface FraudFlagWithTarget extends FraudFlag {
   verification?: {
     id: string
     verdict: string
-    evidence: string
+    evidence_text: string
     promise: {
       id: string
-      title: string
-      politician: {
-        name: string
-      }
+      promise_text: string
+      politician_name: string
     }
     submitted_by_user: {
       username: string
@@ -78,13 +76,13 @@ export async function getFraudFlags(filters?: {
             .select(`
               id,
               verdict,
-              evidence,
+              evidence_text,
               promise:promises(
                 id,
-                title,
-                politician:politicians(name)
+                promise_text,
+                politician_name
               ),
-              submitted_by_user:users!verifications_submitted_by_fkey(
+              submitted_by_user:users!submitted_by(
                 username,
                 citizen_score
               )
