@@ -140,14 +140,14 @@ export default function VerificationsPage() {
         breadcrumbs={[{ label: 'Verifications' }]}
       >
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
-              <Badge variant="outline" className="text-lg px-4 py-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <Badge variant="outline" className="text-sm sm:text-lg px-3 sm:px-4 py-2 w-fit">
                 {totalCount} total
               </Badge>
             </div>
 
             {/* Filters */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col lg:flex-row gap-4">
               <Tabs value={statusFilter} onValueChange={(v) => setStatusFilter(v as StatusFilter)} className="flex-1">
                 <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="pending">Pending</TabsTrigger>
@@ -157,7 +157,7 @@ export default function VerificationsPage() {
                 </TabsList>
               </Tabs>
               <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortBy)}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full lg:w-[180px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -183,7 +183,7 @@ export default function VerificationsPage() {
                 </p>
               </div>
             ) : (
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
                 {verifications.map((verification) => (
                   <VerificationReviewCard
                     key={verification.id}

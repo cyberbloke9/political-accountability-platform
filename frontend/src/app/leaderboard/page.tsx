@@ -22,20 +22,20 @@ export default function LeaderboardPage() {
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main className="flex-1 container py-8">
+      <main className="flex-1 container py-8 px-4">
         <div className="space-y-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
                 Citizen Leaderboard
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-sm sm:text-base text-muted-foreground">
                 Top contributors to political accountability
               </p>
             </div>
-            <Badge variant="outline" className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Live Updates
+            <Badge variant="outline" className="flex items-center gap-2 w-fit">
+              <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="text-xs sm:text-sm">Live Updates</span>
             </Badge>
           </div>
 
@@ -79,40 +79,40 @@ export default function LeaderboardPage() {
                         : ''
                     }
                   >
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-muted font-bold text-lg">
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-muted font-bold text-base sm:text-lg flex-shrink-0">
                           {rankIcon || rank}
                         </div>
 
-                        <Avatar className="h-12 w-12">
+                        <Avatar className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0">
                           <AvatarFallback className="bg-primary text-primary-foreground">
                             {entry.username[0].toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
 
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-lg">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="font-semibold text-base sm:text-lg truncate">
                               {entry.username}
                             </h3>
                             {entry.title && (
-                              <Badge variant="secondary">{entry.title}</Badge>
+                              <Badge variant="secondary" className="text-xs">{entry.title}</Badge>
                             )}
                           </div>
-                          <div className="flex gap-4 mt-1 text-sm text-muted-foreground">
-                            <span>
+                          <div className="flex flex-wrap gap-2 sm:gap-4 mt-1 text-xs sm:text-sm text-muted-foreground">
+                            <span className="whitespace-nowrap">
                               {entry.total_promises_created} promises
                             </span>
-                            <span>
+                            <span className="whitespace-nowrap">
                               {entry.total_verifications_submitted} verifications
                             </span>
-                            <span>{entry.total_votes_cast} votes</span>
+                            <span className="whitespace-nowrap">{entry.total_votes_cast} votes</span>
                           </div>
                         </div>
 
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-primary">
+                        <div className="text-right flex-shrink-0">
+                          <div className="text-xl sm:text-2xl font-bold text-primary">
                             {entry.total_score.toLocaleString()}
                           </div>
                           <div className="text-xs text-muted-foreground">

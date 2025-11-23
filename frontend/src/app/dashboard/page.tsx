@@ -71,18 +71,18 @@ export default function DashboardPage() {
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main className="flex-1 container py-8">
+      <main className="flex-1 container py-8 px-4">
         <div className="space-y-8">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
               Welcome back!
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-sm sm:text-base text-muted-foreground">
               Track promises, verify claims, and contribute to political accountability
             </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => {
               const Icon = stat.icon
               return (
@@ -111,7 +111,7 @@ export default function DashboardPage() {
                 Start contributing to the platform
               </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-3">
+            <CardContent className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
               <Link href="/promises/new">
                 <Button className="w-full" variant="outline">
                   <Plus className="mr-2 h-4 w-4" />
@@ -134,18 +134,21 @@ export default function DashboardPage() {
           </Card>
 
           <Tabs defaultValue="activity" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="activity">
-                <Activity className="mr-2 h-4 w-4" />
-                Recent Activity
+            <TabsList className="w-full sm:w-auto grid grid-cols-3 sm:inline-grid">
+              <TabsTrigger value="activity" className="text-xs sm:text-sm">
+                <Activity className="mr-0 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Recent Activity</span>
+                <span className="sm:hidden">Activity</span>
               </TabsTrigger>
-              <TabsTrigger value="tracked">
-                <Scale className="mr-2 h-4 w-4" />
-                Tracked Promises
+              <TabsTrigger value="tracked" className="text-xs sm:text-sm">
+                <Scale className="mr-0 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Tracked Promises</span>
+                <span className="sm:hidden">Tracked</span>
               </TabsTrigger>
-              <TabsTrigger value="verifications">
-                <FileText className="mr-2 h-4 w-4" />
-                My Verifications
+              <TabsTrigger value="verifications" className="text-xs sm:text-sm">
+                <FileText className="mr-0 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">My Verifications</span>
+                <span className="sm:hidden">Verifications</span>
               </TabsTrigger>
             </TabsList>
 

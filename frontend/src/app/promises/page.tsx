@@ -82,13 +82,13 @@ export default function PromisesPage() {
       <Header />
       <main className="flex-1 container py-8">
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">Political Promises</h1>
-              <p className="text-muted-foreground">Track and verify promises from political leaders</p>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Political Promises</h1>
+              <p className="text-sm sm:text-base text-muted-foreground">Track and verify promises from political leaders</p>
             </div>
-            <Link href="/promises/new">
-              <Button><Plus className="mr-2 h-4 w-4" />Submit Promise</Button>
+            <Link href="/promises/new" className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto"><Plus className="mr-2 h-4 w-4" />Submit Promise</Button>
             </Link>
           </div>
           <div className="flex flex-col gap-4 md:flex-row md:items-center">
@@ -97,9 +97,9 @@ export default function PromisesPage() {
               <Input placeholder="Search promises, politicians, or parties..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-10 pr-10" />
               {searchQuery && (<button onClick={clearSearch} className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>)}
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
               <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-full sm:w-[140px]"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="newest">Newest First</SelectItem>
                   <SelectItem value="oldest">Oldest First</SelectItem>
@@ -109,10 +109,10 @@ export default function PromisesPage() {
             </div>
           </div>
           <Tabs defaultValue="all" onValueChange={setStatusFilter}>
-            <TabsList>
+            <TabsList className="w-full sm:w-auto grid grid-cols-3 sm:grid-cols-5 gap-1">
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="pending">Pending</TabsTrigger>
-              <TabsTrigger value="in_progress">In Progress</TabsTrigger>
+              <TabsTrigger value="in_progress" className="text-xs sm:text-sm">In Progress</TabsTrigger>
               <TabsTrigger value="fulfilled">Fulfilled</TabsTrigger>
               <TabsTrigger value="broken">Broken</TabsTrigger>
             </TabsList>
