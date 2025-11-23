@@ -12,6 +12,7 @@ export function Footer() {
       { name: 'Browse Promises', href: '/promises' },
       { name: 'Leaderboard', href: '/leaderboard' },
       { name: 'How It Works', href: '/how-it-works' },
+      { name: 'Transparency Log', href: '/transparency' },
     ],
     community: [
       { name: 'Submit Promise', href: '/promises/new' },
