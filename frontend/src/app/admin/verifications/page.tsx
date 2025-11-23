@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { AdminGuard } from '@/components/admin/AdminGuard'
-import { Header } from '@/components/layout/Header'
-import { Footer } from '@/components/layout/Footer'
+import AdminLayout from '@/components/admin/AdminLayout'
 import { VerificationReviewCard } from '@/components/admin/VerificationReviewCard'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -52,7 +51,7 @@ export default function VerificationsPage() {
             promise_text,
             party
           ),
-          submitter:users!verifications_submitted_by_fkey (
+          submitter:users!submitted_by (
             id,
             username,
             citizen_score
@@ -136,16 +135,12 @@ export default function VerificationsPage() {
 
   return (
     <AdminGuard requiredPermission="view_verification_queue">
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1 container py-8">
-          <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight">Verification Queue</h1>
-                <p className="text-muted-foreground">Review and moderate verification submissions</p>
-              </div>
+      <AdminLayout
+        title="Verification Queue"
+        breadcrumbs={[{ label: 'Verifications' }]}
+      >
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
               <Badge variant="outline" className="text-lg px-4 py-2">
                 {totalCount} total
               </Badge>
@@ -200,10 +195,8 @@ export default function VerificationsPage() {
               </div>
             )}
           </div>
-        </main>
-        <Footer />
-      </div>
-    <RejectDialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen} onConfirm={handleRejectConfirm} loading={actionLoading} />
+        <RejectDialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen} onConfirm={handleRejectConfirm} loading={actionLoading} />
+      </AdminLayout>
     </AdminGuard>
   )
 }
