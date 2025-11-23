@@ -165,34 +165,36 @@ export default function AdminAuditPage() {
         <div className="space-y-8">
           {/* Header */}
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col gap-4 mb-4">
               <div>
-                <h1 className="text-3xl font-bold flex items-center gap-2">
-                  <Shield className="h-8 w-8 text-primary" />
+                <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-2">
+                  <Shield className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
                   Admin Audit Log
                 </h1>
-                <p className="text-muted-foreground mt-2">
+                <p className="text-sm sm:text-base text-muted-foreground mt-2">
                   Complete audit trail of all moderation actions
                 </p>
               </div>
-              <div className="flex gap-2">
-                <Button onClick={loadData} variant="outline" disabled={loading}>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button onClick={loadData} variant="outline" disabled={loading} className="w-full sm:w-auto">
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Refresh
                 </Button>
-                <Button onClick={exportToCSV} variant="outline" disabled={loading}>
+                <Button onClick={exportToCSV} variant="outline" disabled={loading} className="w-full sm:w-auto">
                   <Download className="h-4 w-4 mr-2" />
-                  Export CSV
+                  <span className="hidden sm:inline">Export CSV</span>
+                  <span className="sm:hidden">CSV</span>
                 </Button>
-                <Button onClick={exportToJSON} variant="outline" disabled={loading}>
+                <Button onClick={exportToJSON} variant="outline" disabled={loading} className="w-full sm:w-auto">
                   <Download className="h-4 w-4 mr-2" />
-                  Export JSON
+                  <span className="hidden sm:inline">Export JSON</span>
+                  <span className="sm:hidden">JSON</span>
                 </Button>
               </div>
             </div>
 
             {/* Stats Dashboard */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -281,7 +283,7 @@ export default function AdminAuditPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
                     <Label htmlFor="action_type">Action Type</Label>
                     <Select
@@ -340,7 +342,7 @@ export default function AdminAuditPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
                     <Label htmlFor="start_date">Start Date</Label>
                     <Input
@@ -361,7 +363,7 @@ export default function AdminAuditPage() {
                     />
                   </div>
 
-                  <div className="flex items-end">
+                  <div className="flex items-end sm:col-span-2 lg:col-span-1">
                     <Button onClick={clearFilters} variant="outline" className="w-full">
                       Clear Filters
                     </Button>

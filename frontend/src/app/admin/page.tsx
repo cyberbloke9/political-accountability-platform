@@ -194,21 +194,21 @@ export default function AdminDashboard() {
         <main className="flex-1 container py-8">
           <div className="space-y-8">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-                <p className="text-muted-foreground">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+                <p className="text-sm sm:text-base text-muted-foreground">
                   Welcome back, {admin.isSuperAdmin ? 'SuperAdmin' : admin.isModerator ? 'Moderator' : 'Reviewer'}
                 </p>
               </div>
-              <Badge variant="outline" className="text-sm px-4 py-2">
-                <Shield className="mr-2 h-4 w-4" />
-                {admin.roles.join(', ')}
+              <Badge variant="outline" className="text-xs sm:text-sm px-3 sm:px-4 py-2 w-fit">
+                <Shield className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="truncate max-w-[150px] sm:max-w-none">{admin.roles.join(', ')}</span>
               </Badge>
             </div>
 
             {/* Stats Grid */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
               {statCards.map((stat) => {
                 const Icon = stat.icon
                 return (
@@ -242,7 +242,7 @@ export default function AdminDashboard() {
                 <CardTitle>Today&apos;s Activity</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                   <div className="flex items-center gap-3">
                     <div className="bg-green-100 p-3 rounded-full">
                       <CheckCircle className="h-5 w-5 text-green-600" />
@@ -276,8 +276,8 @@ export default function AdminDashboard() {
 
             {/* Quick Actions */}
             <div>
-              <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4">Quick Actions</h2>
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 {quickActions.map((action) => {
                   const Icon = action.icon
                   const hasAccess = admin.hasPermission(action.permission)

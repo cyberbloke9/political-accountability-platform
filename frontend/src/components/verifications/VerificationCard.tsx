@@ -190,22 +190,22 @@ export function VerificationCard({ verification, onVoteChange }: VerificationCar
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-3">
-            <Badge className={verdict.className + ' border'}>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <Badge className={verdict.className + ' border text-xs sm:text-sm'}>
               <VerdictIcon className="h-3 w-3 mr-1" />
               {verdict.label}
             </Badge>
-            <Badge className={status.className}>
+            <Badge className={status.className + ' text-xs sm:text-sm'}>
               {status.label}
             </Badge>
           </div>
 
           {verification.submitter && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <User className="h-4 w-4" />
-              <span>{verification.submitter.username}</span>
-              <Badge variant="outline" className="ml-2">
+            <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+              <User className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="truncate max-w-[150px]">{verification.submitter.username}</span>
+              <Badge variant="outline" className="text-xs whitespace-nowrap">
                 Score: {verification.submitter.citizen_score}
               </Badge>
             </div>
@@ -245,10 +245,10 @@ export function VerificationCard({ verification, onVoteChange }: VerificationCar
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-primary hover:underline flex items-center gap-2"
+                    className="text-xs sm:text-sm text-primary hover:underline flex items-start gap-2 break-all"
                   >
-                    <ExternalLink className="h-3 w-3" />
-                    {url}
+                    <ExternalLink className="h-3 w-3 flex-shrink-0 mt-0.5" />
+                    <span className="truncate">{url}</span>
                   </a>
                 ))}
               </div>
@@ -258,31 +258,31 @@ export function VerificationCard({ verification, onVoteChange }: VerificationCar
 
         {/* Voting Section */}
         <Separator />
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-2">
             <Button
               variant={userVote === 'upvote' ? 'default' : 'outline'}
               size="sm"
               onClick={() => handleVote('upvote')}
               disabled={isVoting}
-              className="gap-2"
+              className="gap-1 sm:gap-2 flex-1 sm:flex-initial"
             >
-              <ThumbsUp className="h-4 w-4" />
-              <span className="font-medium">{upvotes}</span>
+              <ThumbsUp className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="font-medium text-xs sm:text-sm">{upvotes}</span>
             </Button>
             <Button
               variant={userVote === 'downvote' ? 'default' : 'outline'}
               size="sm"
               onClick={() => handleVote('downvote')}
               disabled={isVoting}
-              className="gap-2"
+              className="gap-1 sm:gap-2 flex-1 sm:flex-initial"
             >
-              <ThumbsDown className="h-4 w-4" />
-              <span className="font-medium">{downvotes}</span>
+              <ThumbsDown className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="font-medium text-xs sm:text-sm">{downvotes}</span>
             </Button>
           </div>
 
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground text-center sm:text-right">
             {upvotes + downvotes} {upvotes + downvotes === 1 ? 'vote' : 'votes'}
           </p>
         </div>

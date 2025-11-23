@@ -233,12 +233,13 @@ export default function PromiseDetailPage() {
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main className="flex-1 container py-6 md:py-8 px-4">
+      <main className="flex-1 container py-6 md:py-8 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Back Button */}
-          <Button variant="ghost" onClick={() => router.push('/promises')}>
+          <Button variant="ghost" size="sm" onClick={() => router.push('/promises')} className="sm:size-default">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Promises
+            <span className="hidden xs:inline">Back to Promises</span>
+            <span className="xs:hidden">Back</span>
           </Button>
 
           {/* Main Content Card */}
@@ -269,7 +270,7 @@ export default function PromiseDetailPage() {
             <CardContent className="space-y-6">
               {/* Promise Image */}
               {promise.image_url && (
-                <div className="rounded-lg overflow-hidden relative w-full h-96">
+                <div className="rounded-lg overflow-hidden relative w-full h-48 sm:h-64 md:h-96">
                   <Image
                     src={promise.image_url}
                     alt="Promise related image"
@@ -373,10 +374,10 @@ export default function PromiseDetailPage() {
                       href={promise.source_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-primary hover:underline flex items-center gap-2 text-sm"
+                      className="text-primary hover:underline flex items-center gap-2 text-sm break-all"
                     >
-                      <ExternalLink className="h-4 w-4" />
-                      {promise.source_url}
+                      <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{promise.source_url}</span>
                     </a>
                   </div>
                 </>

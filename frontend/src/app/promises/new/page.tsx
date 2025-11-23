@@ -387,7 +387,7 @@ export default function NewPromisePage() {
                 {/* Tags */}
                 <div className="space-y-2">
                   <Label htmlFor="tags">Tags (Optional)</Label>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <Input
                       id="tags"
                       placeholder="Add a tag and press Enter"
@@ -399,8 +399,9 @@ export default function NewPromisePage() {
                           addTag()
                         }
                       }}
+                      className="flex-1"
                     />
-                    <Button type="button" variant="outline" onClick={addTag}>
+                    <Button type="button" variant="outline" onClick={addTag} className="w-full sm:w-auto">
                       Add
                     </Button>
                   </div>
@@ -429,9 +430,9 @@ export default function NewPromisePage() {
                 <div className="space-y-2">
                   <Label htmlFor="image">Image (Optional)</Label>
                   {!imagePreview ? (
-                    <div className="border-2 border-dashed rounded-lg p-8 text-center">
-                      <Upload className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
-                      <p className="text-sm text-muted-foreground mb-4">
+                    <div className="border-2 border-dashed rounded-lg p-6 sm:p-8 text-center">
+                      <Upload className="h-8 w-8 sm:h-10 sm:w-10 mx-auto text-muted-foreground mb-3 sm:mb-4" />
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
                         Upload an image related to the promise
                       </p>
                       <Input
@@ -446,7 +447,7 @@ export default function NewPromisePage() {
                       </p>
                     </div>
                   ) : (
-                    <div className="relative w-full h-64">
+                    <div className="relative w-full h-48 sm:h-64">
                       <Image
                         src={imagePreview}
                         alt="Preview"
@@ -461,19 +462,19 @@ export default function NewPromisePage() {
                         onClick={removeImage}
                         className="absolute top-2 right-2"
                       >
-                        <X className="h-4 w-4 mr-1" />
-                        Remove
+                        <X className="h-4 w-4 sm:mr-1" />
+                        <span className="hidden sm:inline">Remove</span>
                       </Button>
                     </div>
                   )}
                 </div>
 
                 {/* Submit Button */}
-                <div className="flex gap-4 pt-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1"
+                    className="flex-1 w-full sm:w-auto"
                     size="lg"
                   >
                     {isSubmitting ? (
@@ -491,6 +492,7 @@ export default function NewPromisePage() {
                     onClick={() => router.push('/promises')}
                     disabled={isSubmitting}
                     size="lg"
+                    className="w-full sm:w-auto"
                   >
                     Cancel
                   </Button>

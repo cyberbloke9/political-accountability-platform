@@ -120,19 +120,19 @@ export default function TransparencyPage() {
       <main className="flex-1 container py-8">
         <div className="space-y-8">
           {/* Header */}
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <Shield className="h-12 w-12 text-primary" />
-              <h1 className="text-4xl font-bold">Public Transparency Log</h1>
+          <div className="text-center max-w-3xl mx-auto px-4">
+            <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4">
+              <Shield className="h-8 w-8 sm:h-12 sm:w-12 text-primary" />
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Public Transparency Log</h1>
             </div>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground">
               Complete audit trail of all moderation actions. Every admin action is
               logged and publicly visible to ensure accountability and transparency.
             </p>
           </div>
 
           {/* Stats Dashboard */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -205,7 +205,7 @@ export default function TransparencyPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                   <Label htmlFor="action_type">Action Type</Label>
                   <Select
@@ -263,7 +263,7 @@ export default function TransparencyPage() {
                   />
                 </div>
 
-                <div className="flex items-end gap-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-2 sm:col-span-2 lg:col-span-1">
                   <Button onClick={clearFilters} variant="outline" className="flex-1">
                     Clear
                   </Button>

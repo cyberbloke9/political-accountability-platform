@@ -53,29 +53,29 @@ export function VerificationReviewCard({
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardHeader>
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <Badge className={verdict.color}>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <Badge className={verdict.color + ' text-xs sm:text-sm'}>
                 {verdict.label}
               </Badge>
-              <Badge variant="outline">
-                {voteRatio}% approval ({verification.upvotes} / {verification.downvotes})
+              <Badge variant="outline" className="text-xs">
+                {voteRatio}% ({verification.upvotes}/{verification.downvotes})
               </Badge>
             </div>
-            <CardTitle className="text-lg line-clamp-2 mb-2">
+            <CardTitle className="text-base sm:text-lg line-clamp-2 mb-2">
               {verification.promise.politician_name}
               {verification.promise.party && (
-                <span className="text-sm text-muted-foreground ml-2">
+                <span className="text-xs sm:text-sm text-muted-foreground ml-2">
                   ({verification.promise.party})
                 </span>
               )}
             </CardTitle>
-            <p className="text-sm text-muted-foreground line-clamp-2">
+            <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
               Promise: {verification.promise.promise_text}
             </p>
           </div>
-          <Link href={`/promises/${verification.promise.id}`} target="_blank">
+          <Link href={`/promises/${verification.promise.id}`} target="_blank" className="self-start">
             <Button variant="ghost" size="sm">
               <ExternalLink className="h-4 w-4" />
             </Button>
@@ -127,30 +127,32 @@ export function VerificationReviewCard({
         </div>
 
         {/* Voting Stats */}
-        <div className="flex gap-4 pt-3 border-t">
-          <div className="flex items-center gap-2 text-sm">
-            <div className="bg-green-100 p-2 rounded-full">
-              <ThumbsUp className="h-4 w-4 text-green-600" />
+        <div className="flex flex-wrap gap-3 sm:gap-4 pt-3 border-t">
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
+            <div className="bg-green-100 p-1.5 sm:p-2 rounded-full">
+              <ThumbsUp className="h-3 w-3 sm:h-4 sm:w-4 text-green-600" />
             </div>
             <span className="font-semibold">{verification.upvotes}</span>
-            <span className="text-muted-foreground">upvotes</span>
+            <span className="text-muted-foreground hidden sm:inline">upvotes</span>
+            <span className="text-muted-foreground sm:hidden">up</span>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <div className="bg-red-100 p-2 rounded-full">
-              <ThumbsDown className="h-4 w-4 text-red-600" />
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
+            <div className="bg-red-100 p-1.5 sm:p-2 rounded-full">
+              <ThumbsDown className="h-3 w-3 sm:h-4 sm:w-4 text-red-600" />
             </div>
             <span className="font-semibold">{verification.downvotes}</span>
-            <span className="text-muted-foreground">downvotes</span>
+            <span className="text-muted-foreground hidden sm:inline">downvotes</span>
+            <span className="text-muted-foreground sm:hidden">down</span>
           </div>
         </div>
 
         {/* Action Buttons */}
         {(onApprove || onReject) && (
-          <div className="flex gap-2 pt-4">
+          <div className="flex flex-col sm:flex-row gap-2 pt-4">
             {onApprove && (
               <Button
                 onClick={() => onApprove(verification.id)}
-                className="flex-1 bg-green-600 hover:bg-green-700"
+                className="flex-1 bg-green-600 hover:bg-green-700 w-full"
               >
                 Approve
               </Button>
@@ -159,7 +161,7 @@ export function VerificationReviewCard({
               <Button
                 onClick={() => onReject(verification.id)}
                 variant="destructive"
-                className="flex-1"
+                className="flex-1 w-full"
               >
                 Reject
               </Button>

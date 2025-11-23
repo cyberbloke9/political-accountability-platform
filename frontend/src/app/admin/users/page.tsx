@@ -192,7 +192,7 @@ export default function UsersPage() {
         <div className="space-y-6">
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -258,7 +258,7 @@ export default function UsersPage() {
               <CardTitle className="text-lg">Filters</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                   <label className="text-sm font-medium mb-2 block">
                     Search
@@ -344,11 +344,11 @@ export default function UsersPage() {
           {/* Users Table */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>
+              <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <span className="text-base sm:text-lg">
                   Users ({filteredUsers.length} of {users.length})
                 </span>
-                <Button variant="outline" size="sm" onClick={loadUsers} disabled={loading}>
+                <Button variant="outline" size="sm" onClick={loadUsers} disabled={loading} className="w-full sm:w-auto">
                   <Loader2 className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                   Refresh
                 </Button>
