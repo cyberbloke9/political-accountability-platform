@@ -65,30 +65,36 @@ export default function TransparencyPage() {
 
   useEffect(() => {
     loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, filters])
 
   const loadData = async () => {
-    setLoading(true)
+    try {
+      setLoading(true)
 
-    const [actionsResult, statsData] = await Promise.all([
-      getAdminActions({
-        ...filters,
-        action_type: filters.action_type || undefined,
-        target_type: filters.target_type || undefined,
-        search: filters.search || undefined,
-        limit: pageSize,
-        offset: (currentPage - 1) * pageSize
-      }),
-      getAdminActionStats()
-    ])
+      const [actionsResult, statsData] = await Promise.all([
+        getAdminActions({
+          ...filters,
+          action_type: filters.action_type || undefined,
+          target_type: filters.target_type || undefined,
+          search: filters.search || undefined,
+          limit: pageSize,
+          offset: (currentPage - 1) * pageSize
+        }),
+        getAdminActionStats()
+      ])
 
-    if (actionsResult.data) {
-      setActions(actionsResult.data)
-      setTotalCount(actionsResult.count)
+      if (actionsResult.data) {
+        setActions(actionsResult.data)
+        setTotalCount(actionsResult.count)
+      }
+
+      setStats(statsData)
+    } catch (error) {
+      console.error('Error loading transparency data:', error)
+    } finally {
+      setLoading(false)
     }
-
-    setStats(statsData)
-    setLoading(false)
   }
 
   const handleFilterChange = (field: string, value: string) => {

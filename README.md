@@ -69,17 +69,19 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
 3. **Set up Supabase**
    - Create a new project at [supabase.com](https://supabase.com)
    - Run the database migrations from `database/migrations/` in order:
-     1. `001_initial_schema.sql` - Core tables
-     2. `004_admin_system.sql` - Admin roles & permissions
-     3. `005_moderation_system_fixed.sql` - Moderation & audit log
-     4. `006_fraud_detection_fixed.sql` - Fraud detection
-     5. `007_vote_pattern_analysis.sql` - Vote patterns
-     6. `008_reputation_scoring.sql` - Reputation rules
-     7. `009_reputation_calculation_engine.sql` - Reputation engine
-     8. `010_auto_approval_system.sql` - Auto-approval (HARSH rules)
-     9. `011_ban_management_system.sql` - Ban system with appeals
+     1. `001_initial_schema.sql` - Core tables and initial setup
+     2. `002_reputation_system.sql` - Reputation system foundation
+     3. `003_promise_tags.sql` - Promise tagging system
+     4. `004_admin_system.sql` - Admin roles & permissions
+     5. `005_moderation_system_fixed.sql` - Moderation & audit log
+     6. `006_fraud_detection_fixed.sql` - Fraud detection algorithms
+     7. `007_add_fraud_permission.sql` - Fraud permission setup
+     8. `008_vote_pattern_analysis_fixed.sql` - Vote pattern analysis
+     9. `009_reputation_engine.sql` - Reputation calculation engine
+     10. `010_auto_approval_system.sql` - Auto-approval system
+     11. `011_ban_management_system.sql` - Ban system with appeals
 
-   Each migration has detailed instructions in `RUN_MIGRATION_XXX_INSTRUCTIONS.md`
+   Run each SQL file in the Supabase SQL Editor in sequential order
 
 4. **Configure environment variables**
    ```bash
