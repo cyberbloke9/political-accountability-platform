@@ -53,3 +53,9 @@ backend/prisma/migrations/*
 .vercel
 .turbo
 *.pem
+.puttamachine/
+.claude/
+
+# OS
+Thumbs.db
+Desktop.ini
