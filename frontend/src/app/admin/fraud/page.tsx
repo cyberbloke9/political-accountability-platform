@@ -312,6 +312,7 @@ export default function FraudDetectionPage() {
               </SelectContent>
             </Select>
           </div>
+          </div>
 
           {/* Flags List */}
           {loading ? (
