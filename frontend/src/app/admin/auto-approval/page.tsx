@@ -24,7 +24,6 @@ import {
   Loader2,
   RefreshCw,
   Save,
-  Shield,
   XCircle
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -61,6 +60,7 @@ export default function AutoApprovalPage() {
     loadData()
   }, [])
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadData = async () => {
     setLoading(true)
 

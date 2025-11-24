@@ -41,7 +41,6 @@ import {
   type BanAppeal
 } from '@/lib/banManagement'
 import {
-  Shield,
   Ban as BanIcon,
   UserX,
   UserCheck,
@@ -100,6 +99,7 @@ export default function BansManagementPage() {
     loadData()
   }, [filter, banTypeFilter])
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadData = async () => {
     setLoading(true)
 
