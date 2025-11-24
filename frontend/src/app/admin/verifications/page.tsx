@@ -45,7 +45,9 @@ export default function VerificationsPage() {
           downvotes,
           status,
           created_at,
-          promise:promises (
+          promise_id,
+          submitted_by,
+          promise:promises!promise_id (
             id,
             politician_name,
             promise_text,
@@ -84,12 +86,29 @@ export default function VerificationsPage() {
 
       const { data, error, count } = await query
 
-      if (error) throw error
+      if (error) {
+        console.error('Error fetching verifications:', error)
+        toast({
+          title: 'Error loading verifications',
+          description: error.message,
+          variant: 'destructive'
+        })
+        setVerifications([])
+        setTotalCount(0)
+        setLoading(false)
+        return
+      }
 
+      console.log('Fetched verifications:', data)
       setVerifications(data || [])
       setTotalCount(count || 0)
     } catch (error) {
       console.error('Error fetching verifications:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to load verifications',
+        variant: 'destructive'
+      })
     } finally {
       setLoading(false)
     }
