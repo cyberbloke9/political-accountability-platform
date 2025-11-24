@@ -17,7 +17,7 @@ import {
   updateReputationRule,
   type ReputationRule
 } from '@/lib/reputationEngine'
-import { Award, Loader2, RefreshCw, Save, TrendingDown } from 'lucide-react'
+import { Loader2, RefreshCw, Save, TrendingDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function ReputationSettingsPage() {
@@ -40,6 +40,7 @@ export default function ReputationSettingsPage() {
 
   useEffect(() => {
     loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const loadData = async () => {
