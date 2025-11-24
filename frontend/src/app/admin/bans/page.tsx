@@ -99,6 +99,7 @@ export default function BansManagementPage() {
     loadData()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, banTypeFilter])
+
   const loadData = async () => {
     setLoading(true)
 
