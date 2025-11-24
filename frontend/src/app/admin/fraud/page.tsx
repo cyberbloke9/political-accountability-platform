@@ -1,6 +1,7 @@
 'use client'
 
 import { AdminGuard } from '@/components/admin/AdminGuard'
+import AdminLayout from '@/components/admin/AdminLayout'
 import { FraudFlagCard } from '@/components/admin/FraudFlagCard'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -18,7 +19,7 @@ import {
   runFraudDetection,
   type FraudFlagWithTarget
 } from '@/lib/fraudDetection'
-import { AlertCircle, Loader2, Play, RefreshCw, Shield } from 'lucide-react'
+import { AlertCircle, Loader2, Play, RefreshCw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function FraudDetectionPage() {
@@ -162,44 +163,36 @@ export default function FraudDetectionPage() {
 
   return (
     <AdminGuard requiredPermission="manage_fraud">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
-                <Shield className="h-8 w-8 text-primary" />
-                Fraud Detection
-              </h1>
-              <p className="text-muted-foreground mt-2">
-                Review and manage fraud detection flags
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                onClick={loadFlags}
-                variant="outline"
-                disabled={loading || detectLoading}
-              >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
-              </Button>
-              <Button
-                onClick={handleRunDetection}
-                disabled={loading || detectLoading}
-              >
-                {detectLoading ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                ) : (
-                  <Play className="h-4 w-4 mr-2" />
-                )}
-                Run Detection
-              </Button>
-            </div>
+      <AdminLayout
+        title="Fraud Detection"
+        breadcrumbs={[{ label: 'Fraud Detection' }]}
+      >
+        <div className="space-y-6">
+          {/* Action Buttons */}
+          <div className="flex gap-2 justify-end">
+            <Button
+              onClick={loadFlags}
+              variant="outline"
+              disabled={loading || detectLoading}
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+            <Button
+              onClick={handleRunDetection}
+              disabled={loading || detectLoading}
+            >
+              {detectLoading ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Play className="h-4 w-4 mr-2" />
+              )}
+              Run Detection
+            </Button>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -264,10 +257,9 @@ export default function FraudDetectionPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
 
-        {/* Filters */}
-        <div className="mb-6 flex gap-4 flex-wrap">
+          {/* Filters */}
+          <div className="flex gap-4 flex-wrap">
           <div className="flex-1 min-w-[200px]">
             <label className="text-sm font-medium mb-2 block">Status</label>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -320,10 +312,9 @@ export default function FraudDetectionPage() {
               </SelectContent>
             </Select>
           </div>
-        </div>
 
-        {/* Flags List */}
-        {loading ? (
+          {/* Flags List */}
+          {loading ? (
           <div className="flex justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
@@ -346,7 +337,8 @@ export default function FraudDetectionPage() {
             ))}
           </div>
         )}
-      </div>
+        </div>
+      </AdminLayout>
     </AdminGuard>
   )
 }

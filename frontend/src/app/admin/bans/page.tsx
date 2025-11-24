@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { AdminGuard } from '@/components/admin/AdminGuard'
+import AdminLayout from '@/components/admin/AdminLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -265,16 +266,12 @@ export default function BansManagementPage() {
 
   return (
     <AdminGuard minLevel={2}>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <AdminLayout title="Ban Management" breadcrumbs={[{ label: 'Bans' }]}>
         <div className="space-y-8">
           {/* Header */}
           <div>
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h1 className="text-3xl font-bold flex items-center gap-2">
-                  <Shield className="h-8 w-8 text-primary" />
-                  Ban Management
-                </h1>
                 <p className="text-muted-foreground mt-2">
                   Manage user bans and review appeals
                 </p>
@@ -547,7 +544,6 @@ export default function BansManagementPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
 
       {/* Ban User Dialog */}
       <Dialog open={banDialogOpen} onOpenChange={setBanDialogOpen}>
@@ -724,6 +720,7 @@ export default function BansManagementPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </AdminLayout>
     </AdminGuard>
   )
 }
