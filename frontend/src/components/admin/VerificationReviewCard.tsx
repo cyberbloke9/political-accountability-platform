@@ -21,7 +21,6 @@ interface VerificationReviewCardProps {
       id: string
       politician_name: string
       promise_text: string
-      party?: string
     }
     submitter: {
       id: string
@@ -65,11 +64,6 @@ export function VerificationReviewCard({
             </div>
             <CardTitle className="text-base sm:text-lg line-clamp-2 mb-2">
               {verification.promise.politician_name}
-              {verification.promise.party && (
-                <span className="text-xs sm:text-sm text-muted-foreground ml-2">
-                  ({verification.promise.party})
-                </span>
-              )}
             </CardTitle>
             <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
               Promise: {verification.promise.promise_text}

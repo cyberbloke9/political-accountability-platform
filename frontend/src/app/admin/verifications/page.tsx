@@ -50,8 +50,7 @@ export default function VerificationsPage() {
           promise:promises!promise_id (
             id,
             politician_name,
-            promise_text,
-            party
+            promise_text
           ),
           submitter:users!submitted_by (
             id,
