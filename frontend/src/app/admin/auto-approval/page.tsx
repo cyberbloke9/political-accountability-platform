@@ -58,6 +58,7 @@ export default function AutoApprovalPage() {
 
   useEffect(() => {
     loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,7 +90,7 @@ export default function AutoApprovalPage() {
     setLoading(false)
   }
 
-  const handleFieldChange = (field: keyof AutoApprovalRules, value: any) => {
+  const handleFieldChange = (field: keyof AutoApprovalRules, value: string | number | boolean) => {
     if (!editedRules) return
 
     setEditedRules({

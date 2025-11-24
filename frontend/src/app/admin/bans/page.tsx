@@ -97,6 +97,7 @@ export default function BansManagementPage() {
 
   useEffect(() => {
     loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, banTypeFilter])
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -438,7 +439,7 @@ export default function BansManagementPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label>Status</Label>
-                  <Select value={filter} onValueChange={(value: any) => setFilter(value)}>
+                  <Select value={filter} onValueChange={(value: 'all' | 'active' | 'expired') => setFilter(value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -454,7 +455,7 @@ export default function BansManagementPage() {
                   <Label>Ban Type</Label>
                   <Select
                     value={banTypeFilter}
-                    onValueChange={(value: any) => setBanTypeFilter(value)}
+                    onValueChange={(value: 'all' | 'temporary' | 'permanent') => setBanTypeFilter(value)}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -568,7 +569,7 @@ export default function BansManagementPage() {
 
             <div>
               <Label htmlFor="banType">Ban Type</Label>
-              <Select value={banType} onValueChange={(value: any) => setBanType(value)}>
+              <Select value={banType} onValueChange={(value: 'temporary' | 'permanent') => setBanType(value)}>
                 <SelectTrigger id="banType">
                   <SelectValue />
                 </SelectTrigger>
