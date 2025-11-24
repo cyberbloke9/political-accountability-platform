@@ -27,7 +27,7 @@ export default function AdminLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Left: Back to Dashboard */}
-            <Link href="/admin/dashboard">
+            <Link href="/admin">
               <Button variant="ghost" size="sm" className="gap-2 hover:bg-indigo-50">
                 <ArrowLeft className="h-4 w-4" />
                 <Shield className="h-5 w-5 text-indigo-600" />
@@ -43,7 +43,7 @@ export default function AdminLayout({
           {breadcrumbs.length > 0 && (
             <div className="flex items-center gap-2 pb-3 text-sm">
               <Link
-                href="/admin/dashboard"
+                href="/admin"
                 className="text-gray-500 hover:text-indigo-600 transition-colors"
               >
                 Dashboard
