@@ -216,7 +216,6 @@ export default function TransparencyPage() {
                       <SelectValue placeholder="All actions" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All actions</SelectItem>
                       <SelectItem value="approve_verification">
                         Approve Verification
                       </SelectItem>
@@ -244,7 +243,6 @@ export default function TransparencyPage() {
                       <SelectValue placeholder="All targets" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All targets</SelectItem>
                       <SelectItem value="verification">Verification</SelectItem>
                       <SelectItem value="user">User</SelectItem>
                       <SelectItem value="politician">Politician</SelectItem>
