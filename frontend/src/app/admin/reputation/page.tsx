@@ -1,6 +1,7 @@
 'use client'
 
 import { AdminGuard } from '@/components/admin/AdminGuard'
+import AdminLayout from '@/components/admin/AdminLayout'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -130,15 +131,11 @@ export default function ReputationSettingsPage() {
 
   return (
     <AdminGuard minLevel={3}>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <AdminLayout title="Reputation Management" breadcrumbs={[{ label: 'Reputation' }]}>
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
-                <Award className="h-8 w-8 text-primary" />
-                Reputation Engine Settings
-              </h1>
               <p className="text-muted-foreground mt-2">
                 Configure automated reputation rules and scoring system
               </p>
@@ -357,7 +354,7 @@ export default function ReputationSettingsPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </AdminLayout>
     </AdminGuard>
   )
 }

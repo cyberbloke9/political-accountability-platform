@@ -1,6 +1,7 @@
 'use client'
 
 import { AdminGuard } from '@/components/admin/AdminGuard'
+import AdminLayout from '@/components/admin/AdminLayout'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -142,15 +143,11 @@ export default function AutoApprovalPage() {
 
   return (
     <AdminGuard minLevel={3}>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <AdminLayout title="Auto-Approval Settings" breadcrumbs={[{ label: 'Auto-Approval' }]}>
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
-                <Shield className="h-8 w-8 text-primary" />
-                Auto-Approval System
-              </h1>
               <p className="text-muted-foreground mt-2">
                 HARSH rules - only top-tier contributors qualify
               </p>
@@ -473,7 +470,7 @@ export default function AutoApprovalPage() {
             </Card>
           </div>
         )}
-      </div>
+      </AdminLayout>
     </AdminGuard>
   )
 }

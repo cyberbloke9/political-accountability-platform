@@ -98,7 +98,7 @@ export function VerificationReviewCard({
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-primary hover:underline inline-flex items-center gap-1 block"
+                  className="text-sm text-primary hover:underline flex items-center gap-1"
                 >
                   View source {verification.evidence_urls!.length > 1 && `#${index + 1}`} <ExternalLink className="h-3 w-3" />
                 </a>

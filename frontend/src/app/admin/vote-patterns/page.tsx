@@ -1,6 +1,7 @@
 'use client'
 
 import { AdminGuard } from '@/components/admin/AdminGuard'
+import AdminLayout from '@/components/admin/AdminLayout'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -91,15 +92,11 @@ export default function VotePatternsPage() {
 
   return (
     <AdminGuard requiredPermission="manage_fraud">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <AdminLayout title="Vote Pattern Analysis" breadcrumbs={[{ label: 'Vote Patterns' }]}>
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
-                <TrendingUp className="h-8 w-8 text-primary" />
-                Vote Pattern Analysis
-              </h1>
               <p className="text-muted-foreground mt-2">
                 Detect partisan bias and coordinated voting for India&apos;s multi-party democracy
               </p>
@@ -282,7 +279,7 @@ export default function VotePatternsPage() {
             </div>
           </div>
         )}
-      </div>
+      </AdminLayout>
     </AdminGuard>
   )
 }

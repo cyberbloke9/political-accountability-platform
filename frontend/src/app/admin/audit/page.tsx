@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { AdminGuard } from '@/components/admin/AdminGuard'
+import AdminLayout from '@/components/admin/AdminLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
@@ -161,16 +162,12 @@ export default function AdminAuditPage() {
 
   return (
     <AdminGuard minLevel={1}>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <AdminLayout title="Admin Audit Log" breadcrumbs={[{ label: 'Audit Log' }]}>
         <div className="space-y-8">
           {/* Header */}
           <div>
             <div className="flex flex-col gap-4 mb-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-2">
-                  <Shield className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
-                  Admin Audit Log
-                </h1>
                 <p className="text-sm sm:text-base text-muted-foreground mt-2">
                   Complete audit trail of all moderation actions
                 </p>
@@ -554,7 +551,7 @@ export default function AdminAuditPage() {
             </Card>
           )}
         </div>
-      </div>
+      </AdminLayout>
     </AdminGuard>
   )
 }
