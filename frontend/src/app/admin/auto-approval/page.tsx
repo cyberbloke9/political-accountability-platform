@@ -58,10 +58,9 @@ export default function AutoApprovalPage() {
 
   useEffect(() => {
     loadData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadData = async () => {
     setLoading(true)
 
