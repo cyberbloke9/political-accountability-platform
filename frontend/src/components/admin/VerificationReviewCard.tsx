@@ -14,6 +14,7 @@ interface VerificationReviewCardProps {
     evidence_text: string
     evidence_urls?: string[]
     verdict: 'fulfilled' | 'broken' | 'in_progress' | 'stalled'
+    status: 'pending' | 'approved' | 'rejected'
     upvotes: number
     downvotes: number
     created_at: string
@@ -39,12 +40,19 @@ const verdictConfig = {
   stalled: { label: 'Stalled', color: 'bg-yellow-500' }
 }
 
+const statusConfig = {
+  pending: { label: 'Pending Review', color: 'bg-yellow-600' },
+  approved: { label: 'Approved', color: 'bg-green-600' },
+  rejected: { label: 'Rejected', color: 'bg-red-600' }
+}
+
 export function VerificationReviewCard({
   verification,
   onApprove,
   onReject
 }: VerificationReviewCardProps) {
   const verdict = verdictConfig[verification.verdict]
+  const status = statusConfig[verification.status]
   const voteRatio = verification.upvotes + verification.downvotes > 0
     ? Math.round((verification.upvotes / (verification.upvotes + verification.downvotes)) * 100)
     : 0
@@ -55,8 +63,13 @@ export function VerificationReviewCard({
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2 mb-2">
-              <Badge className={verdict.color + ' text-xs sm:text-sm'}>
-                {verdict.label}
+              {/* Show status badge (Pending/Approved/Rejected) */}
+              <Badge className={status.color + ' text-white text-xs sm:text-sm'}>
+                {status.label}
+              </Badge>
+              {/* Show verdict badge (Fulfilled/Broken/etc) */}
+              <Badge variant="outline" className="text-xs sm:text-sm">
+                Claim: {verdict.label}
               </Badge>
               <Badge variant="outline" className="text-xs">
                 {voteRatio}% ({verification.upvotes}/{verification.downvotes})
