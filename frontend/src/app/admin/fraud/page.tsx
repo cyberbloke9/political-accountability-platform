@@ -315,28 +315,28 @@ export default function FraudDetectionPage() {
 
           {/* Flags List */}
           {loading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : filteredFlags.length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center text-muted-foreground">
-              No fraud flags found matching your filters.
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="space-y-4">
-            {filteredFlags.map(flag => (
-              <FraudFlagCard
-                key={flag.id}
-                flag={flag}
-                onConfirm={handleConfirm}
-                onDismiss={handleDismiss}
-                loading={actionLoading}
-              />
-            ))}
-          </div>
-        )}
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : filteredFlags.length === 0 ? (
+            <Card>
+              <CardContent className="py-12 text-center text-muted-foreground">
+                No fraud flags found matching your filters.
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-4">
+              {filteredFlags.map(flag => (
+                <FraudFlagCard
+                  key={flag.id}
+                  flag={flag}
+                  onConfirm={handleConfirm}
+                  onDismiss={handleDismiss}
+                  loading={actionLoading}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </AdminLayout>
     </AdminGuard>
