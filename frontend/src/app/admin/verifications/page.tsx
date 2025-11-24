@@ -39,7 +39,7 @@ export default function VerificationsPage() {
         .select(`
           id,
           evidence_text,
-          evidence_url,
+          evidence_urls,
           verdict,
           upvotes,
           downvotes,

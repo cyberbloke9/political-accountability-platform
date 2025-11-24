@@ -12,7 +12,7 @@ interface VerificationReviewCardProps {
   verification: {
     id: string
     evidence_text: string
-    evidence_url?: string
+    evidence_urls?: string[]
     verdict: 'fulfilled' | 'broken' | 'in_progress' | 'stalled'
     upvotes: number
     downvotes: number
@@ -90,15 +90,20 @@ export function VerificationReviewCard({
           <p className="text-sm text-muted-foreground line-clamp-3">
             {verification.evidence_text}
           </p>
-          {verification.evidence_url && (
-            <a
-              href={verification.evidence_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-primary hover:underline mt-1 inline-flex items-center gap-1"
-            >
-              View source <ExternalLink className="h-3 w-3" />
-            </a>
+          {verification.evidence_urls && verification.evidence_urls.length > 0 && (
+            <div className="mt-2 space-y-1">
+              {verification.evidence_urls.map((url, index) => (
+                <a
+                  key={index}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:underline inline-flex items-center gap-1 block"
+                >
+                  View source {verification.evidence_urls!.length > 1 && `#${index + 1}`} <ExternalLink className="h-3 w-3" />
+                </a>
+              ))}
+            </div>
           )}
         </div>
 
