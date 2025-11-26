@@ -42,6 +42,9 @@ interface VerificationData {
   downvotes: number
   created_at: string
   verification_hash: string
+  trust_level?: 'admin' | 'trusted_community' | 'community' | 'untrusted'
+  is_self_verification?: boolean
+  verification_weight?: number
   promise: {
     id: string
     politician_name: string
@@ -130,6 +133,9 @@ export default function VerificationDetailPage() {
           downvotes,
           created_at,
           verification_hash,
+          trust_level,
+          is_self_verification,
+          verification_weight,
           promise:promises!promise_id (
             id,
             politician_name,
@@ -306,6 +312,36 @@ export default function VerificationDetailPage() {
                 <Badge variant="outline">
                   {voteRatio}% ({verification.upvotes}/{verification.downvotes})
                 </Badge>
+                {verification.trust_level === 'admin' && (
+                  <Badge className="bg-purple-500/10 text-purple-600 border-purple-500/20 gap-1">
+                    <Shield className="h-3 w-3" />
+                    Admin Verified (3.0x points)
+                  </Badge>
+                )}
+                {verification.trust_level === 'trusted_community' && (
+                  <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/20 gap-1">
+                    <Shield className="h-3 w-3" />
+                    Trusted User (2.0x points)
+                  </Badge>
+                )}
+                {verification.trust_level === 'community' && (
+                  <Badge className="bg-gray-500/10 text-gray-600 border-gray-500/20 gap-1">
+                    <User className="h-3 w-3" />
+                    Community (1.0x points)
+                  </Badge>
+                )}
+                {verification.trust_level === 'untrusted' && (
+                  <Badge className="bg-orange-500/10 text-orange-600 border-orange-500/20 gap-1">
+                    <ShieldAlert className="h-3 w-3" />
+                    New User (0.5x points)
+                  </Badge>
+                )}
+                {verification.is_self_verification && (
+                  <Badge className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20 gap-1">
+                    <AlertTriangle className="h-3 w-3" />
+                    Self-Verified (0.1x points)
+                  </Badge>
+                )}
               </div>
               <CardTitle className="text-2xl">
                 {verification.promise.politician_name}
