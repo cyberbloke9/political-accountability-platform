@@ -19,6 +19,7 @@ import {
   ThumbsUp,
   ThumbsDown,
   Shield,
+  ShieldAlert,
   CheckCircle2,
   XCircle,
   Clock,
