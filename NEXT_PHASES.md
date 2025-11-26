@@ -1,420 +1,664 @@
-# Political Accountability Platform - Next Development Phases
-## Updated: November 25, 2025
+# Political Accountability Platform - Development Roadmap
+## Updated: November 27, 2025
 
 ---
 
-## ✅ **COMPLETED PHASES (1-8)**
+## ✅ **COMPLETED PHASES**
 
-### Phase 1-7: Core Platform ✓
-- Authentication, promises, verifications, voting, profiles, search
+### Phase 1-8: Core Platform Foundation ✓
+- Authentication and user management
+- Promise creation and browsing
+- Verification submission system
+- Community voting mechanism
+- User profiles and reputation
+- Advanced search and filtering
+- Admin roles and permissions (Reviewer/Moderator/SuperAdmin)
+- Fraud detection and vote pattern analysis
+- Reputation engine with dynamic scoring
+- Auto-approval for trusted users
+- Ban management with appeals system
+- Public transparency log
 
-### Phase 8: Admin & Moderation System ✓
-- Role-based access control (Reviewer/Moderator/SuperAdmin)
-- Verification review queue with approve/reject
-- Fraud detection (spam, vote manipulation, duplicate content)
-- Vote pattern analysis (partisan bias detection)
-- Reputation engine with dynamic point system
-- Auto-approval for trusted users (250+ score, 10+ approved verifications)
-- Ban management (temporary/permanent bans with appeals)
-- Public transparency log (all admin actions visible)
-- Complete audit trail
+### Phase 9: Verification Detail Page ✓
+- Detailed verification view with full evidence
+- Community voting interface
+- Admin moderation controls
+- Cryptographic hash integrity
+- Status tracking and history
 
-### **CRITICAL BUGS FIXED:**
-- ✅ Double deduction bug (rejections deducted -30 instead of -15)
-- ✅ Self-voting exploit (users could upvote themselves for +10 points)
-- ✅ Leaderboard not updating (converted materialized view to regular view)
-- ✅ Verification status badges showing wrong values
-- ✅ Database functions with ambiguous column names
+### Phase 1 (Anti-Gaming): Complete Anti-Gaming System ✓
+- **Self-Verification Detection**: Automatic flagging with 0.1x penalty
+- **Weighted Trust System**: 4-tier trust levels (Admin 3.0x, Trusted 2.0x, Community 1.0x, Untrusted 0.5x)
+- **Sybil Attack Detection**: Pattern recognition for coordinated voting, rapid submissions
+- **Automated Flagging**: Real-time suspicious activity monitoring with severity levels
+- **Trust Progression Display**: Clear requirements shown to users
+- **Admin Flagged Accounts Dashboard**: Review and resolve suspicious activity
+- **Frontend Integration**: Trust badges, self-verification warnings, progression indicators
+
+**Database Migrations Completed:**
+- Migration 012: Verification hash integrity
+- Migration 013: Self-verification prevention
+- Migration 014: Weighted trust system
+- Migration 015: Sybil attack detection
 
 ---
 
-## 🚀 **PHASE 9: Verification Detail Page & Missing Pages**
-**Priority:** CRITICAL
-**Estimated Time:** 1-2 days
+## 🚀 **UPCOMING PHASES** (Priority Order)
+
+## **PHASE 2: Additional Anti-Gaming Enhancements**
+**Priority:** HIGH
+**Estimated Time:** 3-4 days
 
 ### Why This Phase?
-- Users clicking "View verification" from transparency log get blank page
-- Need dedicated verification detail page
-- Missing 404/error pages
+Continue strengthening the anti-gaming system with advanced automation and detection mechanisms before adding new features.
 
 ### Tasks:
-1. **Verification Detail Page (`/verifications/[id]`)**
-   - Full verification details (evidence text, URLs, verdict)
-   - Promise information with link to promise page
-   - Submitter information (username, citizen score)
-   - Community voting (upvotes/downvotes with percentages)
-   - Admin decision history (approved/rejected, when, by whom, reason)
-   - Status badges (Pending/Approved/Rejected + verdict)
-   - Action buttons for admins (Approve/Reject if pending)
 
-2. **404 Not Found Page**
-   - Custom 404 page with helpful links
-   - Search bar to find promises
-   - Link to home and browse promises
+#### 1. **Vote Brigade Detection** (Migration 016)
+```sql
+-- Detect coordinated voting groups
+CREATE TABLE vote_brigade_patterns (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_ids UUID[] NOT NULL,
+  verification_ids UUID[] NOT NULL,
+  detection_timestamp TIMESTAMPTZ DEFAULT NOW(),
+  confidence_score DECIMAL(3,2),
+  pattern_type TEXT,
+  flagged BOOLEAN DEFAULT TRUE
+);
+```
 
-3. **Error Boundary Page**
-   - Global error boundary for React errors
-   - Friendly error message
-   - Report error button
+**Detection Patterns:**
+- Multiple accounts voting identically on same verifications
+- Time correlation analysis (votes within 1 minute window)
+- IP address clustering
+- Device fingerprint similarities
+- Voting velocity anomalies
+
+#### 2. **Trust Level Automation** (Migration 017)
+```sql
+-- Automatic trust level promotion/demotion
+CREATE OR REPLACE FUNCTION auto_update_trust_levels()
+RETURNS void AS $$
+-- Runs nightly to update all user trust levels
+-- Promotes users who meet requirements
+-- Demotes users who fall below thresholds
+$$ LANGUAGE plpgsql;
+```
+
+**Features:**
+- Nightly cron job to recalculate all trust levels
+- Automatic promotion when thresholds met
+- Automatic demotion for inactive or low-quality users
+- Notification system integration
+
+#### 3. **Reputation Decay System** (Migration 018)
+```sql
+-- Decay points for inactive users
+CREATE TABLE reputation_decay_config (
+  decay_start_days INTEGER DEFAULT 90,
+  decay_rate DECIMAL(3,2) DEFAULT 0.02,
+  minimum_score INTEGER DEFAULT 50
+);
+```
+
+**Decay Rules:**
+- After 90 days of inactivity, points decay by 2% per month
+- Minimum score floor of 50 points
+- Encourages ongoing participation
+- Prevents score squatting
+
+#### 4. **Advanced Fraud Detection** (Migration 019)
+```sql
+-- ML-ready fraud scoring
+CREATE TABLE fraud_scores (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  verification_id UUID REFERENCES verifications(id),
+  fraud_probability DECIMAL(3,2),
+  features JSONB,
+  model_version TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+**Fraud Indicators:**
+- Content similarity to known spam
+- Unusual submission patterns
+- Geographic anomalies
+- Behavioral outliers
+- Network graph analysis
+
+#### 5. **Rate Limiting System** (Migration 020)
+```sql
+-- Per-user action limits
+CREATE TABLE rate_limits (
+  user_id UUID REFERENCES users(id),
+  action_type TEXT,
+  action_count INTEGER,
+  window_start TIMESTAMPTZ,
+  blocked_until TIMESTAMPTZ
+);
+```
+
+**Rate Limits:**
+- Verifications: 5 per hour, 20 per day
+- Votes: 50 per hour, 200 per day
+- Promises: 3 per hour, 10 per day
+- Comments: 10 per hour, 50 per day (future)
+
+#### 6. **Audit Trail Enhancement** (Migration 021)
+```sql
+-- Comprehensive activity logging
+CREATE TABLE activity_log (
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID REFERENCES users(id),
+  action_type TEXT,
+  resource_type TEXT,
+  resource_id UUID,
+  ip_address INET,
+  user_agent TEXT,
+  metadata JSONB,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_activity_user ON activity_log(user_id, created_at DESC);
+CREATE INDEX idx_activity_ip ON activity_log(ip_address, created_at DESC);
+```
+
+**Logged Actions:**
+- All submissions, votes, edits, deletions
+- IP addresses and user agents
+- Forensic analysis capability
+- Abuse pattern detection
 
 ### Success Metrics:
-- ✅ "View verification" links work from transparency log
-- ✅ All verification data displays correctly
-- ✅ Admins can moderate from verification detail page
-- ✅ 404 errors show helpful page instead of blank
+- ✓ Vote brigade detection accuracy > 90%
+- ✓ Trust levels update automatically within 24 hours
+- ✓ Reputation decay reduces inactive high scores by 20%
+- ✓ Rate limiting blocks spam attempts
+- ✓ Audit trail captures 100% of actions
 
 ---
 
-## 🔔 **PHASE 10: In-App Notifications System**
+## **PHASE 3: Promise Status Updates (Automated)**
 **Priority:** HIGH
 **Estimated Time:** 2-3 days
 
 ### Why This Phase?
-- Users need real-time updates on their activity
-- Reputation changes, approvals, rejections should notify users
-- Increase user engagement and retention
+Enable automatic promise status transitions based on verification consensus, making the platform more dynamic and reducing manual work.
 
 ### Tasks:
-1. **Notification Bell in Header**
-   - Bell icon with unread count badge
-   - Dropdown showing recent 5 notifications
-   - "View All" link to notifications page
-   - Real-time updates using Supabase realtime
 
-2. **Notifications Page (`/notifications`)**
-   - List all notifications (paginated)
-   - Mark as read/unread
-   - Filter by type (all, reputation, verifications, votes)
-   - Clear all read notifications
-   - Notification grouping (e.g., "3 upvotes on your verification")
+#### 1. **Consensus Algorithm** (Migration 022)
+```sql
+CREATE OR REPLACE FUNCTION calculate_promise_consensus(p_promise_id UUID)
+RETURNS TABLE (
+  verdict TEXT,
+  confidence DECIMAL(3,2),
+  supporting_verifications INTEGER,
+  total_weight DECIMAL(10,2)
+) AS $$
+-- Weighted consensus based on trust levels
+-- Returns most likely verdict with confidence score
+$$ LANGUAGE plpgsql;
+```
 
-3. **Notification Types Already in Database:**
-   - Verification approved (+10 points)
-   - Verification rejected (-15 points, with reason)
-   - Reputation change (manual adjustments)
-   - Upvote received (+10 points to verification author)
-   - Downvote received (-5 points to verification author)
+**Consensus Rules:**
+- Minimum 3 verifications required
+- Weight by trust level (Admin 3.0x, Trusted 2.0x, etc.)
+- Confidence threshold: 70% for auto-update
+- Admin verifications override community consensus
 
-4. **New Notification Types to Add:**
-   - Promise you created was verified
-   - Your verification reached 10/25/50/100 votes
-   - You reached new citizen score milestone (100/250/500/1000)
-   - Your verification is being reviewed by admin
-   - Ban appeal approved/rejected
+#### 2. **Status Transition System**
+```sql
+CREATE TABLE promise_status_history (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  promise_id UUID REFERENCES promises(id),
+  old_status TEXT,
+  new_status TEXT,
+  trigger_type TEXT, -- 'manual', 'auto_consensus', 'admin_override'
+  confidence_score DECIMAL(3,2),
+  changed_by UUID REFERENCES users(id),
+  changed_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
 
-### Database:
-- ✅ `notifications` table already exists (created in Phase 8)
-- Just need to build the UI and real-time subscriptions
+**Transition Types:**
+- `pending` → `in_progress` (verification evidence of work started)
+- `in_progress` → `fulfilled` (consensus shows completion)
+- `in_progress` → `stalled` (no progress for 90 days)
+- `pending` → `broken` (official statement or evidence of reversal)
+
+#### 3. **Status Update Notifications**
+```sql
+-- Notify promise creator and watchers
+CREATE OR REPLACE FUNCTION notify_status_change()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO notifications (user_id, type, message, link)
+  SELECT
+    NEW.created_by,
+    'promise_status_changed',
+    'Promise status updated to ' || NEW.status,
+    '/promises/' || NEW.id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+#### 4. **Timeline Visualization**
+- Visual timeline showing promise lifecycle
+- Key milestones and verification events
+- Status change history
+- Evidence aggregation by verdict
 
 ### Success Metrics:
-- ✅ Users see notifications in real-time
-- ✅ Notification bell updates without page refresh
-- ✅ All notification types display correctly
-- ✅ Users can manage notifications (read/unread/delete)
+- ✓ Automatic status updates with > 70% confidence
+- ✓ Manual overrides by admins always possible
+- ✓ Users notified of status changes within 1 minute
+- ✓ Timeline accurately reflects promise history
 
 ---
 
-## 💬 **PHASE 11: Comments & Discussions**
+## **PHASE 4: In-App Notifications System**
+**Priority:** MEDIUM-HIGH
+**Estimated Time:** 2-3 days
+
+### Why This Phase?
+Users need real-time updates on their activity to stay engaged with the platform.
+
+### Tasks:
+
+#### 1. **Notification Bell in Header**
+- Bell icon with unread count badge
+- Dropdown showing recent 5 notifications
+- "View All" link to notifications page
+- Real-time updates using Supabase realtime
+
+#### 2. **Notifications Page (`/notifications`)**
+- List all notifications (paginated)
+- Mark as read/unread
+- Filter by type (all, reputation, verifications, votes, promises)
+- Clear all read notifications
+- Notification grouping (e.g., "3 upvotes on your verification")
+
+#### 3. **Notification Types:**
+**Existing in Database:**
+- Verification approved (+10 points)
+- Verification rejected (-15 points with reason)
+- Reputation change (manual adjustments)
+- Upvote received (+10 points)
+- Downvote received (-5 points)
+
+**New Types to Add:**
+- Promise you created was verified
+- Your verification reached milestones (10/25/50/100 votes)
+- Trust level advancement (Community → Trusted)
+- Citizen score milestones (100/250/500/1000)
+- Your verification is under admin review
+- Ban appeal approved/rejected
+- Promise status changed
+
+#### 4. **Real-time Subscriptions**
+```typescript
+// Subscribe to user's notifications
+supabase
+  .channel(`notifications:${userId}`)
+  .on('postgres_changes', {
+    event: 'INSERT',
+    schema: 'public',
+    table: 'notifications',
+    filter: `user_id=eq.${userId}`
+  }, (payload) => {
+    // Update notification count
+    // Show toast notification
+  })
+  .subscribe()
+```
+
+### Success Metrics:
+- ✓ Notifications appear in real-time (< 1 second delay)
+- ✓ Bell badge updates without page refresh
+- ✓ All notification types display correctly
+- ✓ Users can manage notifications effectively
+
+---
+
+## **PHASE 5: Comments & Discussions**
 **Priority:** MEDIUM
 **Estimated Time:** 2-3 days
 
 ### Why This Phase?
-- Enable community discussion on promises and verifications
-- Allow users to ask questions about evidence
-- Improve verification quality through peer review
+Enable community discussion to improve verification quality and engagement.
 
 ### Tasks:
-1. **Database Schema**
-   - Create `comments` table (id, user_id, target_type, target_id, content, parent_id, upvotes, downvotes, created_at)
-   - Create `comment_votes` table (comment_id, user_id, vote_type)
-   - Add RLS policies for comments
 
-2. **Comment System**
-   - Add comments to promise pages
-   - Add comments to verification detail pages
-   - Nested replies (1 level deep)
-   - Upvote/downvote comments
-   - Edit/delete own comments (within 5 minutes)
-   - Report inappropriate comments
+#### 1. **Database Schema** (Migration 023)
+```sql
+CREATE TABLE comments (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  target_type TEXT CHECK (target_type IN ('promise', 'verification')),
+  target_id UUID NOT NULL,
+  content TEXT NOT NULL CHECK (length(content) BETWEEN 1 AND 500),
+  parent_id UUID REFERENCES comments(id),
+  upvotes INTEGER DEFAULT 0,
+  downvotes INTEGER DEFAULT 0,
+  is_edited BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  deleted_at TIMESTAMPTZ
+);
 
-3. **Comment Moderation (Admin)**
-   - View reported comments
-   - Delete inappropriate comments
-   - Ban users who repeatedly violate comment policy
+CREATE TABLE comment_votes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  comment_id UUID REFERENCES comments(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES users(id),
+  vote_type TEXT CHECK (vote_type IN ('upvote', 'downvote')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(comment_id, user_id)
+);
+```
 
-4. **UI Components**
-   - Comment input box with character limit (500 chars)
-   - Comment thread display
-   - Reply button and nested display
-   - Vote buttons on comments
-   - Edit/delete buttons for own comments
+#### 2. **Comment Features**
+- Add comments to promise pages
+- Add comments to verification detail pages
+- Nested replies (1 level deep only)
+- Upvote/downvote comments
+- Edit own comments (within 5 minutes)
+- Delete own comments
+- Report inappropriate comments
+
+#### 3. **Comment Moderation (Admin)**
+- View reported comments
+- Delete inappropriate comments
+- Ban users who repeatedly violate policy
+- Comment removal reasons logged
+
+#### 4. **UI Components**
+- Comment input box (500 char limit)
+- Comment thread display
+- Reply button and nested display
+- Vote buttons on comments
+- Edit/delete buttons for own comments
+- Timestamp and author display
 
 ### Success Metrics:
-- ✅ Users can comment on promises and verifications
-- ✅ Nested replies work correctly
-- ✅ Comment voting works
-- ✅ Admins can moderate comments
+- ✓ Users can comment on promises and verifications
+- ✓ Nested replies work correctly
+- ✓ Comment voting functional
+- ✓ Admins can moderate effectively
 
 ---
 
-## 📊 **PHASE 12: Analytics & Insights Dashboard**
+## **PHASE 6: Analytics & Insights Dashboard**
 **Priority:** MEDIUM
 **Estimated Time:** 3-4 days
 
 ### Why This Phase?
-- Provide data-driven insights to users and public
-- Show platform statistics and trends
-- Highlight top contributors and politicians
-- Increase transparency and engagement
+Provide data-driven insights to increase transparency and engagement.
 
 ### Tasks:
-1. **Platform Statistics Page (`/analytics`)**
-   - Total promises tracked
-   - Total verifications submitted
-   - Total votes cast
-   - Total active users
-   - Verification approval rate
-   - Average citizen score
 
-2. **Politician Analytics**
-   - Promise fulfillment rate by politician (top 10)
-   - Promises by status (fulfilled/broken/in_progress/stalled)
-   - Most verified politicians
-   - Least verified politicians (need attention)
+#### 1. **Platform Statistics Page (`/analytics`)**
+```sql
+-- Materialized view for fast analytics
+CREATE MATERIALIZED VIEW platform_stats AS
+SELECT
+  COUNT(DISTINCT p.id) as total_promises,
+  COUNT(DISTINCT v.id) as total_verifications,
+  COUNT(DISTINCT vo.id) as total_votes,
+  COUNT(DISTINCT u.id) as total_users,
+  AVG(u.citizen_score) as avg_citizen_score,
+  (COUNT(*) FILTER (WHERE v.status = 'approved')::FLOAT /
+   NULLIF(COUNT(*), 0)) as approval_rate
+FROM promises p
+LEFT JOIN verifications v ON p.id = v.promise_id
+LEFT JOIN votes vo ON v.id = vo.verification_id
+LEFT JOIN users u ON v.submitted_by = u.id;
 
-3. **Party Analytics**
-   - Promise fulfillment rate by party
-   - Comparative analysis (BJP vs Congress vs AAP, etc.)
-   - Party bias in verifications (using vote pattern data)
+REFRESH MATERIALIZED VIEW platform_stats;
+```
 
-4. **Category Analytics**
-   - Promises by category (Education, Healthcare, Infrastructure, etc.)
-   - Fulfillment rate by category
-   - Most tracked categories
+**Metrics:**
+- Total promises tracked
+- Total verifications submitted
+- Total votes cast
+- Total active users
+- Verification approval rate
+- Average citizen score
 
-5. **Geographic Analytics**
-   - Promises by state/constituency
-   - Heatmap of promise density
-   - Fulfillment rate by region
+#### 2. **Politician Analytics**
+- Promise fulfillment rate by politician (top 10)
+- Promises by status (fulfilled/broken/in_progress/stalled)
+- Most verified politicians
+- Least verified politicians (need attention)
 
-6. **Data Visualizations**
-   - Pie charts (promise status distribution)
-   - Bar charts (fulfillment by politician/party/category)
-   - Line charts (promises over time)
-   - Heatmaps (geographic distribution)
+#### 3. **Party Analytics**
+- Promise fulfillment rate by party
+- Comparative analysis (BJP vs Congress vs AAP, etc.)
+- Party bias in verifications (using vote pattern data)
 
-### Libraries:
-- Recharts or Chart.js for visualizations
-- React Map GL for geographic heatmaps
+#### 4. **Category Analytics**
+- Promises by category (Education, Healthcare, Infrastructure)
+- Fulfillment rate by category
+- Most tracked categories
+
+#### 5. **Data Visualizations**
+- Pie charts (promise status distribution)
+- Bar charts (fulfillment by politician/party/category)
+- Line charts (promises over time)
+- Heatmaps (geographic distribution)
+
+**Libraries:**
+- Recharts for charts
+- React Map GL for heatmaps (future)
 
 ### Success Metrics:
-- ✅ Analytics page shows accurate data
-- ✅ Charts are interactive and responsive
-- ✅ Data updates in real-time
-- ✅ Users can filter analytics by time period
+- ✓ Analytics page loads in < 2 seconds
+- ✓ Charts are interactive and responsive
+- ✓ Data updates daily via materialized views
+- ✓ Users can filter by time period
 
 ---
 
-## 🏆 **PHASE 13: Gamification & Achievements**
-**Priority:** LOW
-**Estimated Time:** 2-3 days
-
-### Why This Phase?
-- Increase user engagement through game-like rewards
-- Recognize top contributors
-- Encourage quality submissions
-
-### Tasks:
-1. **Achievement Badges**
-   - Create `achievements` table (id, name, description, icon, requirement)
-   - Create `user_achievements` table (user_id, achievement_id, earned_at)
-
-2. **Achievement Types:**
-   - **First Steps:** Submit your first promise/verification
-   - **Fact Checker:** 10/25/50/100 approved verifications
-   - **Promise Hunter:** Create 10/25/50 promises
-   - **Community Leader:** Reach 250/500/1000 citizen score
-   - **Trusted Contributor:** 5 consecutive approved verifications
-   - **Bug Hunter:** Report a bug that gets fixed (like hawkeye!)
-   - **Voting Champion:** Cast 100/500/1000 votes
-   - **Streak Master:** 7/30/90 day activity streak
-
-3. **Leaderboard Enhancements**
-   - Top weekly contributors
-   - Top monthly contributors
-   - Hall of fame (all-time top 10)
-   - Category-specific leaderboards
-
-4. **Profile Enhancements**
-   - Display earned badges on profile
-   - Achievement showcase section
-   - Progress bars for unearned achievements
-
-### Success Metrics:
-- ✅ Users earn badges for achievements
-- ✅ Badges display on profiles
-- ✅ Leaderboard shows weekly/monthly leaders
-- ✅ Users are motivated to contribute more
-
----
-
-## 🔐 **PHASE 14: Security & Performance**
+## **PHASE 7: Security & Performance**
 **Priority:** HIGH (Before Public Launch)
 **Estimated Time:** 3-4 days
 
 ### Why This Phase?
-- Protect against spam, bots, and malicious users
-- Improve page load times
-- Ensure platform can handle traffic spikes
+Protect against attacks and ensure platform can handle traffic.
 
 ### Tasks:
-1. **Security Enhancements**
-   - Rate limiting on API endpoints (Vercel middleware)
-   - CAPTCHA for signup and submissions (hCaptcha or reCAPTCHA)
-   - Content Security Policy (CSP) headers
-   - SQL injection prevention (Supabase already handles this)
-   - XSS prevention (sanitize user input)
 
-2. **Performance Optimization**
-   - Add database indexes for frequently queried fields
-   - Implement pagination for large lists (promises, verifications)
-   - Lazy load images with Next.js Image component
-   - Add CDN caching for static assets
-   - Optimize database queries (use EXPLAIN ANALYZE)
+#### 1. **Security Enhancements**
+- Rate limiting on API endpoints (Vercel middleware)
+- CAPTCHA for signup and submissions (hCaptcha or reCAPTCHA)
+- Content Security Policy (CSP) headers
+- XSS prevention (sanitize user input)
+- SQL injection prevention (already handled by Supabase)
 
-3. **Error Monitoring**
-   - Set up Sentry for error tracking
-   - Add custom error logging
-   - Monitor API response times
-   - Track user sessions
+#### 2. **Performance Optimization**
+- Add database indexes for frequently queried fields
+- Implement pagination for large lists
+- Lazy load images with Next.js Image
+- Add CDN caching for static assets
+- Optimize database queries (EXPLAIN ANALYZE)
 
-4. **Load Testing**
-   - Test with 1000+ concurrent users
-   - Identify bottlenecks
-   - Optimize slow queries
+#### 3. **Error Monitoring**
+- Set up Sentry for error tracking
+- Custom error logging
+- Monitor API response times
+- Track user sessions
+
+#### 4. **Load Testing**
+- Test with 1000+ concurrent users
+- Identify bottlenecks
+- Optimize slow queries
 
 ### Success Metrics:
-- ✅ API endpoints have rate limiting
-- ✅ CAPTCHA prevents bot signups
-- ✅ Page load time < 2 seconds
-- ✅ Error monitoring captures 100% of errors
-- ✅ Platform handles 1000+ concurrent users
+- ✓ API endpoints have rate limiting
+- ✓ CAPTCHA prevents bot signups
+- ✓ Page load time < 2 seconds
+- ✓ Error monitoring captures 100% of errors
+- ✓ Platform handles 1000+ concurrent users
 
 ---
 
-## 📱 **PHASE 15: Mobile Optimization & PWA**
+## **PHASE 8: Mobile Optimization & PWA**
 **Priority:** MEDIUM
 **Estimated Time:** 2-3 days
 
 ### Why This Phase?
-- 70%+ of Indian users browse on mobile
-- PWA provides app-like experience without app store
-- Offline support for poor connectivity
+70%+ of Indian users browse on mobile devices.
 
 ### Tasks:
-1. **Progressive Web App (PWA)**
-   - Add manifest.json for installability
-   - Add service worker for offline support
-   - Cache static assets
-   - Add app icons (192px, 512px)
-   - Add splash screens
 
-2. **Mobile UI Improvements**
-   - Touch-friendly buttons (48x48px minimum)
-   - Mobile-optimized navigation (hamburger menu)
-   - Swipe gestures for verification cards
-   - Bottom navigation bar for key actions
+#### 1. **Progressive Web App (PWA)**
+- Add manifest.json for installability
+- Add service worker for offline support
+- Cache static assets
+- Add app icons (192px, 512px)
+- Add splash screens
 
-3. **Offline Support**
-   - Cache recently viewed promises
-   - Cache user profile data
-   - Show offline indicator
-   - Queue actions when offline (sync when online)
+#### 2. **Mobile UI Improvements**
+- Touch-friendly buttons (48x48px minimum)
+- Mobile-optimized navigation (hamburger menu)
+- Swipe gestures for verification cards
+- Bottom navigation bar for key actions
 
-4. **Push Notifications (Future)**
-   - Web Push API for notifications
-   - Subscribe/unsubscribe management
+#### 3. **Offline Support**
+- Cache recently viewed promises
+- Cache user profile data
+- Show offline indicator
+- Queue actions when offline (sync when online)
 
 ### Success Metrics:
-- ✅ Users can install as PWA
-- ✅ Offline mode works
-- ✅ Mobile UI is touch-friendly
-- ✅ Lighthouse mobile score > 90
+- ✓ Users can install as PWA
+- ✓ Offline mode works for cached content
+- ✓ Mobile UI is touch-friendly
+- ✓ Lighthouse mobile score > 90
 
 ---
 
-## 🤖 **PHASE 16: AI/ML Features (Future)**
+## **PHASE 9: Gamification & Achievements**
+**Priority:** LOW
+**Estimated Time:** 2-3 days
+
+### Tasks:
+
+#### 1. **Achievement Badges** (Migration 024)
+```sql
+CREATE TABLE achievements (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  description TEXT,
+  icon TEXT,
+  requirement JSONB
+);
+
+CREATE TABLE user_achievements (
+  user_id UUID REFERENCES users(id),
+  achievement_id UUID REFERENCES achievements(id),
+  earned_at TIMESTAMPTZ DEFAULT NOW(),
+  PRIMARY KEY (user_id, achievement_id)
+);
+```
+
+#### 2. **Achievement Types:**
+- **First Steps**: Submit first promise/verification
+- **Fact Checker**: 10/25/50/100 approved verifications
+- **Promise Hunter**: Create 10/25/50 promises
+- **Community Leader**: Reach 250/500/1000 citizen score
+- **Trusted Contributor**: 5 consecutive approved verifications
+- **Bug Hunter**: Report fixed bug
+- **Voting Champion**: Cast 100/500/1000 votes
+- **Streak Master**: 7/30/90 day activity streak
+
+#### 3. **Leaderboard Enhancements**
+- Top weekly contributors
+- Top monthly contributors
+- Hall of fame (all-time top 10)
+- Category-specific leaderboards
+
+### Success Metrics:
+- ✓ Users earn badges for achievements
+- ✓ Badges display on profiles
+- ✓ Leaderboard shows weekly/monthly leaders
+- ✓ Increased user engagement
+
+---
+
+## **PHASE 10: AI/ML Features** (Future)
 **Priority:** VERY LOW
 **Estimated Time:** 4-6 weeks
 
-### Why This Phase?
-- Automate repetitive moderation tasks
-- Improve verification quality
-- Reduce admin workload
-
 ### Tasks:
-1. **Automated Fact-Checking**
-   - Integrate with news APIs (NewsAPI, Google News)
-   - Cross-reference promises with government databases
-   - Sentiment analysis on evidence text
-   - Fact-check URLs against known fake news sites
 
-2. **Smart Recommendations**
-   - Suggest related promises (based on content similarity)
-   - Recommend promises needing verification
-   - Detect duplicate promises using NLP
-   - Suggest evidence sources
+#### 1. **Automated Fact-Checking**
+- Integrate with news APIs (NewsAPI, Google News)
+- Cross-reference with government databases
+- Sentiment analysis on evidence text
+- Fact-check URLs against known fake news sites
 
-3. **Advanced Spam Detection**
-   - Train ML model on flagged spam
-   - Auto-flag low-quality submissions
-   - Detect bot activity patterns
-   - Quality score prediction for verifications
+#### 2. **Smart Recommendations**
+- Suggest related promises (content similarity)
+- Recommend promises needing verification
+- Detect duplicate promises using NLP
+- Suggest evidence sources
 
-### Success Metrics:
-- ✅ AI reduces admin moderation time by 50%
-- ✅ Duplicate detection accuracy > 90%
-- ✅ Spam detection accuracy > 95%
+#### 3. **Advanced Spam Detection**
+- Train ML model on flagged spam
+- Auto-flag low-quality submissions
+- Detect bot activity patterns
+- Quality score prediction
 
 ---
 
 ## 📋 **IMMEDIATE PRIORITY ORDER**
 
-### **MUST DO BEFORE PUBLIC LAUNCH:**
-1. ✅ Phase 9: Verification Detail Page (1-2 days) - **CRITICAL**
-2. ✅ Phase 10: Notifications System (2-3 days) - **HIGH**
-3. ✅ Phase 14: Security & Performance (3-4 days) - **HIGH**
-4. ✅ Phase 15: Mobile Optimization & PWA (2-3 days) - **MEDIUM**
+### **Critical Path (Before Public Launch):**
+1. ✅ Phase 2: Additional Anti-Gaming (3-4 days)
+2. ✅ Phase 3: Promise Status Updates (2-3 days)
+3. ✅ Phase 7: Security & Performance (3-4 days)
+4. ✅ Phase 8: Mobile Optimization & PWA (2-3 days)
 
-### **NICE TO HAVE (Post-Launch):**
-5. Phase 11: Comments & Discussions (2-3 days)
-6. Phase 12: Analytics Dashboard (3-4 days)
-7. Phase 13: Gamification (2-3 days)
+**Total:** 10-14 days before launch
 
-### **FUTURE ENHANCEMENTS:**
-8. Phase 16: AI/ML Features (4-6 weeks)
+### **Post-Launch Enhancements:**
+5. Phase 4: Notifications (2-3 days)
+6. Phase 5: Comments (2-3 days)
+7. Phase 6: Analytics (3-4 days)
+8. Phase 9: Gamification (2-3 days)
+
+**Total:** 9-13 days post-launch
+
+### **Future (Optional):**
+9. Phase 10: AI/ML Features (4-6 weeks)
 
 ---
 
 ## ⏱️ **ESTIMATED TIMELINE**
 
-### **Pre-Launch (Critical):** 8-12 days
-- Phase 9: 1-2 days
-- Phase 10: 2-3 days
-- Phase 14: 3-4 days
-- Phase 15: 2-3 days
+### **Pre-Launch (Critical):** 10-14 days
+- Phase 2: Additional Anti-Gaming
+- Phase 3: Promise Status Updates
+- Phase 7: Security & Performance
+- Phase 8: Mobile & PWA
 
-### **Post-Launch (Enhancements):** 7-10 days
-- Phase 11: 2-3 days
-- Phase 12: 3-4 days
-- Phase 13: 2-3 days
+### **Post-Launch (Enhancements):** 9-13 days
+- Phase 4: Notifications
+- Phase 5: Comments
+- Phase 6: Analytics
+- Phase 9: Gamification
 
 ### **Future (Optional):** 4-6 weeks
-- Phase 16: AI/ML Features
+- Phase 10: AI/ML Features
 
 ---
 
-## 🎯 **SUCCESS METRICS (Revised)**
+## 🎯 **SUCCESS METRICS**
 
 ### **Pre-Launch Quality:**
 - ✅ Zero critical bugs
@@ -440,66 +684,5 @@
 
 ---
 
-## 🛠️ **TECHNICAL DEBT TO ADDRESS**
-
-### **Before Public Launch:**
-1. ✅ Fix all ESLint warnings (currently ignored in builds)
-2. ✅ Add proper error boundaries to all pages
-3. ✅ Implement proper loading states everywhere
-4. ✅ Add comprehensive form validation
-5. ✅ Optimize database queries with EXPLAIN ANALYZE
-
-### **Post-Launch:**
-1. Add unit tests for critical functions
-2. Add integration tests for user flows
-3. Add E2E tests with Playwright
-4. Set up CI/CD pipeline
-5. Implement database backups
-
----
-
-## 💡 **FEATURE IDEAS FOR CONSIDERATION**
-
-1. **Social Sharing**
-   - Share promises on Twitter/Facebook with preview cards
-   - Embed promises on external websites
-   - Generate shareable promise cards (images)
-
-2. **Data Export**
-   - Export promises as CSV
-   - Public API for developers
-   - Open datasets for researchers
-
-3. **Partnerships**
-   - Integration with RTI (Right to Information) portals
-   - Partnership with fact-checking organizations
-   - Media collaboration for promise tracking
-   - Government data integration
-
-4. **Advanced Features**
-   - Multi-language support (Hindi, Tamil, Bengali, etc.)
-   - Regional promise tracking (state-wise dashboards)
-   - Promise comparison tool (compare politicians)
-   - Promise timeline visualization
-
----
-
-## 📞 **SUPPORT & DOCUMENTATION NEEDED**
-
-1. User guide/tutorial (how to use the platform)
-2. Video tutorials for key features
-3. FAQ page (common questions)
-4. API documentation (if we build public API)
-5. Contributing guidelines (for open source contributors)
-6. Code of conduct (community standards)
-
----
-
-**Total Estimated Timeline (Critical Path):** 8-12 days before public launch
-**Post-Launch Enhancements:** 7-10 additional days
-**Recommended Team Size:** 1-2 developers
-
----
-
-**Last Updated:** November 25, 2025
-**Current Phase:** Preparing for Phase 9 (Verification Detail Page)
+**Last Updated:** November 27, 2025
+**Current Status:** Phase 1 (Anti-Gaming) completed, preparing for Phase 2

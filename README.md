@@ -35,7 +35,7 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
 - **Public Verifications**: All votes and evidence are publicly visible
 - **Public Audit Log**: All admin actions visible at `/transparency` (no login required)
 
-### 🛡️ Admin & Moderation (Phase 8)
+### 🛡️ Admin & Moderation (Phase 8-9)
 - **Role-Based Access**: Reviewer (L1) → Moderator (L2) → SuperAdmin (L3)
 - **Fraud Detection**: Automated detection of similarity, vote manipulation, fake sources
 - **Vote Pattern Analysis**: Detect partisan bias and coordinated voting
@@ -43,6 +43,15 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
 - **Auto-Approval**: Trusted users (250+ score) skip manual review
 - **Ban Management**: Temporary/permanent bans with appeals system
 - **Complete Transparency**: All mod actions publicly logged
+
+### 🎯 Anti-Gaming System (Phase 1 - Anti-Gaming)
+- **Trust Levels**: Admin (3.0x) → Trusted Community (2.0x) → Community (1.0x) → Untrusted (0.5x)
+- **Self-Verification Detection**: Automatic flagging with 0.1x weight penalty
+- **Weighted Scoring**: Verification points based on submitter trust level
+- **Sybil Attack Detection**: Pattern recognition for coordinated voting, rapid submissions
+- **Automated Flagging**: Real-time suspicious activity monitoring
+- **Trust Progression**: Clear requirements for users to advance trust levels
+- **Admin Dashboard**: Flagged accounts with severity filtering and resolution tools
 
 ## 🚀 Quick Start
 
@@ -80,6 +89,10 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
      9. `009_reputation_engine.sql` - Reputation calculation engine
      10. `010_auto_approval_system.sql` - Auto-approval system
      11. `011_ban_management_system.sql` - Ban system with appeals
+     12. `012_add_verification_hash.sql` - Cryptographic hash integrity
+     13. `013_self_verification_prevention.sql` - Self-verification detection
+     14. `014_weighted_trust_system.sql` - Weighted trust level system
+     15. `015_sybil_attack_detection.sql` - Sybil attack prevention
 
    Run each SQL file in the Supabase SQL Editor in sequential order
 
@@ -159,24 +172,29 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
 See [NEXT_PHASES.md](./NEXT_PHASES.md) for the complete development roadmap.
 
 **Completed:**
-- ✅ Phase 1-6: Foundation, Core Pages, Promise Management, Verification, Voting, User Profiles
-- ✅ Phase 7: Advanced Search & Filtering
-- ✅ Phase 8: Complete Admin Moderation System
-  - Admin roles & permissions (Reviewer, Moderator, SuperAdmin)
-  - Fraud detection algorithms
-  - Vote pattern analysis
-  - Reputation calculation engine
-  - Auto-approval system (HARSH rules)
-  - Ban management (temporary/permanent)
-  - Public transparency log
-  - Complete audit trail
+- ✅ Phase 1-8: Foundation, Core Features, Admin Moderation System
+- ✅ Phase 9: Verification Detail Page with Cryptographic Hash Integrity
+- ✅ Phase 1 (Anti-Gaming): Complete Anti-Gaming System
+  - Trust level system with weighted multipliers (Admin 3.0x → Untrusted 0.5x)
+  - Self-verification detection and prevention (0.1x penalty)
+  - Sybil attack detection for coordinated voting
+  - Automated flagging system with severity levels
+  - Trust progression display for users
+  - Admin dashboard for flagged accounts
 
 **Upcoming:**
-- Phase 9: Notifications & Real-time Updates
-- Phase 10: Comments & Discussions
-- Phase 11: Analytics & Insights Dashboard
-- Phase 12: Mobile Application
-- Phase 13: AI/ML Features (Promise categorization, sentiment analysis)
+- Phase 2 (Anti-Gaming): Additional Anti-Gaming Enhancements
+  - Vote brigade detection
+  - Trust level automation
+  - Reputation decay system
+  - Advanced fraud detection
+  - Rate limiting system
+- Phase 3: Promise Status Updates (Automated transitions)
+- Phase 10: In-App Notifications & Real-time Updates
+- Phase 11: Comments & Discussions
+- Phase 12: Analytics & Insights Dashboard
+- Phase 13: Mobile Application & PWA
+- Phase 14: AI/ML Features (Fact-checking, smart recommendations)
 
 ## 🔒 Privacy & Security
 
