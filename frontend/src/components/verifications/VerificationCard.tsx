@@ -18,6 +18,9 @@ import {
   CheckCircle,
   XCircle,
   Clock,
+  Shield,
+  ShieldAlert,
+  AlertTriangle,
 } from 'lucide-react'
 import { format } from 'date-fns'
 
@@ -31,6 +34,8 @@ interface VerificationCardProps {
     created_at: string
     upvotes: number
     downvotes: number
+    trust_level?: 'admin' | 'trusted_community' | 'community' | 'untrusted'
+    is_self_verification?: boolean
     submitter?: {
       username: string
       citizen_score: number
@@ -74,6 +79,33 @@ const statusConfig = {
   rejected: {
     label: 'Rejected',
     className: 'bg-destructive/10 text-destructive',
+  },
+}
+
+const trustLevelConfig = {
+  admin: {
+    label: 'Admin Verified',
+    icon: Shield,
+    className: 'bg-purple-500/10 text-purple-600 border-purple-500/20',
+    weight: '3.0x',
+  },
+  trusted_community: {
+    label: 'Trusted',
+    icon: Shield,
+    className: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
+    weight: '2.0x',
+  },
+  community: {
+    label: 'Community',
+    icon: User,
+    className: 'bg-gray-500/10 text-gray-600 border-gray-500/20',
+    weight: '1.0x',
+  },
+  untrusted: {
+    label: 'New User',
+    icon: ShieldAlert,
+    className: 'bg-orange-500/10 text-orange-600 border-orange-500/20',
+    weight: '0.5x',
   },
 }
 
@@ -187,6 +219,9 @@ export function VerificationCard({ verification, onVoteChange }: VerificationCar
     }
   }
 
+  const trustLevel = verification.trust_level ? trustLevelConfig[verification.trust_level] : null
+  const TrustIcon = trustLevel?.icon
+
   return (
     <Card>
       <CardHeader>
@@ -199,6 +234,18 @@ export function VerificationCard({ verification, onVoteChange }: VerificationCar
             <Badge className={status.className + ' text-xs sm:text-sm'}>
               {status.label}
             </Badge>
+            {trustLevel && TrustIcon && (
+              <Badge className={trustLevel.className + ' border text-xs sm:text-sm'}>
+                <TrustIcon className="h-3 w-3 mr-1" />
+                {trustLevel.label} {trustLevel.weight}
+              </Badge>
+            )}
+            {verification.is_self_verification && (
+              <Badge className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20 border text-xs sm:text-sm">
+                <AlertTriangle className="h-3 w-3 mr-1" />
+                Self-Verified
+              </Badge>
+            )}
           </div>
 
           {verification.submitter && (

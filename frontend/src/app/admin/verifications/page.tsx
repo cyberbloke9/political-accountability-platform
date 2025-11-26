@@ -47,6 +47,9 @@ export default function VerificationsPage() {
           created_at,
           promise_id,
           submitted_by,
+          trust_level,
+          is_self_verification,
+          verification_weight,
           promise:promises!promise_id (
             id,
             politician_name,

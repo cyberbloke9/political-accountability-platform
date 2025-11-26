@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { PromiseCard } from '@/components/promises/PromiseCard'
 import { supabase } from '@/lib/supabase'
-import { User, Calendar, Award, FileText, CheckCircle, ThumbsUp, Settings } from 'lucide-react'
+import { User, Calendar, Award, FileText, CheckCircle, ThumbsUp, Settings, Shield, ShieldAlert, TrendingUp } from 'lucide-react'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/useAuth'
@@ -21,6 +21,7 @@ interface UserProfile {
   email: string
   citizen_score: number
   created_at: string
+  trust_level?: 'admin' | 'trusted_community' | 'community' | 'untrusted'
 }
 
 interface UserStats {
@@ -28,13 +29,22 @@ interface UserStats {
   verifications_submitted: number
   votes_cast: number
   verifications_approved: number
+  verifications_rejected: number
+  account_age_days: number
 }
 
 export default function ProfilePage() {
   const params = useParams()
   const { user: currentUser } = useAuth()
   const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [stats, setStats] = useState<UserStats>({ promises_created: 0, verifications_submitted: 0, votes_cast: 0, verifications_approved: 0 })
+  const [stats, setStats] = useState<UserStats>({
+    promises_created: 0,
+    verifications_submitted: 0,
+    votes_cast: 0,
+    verifications_approved: 0,
+    verifications_rejected: 0,
+    account_age_days: 0
+  })
   const [promises, setPromises] = useState<any[]>([])
   const [verifications, setVerifications] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -86,11 +96,30 @@ export default function ProfilePage() {
         .eq('submitted_by', userData.id)
         .eq('status', 'approved')
 
+      const { count: rejectedCount } = await supabase
+        .from('verifications')
+        .select('*', { count: 'exact', head: true })
+        .eq('submitted_by', userData.id)
+        .eq('status', 'rejected')
+
+      // Calculate trust level from database function
+      const { data: trustData } = await supabase
+        .rpc('calculate_trust_level', { p_user_id: userData.id })
+
+      // Calculate account age
+      const accountAge = Math.floor(
+        (new Date().getTime() - new Date(userData.created_at).getTime()) / (1000 * 60 * 60 * 24)
+      )
+
+      setProfile({ ...userData, trust_level: trustData })
+
       setStats({
         promises_created: promisesCount || 0,
         verifications_submitted: verificationsCount || 0,
         votes_cast: votesCount || 0,
-        verifications_approved: approvedCount || 0
+        verifications_approved: approvedCount || 0,
+        verifications_rejected: rejectedCount || 0,
+        account_age_days: accountAge
       })
 
       const { data: promisesData } = await supabase
@@ -213,6 +242,121 @@ export default function ProfilePage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Trust Level Progression Card */}
+          {profile.trust_level && (
+            <Card className="border-2 border-primary/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-primary" />
+                  Trust Level & Progression
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-3">
+                  {profile.trust_level === 'admin' && (
+                    <>
+                      <Badge className="bg-purple-500/10 text-purple-600 border-purple-500/20 text-base px-3 py-1">
+                        <Shield className="h-4 w-4 mr-2" />
+                        Admin (3.0x Weight)
+                      </Badge>
+                      <span className="text-sm text-muted-foreground">Highest trust level</span>
+                    </>
+                  )}
+                  {profile.trust_level === 'trusted_community' && (
+                    <>
+                      <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/20 text-base px-3 py-1">
+                        <Shield className="h-4 w-4 mr-2" />
+                        Trusted Community (2.0x Weight)
+                      </Badge>
+                      <span className="text-sm text-muted-foreground">Established contributor</span>
+                    </>
+                  )}
+                  {profile.trust_level === 'community' && (
+                    <>
+                      <Badge className="bg-gray-500/10 text-gray-600 border-gray-500/20 text-base px-3 py-1">
+                        <User className="h-4 w-4 mr-2" />
+                        Community (1.0x Weight)
+                      </Badge>
+                      <span className="text-sm text-muted-foreground">Regular member</span>
+                    </>
+                  )}
+                  {profile.trust_level === 'untrusted' && (
+                    <>
+                      <Badge className="bg-orange-500/10 text-orange-600 border-orange-500/20 text-base px-3 py-1">
+                        <ShieldAlert className="h-4 w-4 mr-2" />
+                        New User (0.5x Weight)
+                      </Badge>
+                      <span className="text-sm text-muted-foreground">Building reputation</span>
+                    </>
+                  )}
+                </div>
+
+                {profile.trust_level !== 'admin' && (
+                  <div className="bg-primary/5 rounded-lg p-4 space-y-3">
+                    <div className="flex items-center gap-2 text-sm font-medium">
+                      <TrendingUp className="h-4 w-4 text-primary" />
+                      Requirements for Next Level
+                    </div>
+                    {profile.trust_level === 'untrusted' && (
+                      <div className="space-y-2 text-sm">
+                        <p className="font-medium">To reach Community level, you need:</p>
+                        <ul className="space-y-1 ml-4">
+                          <li className={profile.citizen_score >= 100 ? 'text-green-600' : 'text-muted-foreground'}>
+                            • Citizen Score: {profile.citizen_score}/100
+                          </li>
+                          <li className={stats.account_age_days >= 7 ? 'text-green-600' : 'text-muted-foreground'}>
+                            • Account Age: {stats.account_age_days}/7 days
+                          </li>
+                          <li className={
+                            (stats.verifications_approved + stats.verifications_rejected) > 0 &&
+                            (stats.verifications_rejected / (stats.verifications_approved + stats.verifications_rejected)) < 0.5
+                              ? 'text-green-600'
+                              : 'text-muted-foreground'
+                          }>
+                            • Rejection Rate: &lt;50% ({stats.verifications_approved + stats.verifications_rejected > 0
+                              ? Math.round((stats.verifications_rejected / (stats.verifications_approved + stats.verifications_rejected)) * 100)
+                              : 0}%)
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                    {profile.trust_level === 'community' && (
+                      <div className="space-y-2 text-sm">
+                        <p className="font-medium">To reach Trusted Community level, you need:</p>
+                        <ul className="space-y-1 ml-4">
+                          <li className={profile.citizen_score >= 500 ? 'text-green-600' : 'text-muted-foreground'}>
+                            • Citizen Score: {profile.citizen_score}/500
+                          </li>
+                          <li className={stats.verifications_approved >= 10 ? 'text-green-600' : 'text-muted-foreground'}>
+                            • Approved Verifications: {stats.verifications_approved}/10
+                          </li>
+                          <li className={stats.account_age_days >= 30 ? 'text-green-600' : 'text-muted-foreground'}>
+                            • Account Age: {stats.account_age_days}/30 days
+                          </li>
+                          <li className={
+                            (stats.verifications_approved + stats.verifications_rejected) > 0 &&
+                            (stats.verifications_rejected / (stats.verifications_approved + stats.verifications_rejected)) < 0.2
+                              ? 'text-green-600'
+                              : 'text-muted-foreground'
+                          }>
+                            • Rejection Rate: &lt;20% ({stats.verifications_approved + stats.verifications_rejected > 0
+                              ? Math.round((stats.verifications_rejected / (stats.verifications_approved + stats.verifications_rejected)) * 100)
+                              : 0}%)
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                    {profile.trust_level === 'trusted_community' && (
+                      <div className="space-y-2 text-sm">
+                        <p className="text-muted-foreground">You've reached the highest community trust level! Keep contributing quality verifications.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           <div className="grid md:grid-cols-4 gap-4">
             <Card>
