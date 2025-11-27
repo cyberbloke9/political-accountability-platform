@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { toast } from 'sonner'
-import { Scale, Loader2 } from 'lucide-react'
+import { ShieldCheck, Loader2 } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -94,7 +94,7 @@ export default function LoginPage() {
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1 flex flex-col items-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground mb-2">
-              <Scale className="h-6 w-6" />
+              <ShieldCheck className="h-6 w-6" />
             </div>
             <CardTitle className="text-2xl font-bold text-center">
               Welcome Back

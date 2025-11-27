@@ -2,7 +2,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from '@/components/ui/badge'
-import { Scale, FileText, AlertCircle, XCircle } from 'lucide-react'
+import { ShieldCheck, FileText, AlertCircle, XCircle } from 'lucide-react'
 
 export default function AboutPage() {
   return (
@@ -84,7 +84,7 @@ export default function AboutPage() {
               <Card className="border-destructive/20">
                 <CardHeader>
                   <div className="flex items-start gap-3">
-                    <Scale className="h-6 w-6 text-destructive mt-1 flex-shrink-0" />
+                    <ShieldCheck className="h-6 w-6 text-destructive mt-1 flex-shrink-0" />
                     <div>
                       <CardTitle className="text-xl mb-2">Corporate Influence &amp; Corruption</CardTitle>
                       <p className="text-muted-foreground text-sm">
