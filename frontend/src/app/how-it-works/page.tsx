@@ -52,8 +52,8 @@ export default function HowItWorksPage() {
       number: 5,
       icon: TrendingUp,
       title: 'Earn Reputation',
-      description: 'Quality contributions earn you citizen score points. Build your reputation by submitting accurate promises and evidence.',
-      actions: ['Submit verified content', 'Get community approval', 'Climb the leaderboard']
+      description: 'Everyone starts with 100 base points. Quality contributions earn you additional citizen score points. Build your reputation by submitting accurate promises and evidence.',
+      actions: ['Start with 100 base points', 'Submit verified content', 'Get community approval', 'Climb the leaderboard']
     },
     {
       number: 6,
@@ -239,8 +239,8 @@ export default function HowItWorksPage() {
                 <TrendingUp className='h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0' />
                 <div>
                   <h4 className='font-semibold text-blue-900 mb-1'>How Weighted Scoring Works</h4>
-                  <p className='text-sm text-blue-800'>
-                    When you submit a verification, your citizen score points are multiplied by your trust level weight.
+                  <p className='text-sm text-blue-800 mb-2'>
+                    All users start with 100 base points when they join the platform. When you submit a verification, your earned points are multiplied by your trust level weight.
                     A Trusted user (2.0x) earns +20 points for approved verifications, while an Untrusted user (0.5x) earns only +5 points.
                     This incentivizes quality over quantity and prevents spam.
                   </p>
