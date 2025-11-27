@@ -22,7 +22,7 @@ import {
   UserPlus,
   LogOut,
   LayoutDashboard,
-  Scale,
+  ShieldCheck,
   Users,
   TrendingUp,
   Menu
@@ -44,7 +44,7 @@ export function Header() {
   }, [user])
 
   const navigation = [
-    { name: 'Promises', href: '/promises', icon: Scale },
+    { name: 'Promises', href: '/promises', icon: ShieldCheck },
     { name: 'Leaderboard', href: '/leaderboard', icon: TrendingUp },
     { name: 'About', href: '/about', icon: Users },
   ]
