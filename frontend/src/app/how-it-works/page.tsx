@@ -207,7 +207,7 @@ export default function HowItWorksPage() {
               </p>
             </div>
 
-            <div className='grid md:grid-cols-2 gap-6'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
               {trustLevels.map((level, index) => {
                 const Icon = level.icon
                 return (
@@ -261,7 +261,7 @@ export default function HowItWorksPage() {
               </p>
             </div>
 
-            <div className='grid md:grid-cols-2 gap-6'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
               {antiGamingFeatures.map((feature, index) => {
                 const Icon = feature.icon
                 return (
