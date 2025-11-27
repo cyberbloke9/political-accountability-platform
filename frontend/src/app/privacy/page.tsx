@@ -113,8 +113,8 @@ export default function PrivacyPage() {
                   For questions about this Privacy Policy:
                 </p>
                 <ul className="text-muted-foreground space-y-2">
-                  <li><strong>Email:</strong> <a href="mailto:papsupport@gmail.com" className="text-primary hover:underline">papsupport@gmail.com</a></li>
-                  <li><strong>Phone:</strong> <a href="tel:+919959311144" className="text-primary hover:underline">+91 9959311144</a></li>
+                  <li><strong>Email:</strong> <a href="mailto:support@political-accountability.in" className="text-primary hover:underline">support@political-accountability.in</a></li>
+                  <li><strong>Feedback Form:</strong> <a href="/contact" className="text-primary hover:underline">Submit via Contact Page</a></li>
                 </ul>
               </CardContent>
             </Card>

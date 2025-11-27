@@ -34,6 +34,7 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
 - **No Data Selling**: Your data stays with you
 - **Public Verifications**: All votes and evidence are publicly visible
 - **Public Audit Log**: All admin actions visible at `/transparency` (no login required)
+- **User Feedback**: Direct feedback system for platform improvements and issue reporting
 
 ### 🛡️ Admin & Moderation (Phase 8-9)
 - **Role-Based Access**: Reviewer (L1) → Moderator (L2) → SuperAdmin (L3)
@@ -101,6 +102,7 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
      18. `016_part3_brigade_rls_policies.sql` - Brigade security policies
      19. `016_part4_fixes.sql` - Brigade function fixes
      20. `016_part5_admin_check_fix.sql` - Admin check improvements
+     21. `017_feedback_table.sql` - User feedback system
 
    Run each SQL file in the Supabase SQL Editor in sequential order
 
@@ -160,7 +162,7 @@ political-accountability-platform/
 5. **Earn Reputation** - Build citizen score through quality contributions
 6. **Track Accountability** - Monitor promise status transparently
 
-For the detailed workflow, see [How It Works](https://your-deployment-url.vercel.app/how-it-works)
+For the detailed workflow, see [How It Works](https://www.political-accountability.in/how-it-works)
 
 ## 🤝 Contributing
 
@@ -195,6 +197,11 @@ See [NEXT_PHASES.md](./NEXT_PHASES.md) for the complete development roadmap.
   - Confidence scoring algorithm (0.0-1.0)
   - Velocity-based detection (rapid voting patterns)
   - Admin review dashboard for brigades
+- ✅ User Feedback System
+  - Interactive feedback form on contact page
+  - Database storage with admin review capability
+  - Email validation and form validation
+  - Status tracking (pending, in_review, resolved, archived)
 
 **In Progress:**
 - Phase 2 Sprint 2-6 (Anti-Gaming): Additional Enhancements
@@ -221,12 +228,12 @@ See [NEXT_PHASES.md](./NEXT_PHASES.md) for the complete development roadmap.
 - **Encrypted**: HTTPS/SSL for all data transmission
 - **Secure Auth**: Supabase authentication with bcrypt password hashing
 
-See our [Privacy Policy](https://your-deployment-url.vercel.app/privacy) for details.
+See our [Privacy Policy](https://www.political-accountability.in/privacy) for details.
 
 ## 📞 Contact & Support
 
-- **Email**: [papsupport@gmail.com](mailto:papsupport@gmail.com)
-- **Phone**: [+91 9959311144](tel:+919959311144)
+- **Email**: [support@political-accountability.in](mailto:support@political-accountability.in)
+- **Feedback**: Submit feedback directly through the platform at [/contact](https://www.political-accountability.in/contact)
 - **Issues**: [GitHub Issues](https://github.com/cyberbloke9/political-accountability-platform/issues)
 
 ## 📄 License
@@ -243,4 +250,4 @@ Special thanks to all contributors who believe in the power of citizen engagemen
 
 **Made with ❤️ for the citizens of India**
 
-[Website](https://your-deployment-url.vercel.app) • [GitHub](https://github.com/cyberbloke9/political-accountability-platform) • [Documentation](./docs)
+[Website](https://www.political-accountability.in) • [GitHub](https://github.com/cyberbloke9/political-accountability-platform) • [Documentation](./docs)
