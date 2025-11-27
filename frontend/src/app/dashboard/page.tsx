@@ -8,7 +8,7 @@ import { Footer } from '@/components/layout/Footer'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { Scale, TrendingUp, FileText, Vote, Trophy, Activity, Plus } from 'lucide-react'
+import { ShieldCheck, TrendingUp, FileText, Vote, Trophy, Activity, Plus } from 'lucide-react'
 import Link from 'next/link'
 
 export default function DashboardPage() {
@@ -40,7 +40,7 @@ export default function DashboardPage() {
     {
       title: 'Promises Tracked',
       value: '0',
-      icon: Scale,
+      icon: ShieldCheck,
       description: 'Promises you are following',
       color: 'text-primary',
     },

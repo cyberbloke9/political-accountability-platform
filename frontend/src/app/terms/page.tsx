@@ -1,7 +1,7 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Card, CardContent } from '@/components/ui/card'
-import { Scale, UserCheck, Ban } from 'lucide-react'
+import { ShieldCheck, UserCheck, Ban } from 'lucide-react'
 
 export default function TermsPage() {
   return (
@@ -14,7 +14,7 @@ export default function TermsPage() {
         <Card className='mb-6 border-primary/20'>
           <CardContent className='pt-6'>
             <div className='flex items-start gap-4'>
-              <Scale className='h-6 w-6 text-primary mt-1 flex-shrink-0' />
+              <ShieldCheck className='h-6 w-6 text-primary mt-1 flex-shrink-0' />
               <div>
                 <h3 className='font-semibold text-lg mb-2'>Platform Purpose</h3>
                 <p className='text-muted-foreground'>

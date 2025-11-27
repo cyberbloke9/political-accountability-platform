@@ -5,7 +5,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Scale, Users, TrendingUp, CheckCircle2, Shield, Eye } from 'lucide-react'
+import { ShieldCheck, Users, TrendingUp, CheckCircle2, Shield, Eye } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 
 export default function HomePage() {
@@ -13,7 +13,7 @@ export default function HomePage() {
 
   const features = [
     {
-      icon: Scale,
+      icon: ShieldCheck,
       title: 'Track Promises',
       description: 'Monitor political promises from announcement to completion'
     },

@@ -26,7 +26,7 @@ import { Calendar } from '@/components/ui/calendar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
-import { Calendar as CalendarIcon, Loader2, Upload, X, Scale } from 'lucide-react'
+import { Calendar as CalendarIcon, Loader2, Upload, X, ShieldCheck } from 'lucide-react'
 import { format } from 'date-fns'
 
 const CATEGORIES = [
@@ -249,7 +249,7 @@ export default function NewPromisePage() {
           {/* Header */}
           <div>
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight flex items-center gap-3">
-              <Scale className="h-8 w-8 text-primary" />
+              <ShieldCheck className="h-8 w-8 text-primary" />
               Submit a Political Promise
             </h1>
             <p className="text-muted-foreground mt-2">
