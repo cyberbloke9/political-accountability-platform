@@ -56,7 +56,7 @@ Violations of the Code of Conduct may result in:
 2. Temporary ban from contributing
 3. Permanent ban from the project
 
-Report violations to: papsupport@gmail.com
+Report violations to: support@political-accountability.in
 
 ---
 
@@ -629,7 +629,7 @@ badges dont show
 ### Communication Channels
 
 - **GitHub Issues**: Bug reports, feature requests, discussions
-- **Email**: papsupport@gmail.com (for sensitive issues)
+- **Email**: support@political-accountability.in (for sensitive issues)
 - **Pull Requests**: Code reviews and technical discussions
 
 ### Getting Help
@@ -729,8 +729,8 @@ By contributing to the Political Accountability Platform, you agree that your co
 ## Questions?
 
 - **General questions**: Create a GitHub Issue with "question" label
-- **Security issues**: Email papsupport@gmail.com (do NOT create public issue)
-- **Other concerns**: papsupport@gmail.com
+- **Security issues**: Email support@political-accountability.in (do NOT create public issue)
+- **Other concerns**: support@political-accountability.in
 
 ---
 

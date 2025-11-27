@@ -127,9 +127,9 @@ export default function GuidelinesPage() {
             <div className='text-center pt-8 border-t'>
               <p className='text-sm text-muted-foreground mb-2'>Questions?</p>
               <p className='text-sm'>
-                <a href='mailto:papsupport@gmail.com' className='text-primary hover:underline'>papsupport@gmail.com</a>
+                <a href='mailto:support@political-accountability.in' className='text-primary hover:underline'>support@political-accountability.in</a>
                 {' | '}
-                <a href='tel:+919959311144' className='text-primary hover:underline'>+91 9959311144</a>
+                <a href='/contact' className='text-primary hover:underline'>Submit Feedback</a>
               </p>
             </div>
           </div>

@@ -2,6 +2,7 @@
 import { Shield } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { useAdmin } from '@/hooks/useAdmin'
@@ -55,13 +56,22 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <Scale className="h-6 w-6 text-primary" />
-          <span className="font-bold text-lg hidden sm:inline-block">
-            Accountability
-          </span>
-          <span className="font-bold text-lg sm:hidden">
-            PAP
-          </span>
+          <Image
+            src="/images/logo (3).png"
+            alt="Political Accountability Platform"
+            width={180}
+            height={45}
+            className="hidden sm:block"
+            priority
+          />
+          <Image
+            src="/images/logo-small.png"
+            alt="PAP"
+            width={60}
+            height={45}
+            className="sm:hidden"
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -156,9 +166,13 @@ export function Header() {
           </SheetTrigger>
           <SheetContent side="right" className="w-[300px] sm:w-[400px]">
             <SheetHeader>
-              <SheetTitle className="flex items-center space-x-2">
-                <Scale className="h-6 w-6 text-primary" />
-                <span>Accountability</span>
+              <SheetTitle className="flex items-center">
+                <Image
+                  src="/images/logo (3).png"
+                  alt="Political Accountability Platform"
+                  width={160}
+                  height={40}
+                />
               </SheetTitle>
             </SheetHeader>
 

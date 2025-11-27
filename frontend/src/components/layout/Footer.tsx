@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { Scale, Github, Mail } from 'lucide-react'
+import Image from 'next/image'
+import { Github, Mail } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 
 export function Footer() {
@@ -32,9 +33,13 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {/* Brand Section */}
           <div className="flex flex-col space-y-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <Scale className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg">Accountability</span>
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/images/logo (3).png"
+                alt="Political Accountability Platform"
+                width={160}
+                height={40}
+              />
             </Link>
             <p className="text-sm text-muted-foreground max-w-xs">
               Track political promises with community verification and transparent accountability.
@@ -47,8 +52,8 @@ export function Footer() {
               >
                 <Github className="h-5 w-5" />
               </Link>
-              <Link 
-                href="mailto:papsupport@gmail.com" 
+              <Link
+                href="mailto:support@political-accountability.in"
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="Contact"
               >
