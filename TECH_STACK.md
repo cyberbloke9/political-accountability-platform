@@ -1,673 +1,284 @@
-# Political Accountability Platform - Technology Stack
-
-## Table of Contents
-1. [Architecture Overview](#architecture-overview)
-2. [Frontend Stack](#frontend-stack)
-3. [Backend Stack](#backend-stack)
-4. [Database](#database)
-5. [Authentication](#authentication)
-6. [Deployment & Hosting](#deployment--hosting)
-7. [Development Tools](#development-tools)
-8. [Third-Party Services](#third-party-services)
-
----
+# Technology Stack
 
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                         Frontend (Vercel)                    │
-│  Next.js 14 + React 18 + TypeScript + Tailwind CSS         │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-                       │ HTTPS/REST API
-                       │
-┌──────────────────────▼──────────────────────────────────────┐
-│                    Backend (Supabase)                        │
-│                                                              │
-│  ┌────────────────┐  ┌────────────────┐  ┌──────────────┐  │
-│  │   PostgreSQL   │  │   Auth System  │  │   Storage    │  │
-│  │   Database     │  │   (JWT)        │  │   (Files)    │  │
-│  └────────────────┘  └────────────────┘  └──────────────┘  │
-│                                                              │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │  Row-Level Security (RLS) + Functions + Triggers     │  │
-│  └──────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
+Frontend (Vercel)                    Backend (Supabase)
+┌─────────────────────┐              ┌──────────────────┐
+│ Next.js 14          │◄────────────►│ PostgreSQL       │
+│ React 18            │   REST API   │ Auth (JWT)       │
+│ TypeScript          │              │ Storage          │
+│ Tailwind CSS        │              │ RLS Policies     │
+└─────────────────────┘              └──────────────────┘
 ```
 
-**Architecture Pattern:** Jamstack (JavaScript, APIs, Markup)
-- **Frontend:** Server-side rendered React with Next.js
-- **Backend:** Serverless Supabase (PostgreSQL + Auth + Storage)
-- **State Management:** React Hooks + Context API
-- **Communication:** REST API (Supabase JS Client)
+Architecture Pattern: Jamstack (JavaScript, APIs, Markup)
 
----
+## Frontend
 
-## Frontend Stack
+### Core
+- Next.js 14 with App Router
+- React 18 with Server Components
+- TypeScript 5
+- Tailwind CSS 3
 
-### Core Framework
+### UI Components
+- shadcn/ui component library
+- Radix UI primitives
+- Lucide React icons
+- Custom components
 
-#### **Next.js 14** (App Router)
-- **Why Next.js?**
-  - Server-side rendering (SSR) for SEO and performance
-  - App Router for modern routing paradigm
-  - Built-in image optimization
-  - API routes for backend logic
-  - Automatic code splitting
-  - Fast refresh for development
+### State Management
+- React Hooks (useState, useEffect, useContext)
+- Context API for global state
+- No external state management library
 
-- **Key Features Used:**
-  - Dynamic routes: `/promises/[id]`, `/verifications/[id]`, `/profile/[username]`
-  - Server components for static content
-  - Client components for interactive features
-  - Metadata API for SEO optimization
-  - Loading states and error boundaries
+### Forms and Validation
+- React Hook Form
+- Zod schema validation
+- Client-side and server-side validation
 
-#### **React 18**
-- **Why React?**
-  - Component-based architecture
-  - Virtual DOM for performance
-  - Large ecosystem of libraries
-  - Strong TypeScript support
+### Routing
+- Next.js App Router (file-based routing)
+- Dynamic routes
+- Protected routes with middleware
+- Server and client components
 
-- **React Features Used:**
-  - Hooks (useState, useEffect, useContext, custom hooks)
-  - Context API for global state (auth, theme)
-  - Suspense for data fetching
-  - Error boundaries for error handling
+## Backend
 
-#### **TypeScript 5**
-- **Why TypeScript?**
-  - Type safety prevents runtime errors
-  - Better IDE autocomplete and intellisense
-  - Self-documenting code
-  - Easier refactoring
-
-- **TypeScript Features:**
-  - Interface definitions for props and data
-  - Strict null checks
-  - Type inference
-  - Generic components
-
-### Styling
-
-#### **Tailwind CSS 3**
-- **Why Tailwind?**
-  - Utility-first CSS for rapid development
-  - Consistent design system
-  - Small bundle size (purges unused styles)
-  - Responsive design built-in
-  - Dark mode support
-
-- **Configuration:**
-  ```javascript
-  // tailwind.config.js
-  theme: {
-    extend: {
-      colors: {
-        primary: '#3b82f6',
-        success: '#10b981',
-        warning: '#f59e0b',
-        destructive: '#ef4444'
-      }
-    }
-  }
-  ```
-
-#### **shadcn/ui**
-- **Why shadcn/ui?**
-  - Pre-built accessible components
-  - Customizable with Tailwind
-  - Radix UI primitives for accessibility
-  - Copy-paste components (not NPM dependency)
-
-- **Components Used:**
-  - Button, Card, Badge, Avatar
-  - Dialog, Dropdown, Tabs, Select
-  - Input, Textarea, Checkbox
-  - Toast notifications
-  - Sheet, Separator
-
-### UI Libraries
-
-#### **Lucide React** (Icons)
-- Over 1000+ consistent icons
-- Tree-shakeable (only import used icons)
-- Customizable size and color
-- Examples: Shield, ThumbsUp, AlertTriangle, User
-
-#### **date-fns** (Date Formatting)
-- Lightweight date utility library
-- Immutable and pure functions
-- Tree-shakeable
-- Used for: `format(date, 'MMM d, yyyy')`
-
-#### **Sonner** (Toast Notifications)
-- Beautiful toast notifications
-- Easy to use API
-- Automatic stacking and queuing
-- Used for: `toast.success()`, `toast.error()`
-
----
-
-## Backend Stack
-
-### **Supabase** (Backend-as-a-Service)
-
-#### **Why Supabase?**
-- Open-source Firebase alternative
-- PostgreSQL database (not NoSQL)
-- Real-time subscriptions
-- Built-in authentication
-- Row-Level Security (RLS)
-- Auto-generated REST API
-- File storage
-- Edge functions (serverless)
-
-#### **Supabase Features Used:**
-
-##### 1. **PostgreSQL Database**
-- Relational database with ACID compliance
-- Complex joins and queries
-- Foreign key constraints
+### Database
+- PostgreSQL (via Supabase)
+- Row-Level Security (RLS) policies
 - Triggers and functions
-- Full-text search capability
+- Full-text search
+- JSON support
 
-##### 2. **Row-Level Security (RLS)**
-```sql
--- Example: Users can only edit their own data
-CREATE POLICY "Users can update own profile"
-ON users FOR UPDATE
-USING (auth.uid() = auth_id);
-
--- Example: Everyone can read approved promises
-CREATE POLICY "Public read approved promises"
-ON promises FOR SELECT
-USING (status = 'approved');
-```
-
-##### 3. **Database Functions (RPC)**
-```sql
--- Calculate trust level dynamically
-CREATE OR REPLACE FUNCTION calculate_trust_level(p_user_id UUID)
-RETURNS TEXT AS $$
-  -- Logic to determine trust level
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-```
-
-##### 4. **Triggers**
-```sql
--- Auto-update timestamps
-CREATE TRIGGER update_updated_at
-BEFORE UPDATE ON verifications
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
-```
-
-##### 5. **Real-time Subscriptions** (Future)
-```typescript
-// Listen to new verifications in real-time
-supabase
-  .channel('verifications')
-  .on('postgres_changes', {
-    event: 'INSERT',
-    schema: 'public',
-    table: 'verifications'
-  }, payload => {
-    // Update UI with new verification
-  })
-  .subscribe()
-```
-
----
-
-## Database
-
-### **PostgreSQL 15** (via Supabase)
-
-#### Database Schema (15 migrations)
-
-##### **Core Tables:**
-1. **users** - User profiles and authentication
-2. **promises** - Political promises tracking
-3. **verifications** - Evidence submissions
-4. **votes** - Community voting records
-5. **tags** - Promise categorization
-6. **promise_tags** - Many-to-many relationship
-
-##### **Admin Tables:**
-7. **admin_roles** - Role definitions (Reviewer, Moderator, SuperAdmin)
-8. **admin_role_permissions** - Permission mappings
-9. **user_admin_roles** - User-role assignments
-10. **audit_log** - Public transparency log
-
-##### **Anti-Gaming Tables:**
-11. **user_activity_flags** - Sybil attack and fraud flags
-12. **verification_relationships** - Track self-verifications
-13. **vote_patterns** - Coordinated voting detection
-
-##### **Reputation Tables:**
-14. **reputation_history** - Point change tracking
-15. **notifications** - User notification system
-
-#### Key Database Features:
-
-##### **Indexes for Performance:**
-```sql
-CREATE INDEX idx_promises_politician ON promises(politician_name);
-CREATE INDEX idx_verifications_promise ON verifications(promise_id);
-CREATE INDEX idx_votes_verification ON votes(verification_id);
-CREATE INDEX idx_users_trust_level ON users(trust_level);
-```
-
-##### **Views for Reporting:**
-```sql
--- Leaderboard view
-CREATE VIEW leaderboard AS
-SELECT
-  username,
-  citizen_score,
-  trust_level,
-  ROW_NUMBER() OVER (ORDER BY citizen_score DESC) as rank
-FROM users
-WHERE citizen_score > 0
-ORDER BY citizen_score DESC;
-```
-
-##### **Materialized Views** (Future for Analytics):
-```sql
-CREATE MATERIALIZED VIEW promise_stats AS
-SELECT
-  politician_name,
-  COUNT(*) as total_promises,
-  COUNT(*) FILTER (WHERE verdict = 'fulfilled') as fulfilled,
-  COUNT(*) FILTER (WHERE verdict = 'broken') as broken
-FROM promises
-GROUP BY politician_name;
-```
-
----
-
-## Authentication
-
-### **Supabase Auth**
-
-#### **Features:**
-- JWT-based authentication
-- Email/password login
-- OAuth providers (Google, GitHub - future)
-- Email verification
-- Password reset
+### Authentication
+- Supabase Auth
+- JWT tokens
+- Email/password authentication
 - Session management
+- Protected API routes
 
-#### **Security:**
-- bcrypt password hashing
-- Secure JWT signing
-- Automatic token refresh
-- PKCE flow for OAuth
+### Storage
+- Supabase Storage
+- Image upload for promises and verifications
+- Presigned URLs for secure access
+- File validation and limits
 
-#### **Custom Auth Flow:**
-```typescript
-// Sign up
-const { data, error } = await supabase.auth.signUp({
-  email: 'user@example.com',
-  password: 'secure-password',
-  options: {
-    data: {
-      username: 'johndoe'
-    }
-  }
-})
+### API
+- REST API via Supabase JS client
+- Server-side API routes (Next.js)
+- Real-time subscriptions
+- Automatic API generation from database schema
 
-// Sign in
-const { data, error } = await supabase.auth.signInWithPassword({
-  email: 'user@example.com',
-  password: 'secure-password'
-})
+## Database Schema
 
-// Sign out
-await supabase.auth.signOut()
-```
+### Core Tables
+- users: User profiles and authentication
+- promises: Political promises tracking
+- verifications: Evidence submissions
+- votes: Community voting records
+- evidence_files: File attachments
+- activity_logs: User activity tracking
 
-#### **Row-Level Security Integration:**
-```sql
--- Get current user's ID in RLS policies
-auth.uid()
+### Admin Tables
+- admin_roles: Admin role definitions
+- user_admin_roles: User-to-role assignments
+- moderation_actions: Admin action log
+- fraud_reports: Fraud detection results
+- vote_patterns: Voting pattern analysis
+- reputation_history: Reputation score changes
 
--- Example: User can only vote once per verification
-CREATE POLICY "One vote per user per verification"
-ON votes FOR INSERT
-WITH CHECK (
-  user_id = (SELECT id FROM users WHERE auth_id = auth.uid())
-  AND NOT EXISTS (
-    SELECT 1 FROM votes v2
-    WHERE v2.verification_id = votes.verification_id
-    AND v2.user_id = votes.user_id
-  )
-);
-```
+### Security Tables
+- user_flags: Suspicious account flags
+- vote_brigade_patterns: Coordinated voting detection
+- user_trust_levels: Trust level assignments
 
----
+## Deployment
 
-## Deployment & Hosting
+### Frontend Hosting
+- Platform: Vercel
+- Automatic deployments from GitHub
+- Preview deployments for pull requests
+- Global CDN distribution
+- Custom domain support
 
-### **Vercel** (Frontend Hosting)
-
-#### **Why Vercel?**
-- Built by Next.js creators
-- Zero-config deployments
-- Automatic HTTPS
-- Global CDN
-- Serverless functions
-- Preview deployments for PRs
-- Environment variable management
-
-#### **Deployment Flow:**
-```
-Git Push → GitHub → Vercel Webhook → Build → Deploy → Live
-```
-
-#### **Build Configuration:**
-```json
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "framework": "nextjs",
-  "installCommand": "npm install"
-}
-```
-
-#### **Environment Variables:**
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-
-### **Supabase** (Backend Hosting)
-
-#### **Infrastructure:**
-- AWS infrastructure
-- PostgreSQL on dedicated compute
-- Edge functions on Deno Deploy
-- Global CDN for assets
+### Backend Hosting
+- Platform: Supabase Cloud
+- Managed PostgreSQL database
 - Automatic backups
-- Point-in-time recovery
+- Connection pooling
+- Geographic regions
 
-#### **Regions:**
-- Database: AWS us-east-1 (or chosen region)
-- Edge Functions: Cloudflare Workers (global)
-
----
+### Domain and SSL
+- Custom domain: political-accountability.in
+- Automatic SSL certificates
+- HTTPS enforcement
 
 ## Development Tools
 
-### **Version Control**
-- **Git** for source control
-- **GitHub** for repository hosting
-- **Conventional Commits** for commit messages
+### Code Quality
+- ESLint for linting
+- Prettier for formatting
+- TypeScript for type safety
+- Husky for git hooks (optional)
 
-### **Code Quality**
-- **ESLint** for JavaScript/TypeScript linting
-- **Prettier** for code formatting (future)
-- **TypeScript compiler** for type checking
+### Version Control
+- Git for source control
+- GitHub for repository hosting
+- Branch protection rules
+- Pull request reviews
 
-### **Package Manager**
-- **npm** for dependency management
-- **package-lock.json** for deterministic builds
+### Package Management
+- npm for dependency management
+- package.json for dependencies
+- package-lock.json for version locking
 
-### **Development Environment**
-- **Node.js 18+** runtime
-- **VS Code** recommended IDE
-- **WSL** for Windows development
+## Security
 
-### **Build Tools**
-- **Next.js compiler** (SWC) for fast builds
-- **Webpack 5** (via Next.js)
-- **PostCSS** for Tailwind processing
+### Authentication
+- Supabase Auth with bcrypt
+- JWT tokens with expiration
+- Secure session management
+- Password reset flow
 
----
+### Authorization
+- Row-Level Security policies
+- Role-based access control
+- Admin permission system
+- Protected API routes
 
-## Third-Party Services
+### Data Protection
+- HTTPS/SSL encryption
+- Encrypted database connections
+- Secure environment variables
+- No sensitive data in client code
 
-### **Current:**
-1. **Supabase** - Backend, database, auth, storage
-2. **Vercel** - Frontend hosting and deployment
-3. **GitHub** - Version control and CI/CD
+### Anti-Gaming
+- Self-verification detection
+- Vote brigade detection
+- Sybil attack prevention
+- Fraud pattern analysis
+- Trust level system
+- Weighted scoring
 
-### **Planned (Future Phases):**
-1. **Sentry** - Error tracking and monitoring
-2. **Google Analytics** - Usage analytics (privacy-focused)
-3. **Cloudflare** - DDoS protection and caching
-4. **SendGrid/Resend** - Email notifications
-5. **NewsAPI** - Fact-checking integrations
+## Performance
 
----
-
-## Performance Optimizations
-
-### **Frontend:**
-- Server-side rendering for initial page load
-- Code splitting by route
+### Frontend Optimization
+- Server-side rendering
+- Static page generation where possible
 - Image optimization with Next.js Image
-- Lazy loading for below-the-fold content
-- Static generation for public pages
+- Code splitting
+- Lazy loading
 
-### **Database:**
-- Indexes on frequently queried columns
-- Connection pooling (Supabase default)
-- Query optimization with EXPLAIN ANALYZE
-- Pagination for large datasets
-- Materialized views for complex reports
+### Backend Optimization
+- Database indexes
+- Query optimization
+- Connection pooling
+- Caching strategies
 
-### **Caching:**
-- Vercel Edge Network caching
-- Browser caching for static assets
-- Stale-while-revalidate strategy
-
----
-
-## Security Stack
-
-### **Frontend Security:**
-- Content Security Policy (CSP) headers
-- XSS prevention (React escapes by default)
-- CSRF protection (Supabase JWT)
-- Input sanitization
-- Rate limiting on forms
-
-### **Backend Security:**
-- Row-Level Security (RLS)
-- SQL injection prevention (parameterized queries)
-- JWT authentication
-- HTTPS only
-- Environment variable secrets
-- Database backups
-
-### **Data Security:**
-- Encrypted at rest (Supabase)
-- Encrypted in transit (HTTPS/TLS)
-- Password hashing (bcrypt)
-- Sensitive data never logged
-
----
-
-## Monitoring & Observability
-
-### **Current:**
-- Vercel Analytics (basic metrics)
-- Supabase Dashboard (database metrics)
-- Browser console (development)
-
-### **Planned:**
-- Sentry for error tracking
-- Custom logging system
+### Monitoring
+- Vercel Analytics
+- Supabase Dashboard metrics
+- Error logging
 - Performance monitoring
-- Uptime monitoring
-- API response time tracking
-
----
 
 ## Development Workflow
 
-### **Local Development:**
+### Local Development
 ```bash
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-# Run type checking
-npm run type-check
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
+npm install          # Install dependencies
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run lint         # Run linter
 ```
 
-### **Git Workflow:**
-```bash
-# Feature development
-git checkout -b feature/new-feature
-git commit -m "feat: add new feature"
-git push origin feature/new-feature
-
-# Create PR → Review → Merge → Deploy
+### Environment Variables
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_key
 ```
 
-### **Database Migrations:**
-```bash
-# Run migration in Supabase SQL Editor
--- File: database/migrations/016_new_feature.sql
+### Database Migrations
+- Sequential SQL migrations
+- Manual execution in Supabase SQL Editor
+- Version controlled in repository
+- Migration documentation in README
 
-# Test in development environment
-# Deploy to production via SQL Editor
-```
+## Dependencies
 
----
+### Core Dependencies
+- next: 14.x
+- react: 18.x
+- typescript: 5.x
+- @supabase/supabase-js: Latest
+- tailwindcss: 3.x
 
-## Technology Choices Rationale
+### UI Dependencies
+- @radix-ui/react-*: Various components
+- lucide-react: Icons
+- class-variance-authority: Component variants
+- tailwind-merge: Tailwind utility merging
 
-### **Why Next.js over Create React App?**
-- Better SEO with SSR
-- Built-in routing
-- Image optimization
-- API routes
-- Better performance
+### Form Dependencies
+- react-hook-form: Form management
+- @hookform/resolvers: Validation resolvers
+- zod: Schema validation
 
-### **Why Supabase over Firebase?**
-- PostgreSQL (relational) vs Firestore (NoSQL)
-- Open-source and self-hostable
-- SQL for complex queries
-- Better pricing model
-- RLS for security
+## Browser Support
 
-### **Why Tailwind over CSS-in-JS?**
-- Faster build times
-- Smaller bundle size
-- Utility-first approach
-- Better for rapid prototyping
-- Consistent design system
+- Chrome (latest 2 versions)
+- Firefox (latest 2 versions)
+- Safari (latest 2 versions)
+- Edge (latest 2 versions)
+- Mobile browsers (iOS Safari, Chrome Mobile)
 
-### **Why TypeScript over JavaScript?**
-- Catch errors at compile time
-- Better IDE support
-- Self-documenting code
-- Easier to refactor
-- Industry standard
+## System Requirements
 
----
+### Development
+- Node.js 18 or higher
+- npm 9 or higher
+- 2GB RAM minimum
+- Modern code editor (VS Code recommended)
 
-## Future Technology Additions
-
-### **Planned:**
-1. **React Query** - Better data fetching and caching
-2. **Zod** - Runtime type validation for forms
-3. **Playwright** - End-to-end testing
-4. **Vitest** - Unit and integration testing
-5. **Storybook** - Component documentation
-6. **OpenAI API** - AI-powered features
-7. **Redis** - Caching layer for high traffic
-
----
-
-## Bundle Size & Performance
-
-### **Current Metrics:**
-- **First Contentful Paint**: < 1.5s
-- **Time to Interactive**: < 3s
-- **Lighthouse Score**: 90+ (Performance)
-- **Bundle Size**: ~200KB (gzipped)
-
-### **Optimization Strategies:**
-- Tree shaking unused code
-- Dynamic imports for routes
-- Image optimization (WebP, AVIF)
-- Font optimization (variable fonts)
-- CSS purging (Tailwind)
-
----
+### Production
+- Vercel account (free tier available)
+- Supabase account (free tier available)
+- Custom domain (optional)
 
 ## Scalability
 
-### **Current Capacity:**
-- **Database**: 500GB storage, 50 concurrent connections
-- **API**: 500k requests/month (Supabase free tier)
-- **Bandwidth**: Unlimited (Vercel)
+### Current Capacity
+- Database: Unlimited (Supabase managed)
+- Storage: Configurable per plan
+- API requests: Rate-limited per plan
+- Concurrent users: Scales automatically
 
-### **Scaling Strategy:**
-- **Horizontal**: Multiple Supabase instances
-- **Vertical**: Upgrade database compute
-- **Caching**: Redis for hot data
-- **CDN**: Cloudflare for global distribution
-- **Read Replicas**: For analytics queries
+### Future Considerations
+- Database read replicas
+- CDN for static assets
+- Redis for caching
+- Queue system for async tasks
+- Microservices architecture (if needed)
 
----
+## Future Technology Additions
 
-## Developer Experience (DX)
+### Planned
+- Redis for caching
+- Bull for job queues
+- Socket.io for real-time features
+- ElasticSearch for advanced search
+- Machine learning for fraud detection
 
-### **Fast Feedback Loops:**
-- Hot module replacement (< 1s refresh)
-- TypeScript errors in IDE
-- ESLint warnings on save
-- Automatic formatting
+### Under Consideration
+- React Native for mobile app
+- Progressive Web App (PWA)
+- GraphQL API
+- Serverless functions
+- Message queue system
 
-### **Documentation:**
-- Inline JSDoc comments
-- README for setup
-- This TECH_STACK.md
-- Code examples in comments
+## License
 
-### **Tooling:**
-- VS Code extensions (ESLint, Tailwind Intellisense)
-- GitHub Copilot support
-- Supabase Studio for database management
-
----
-
-## Cost Analysis
-
-### **Monthly Costs (Free Tier):**
-- **Vercel**: $0 (Hobby plan)
-- **Supabase**: $0 (Free tier: 500MB database, 50k auth users)
-- **GitHub**: $0 (Public repository)
-- **Total**: $0/month
-
-### **Monthly Costs (Production - Estimated):**
-- **Vercel Pro**: $20/month
-- **Supabase Pro**: $25/month
-- **Sentry**: $26/month (errors)
-- **Sendgrid**: $15/month (email)
-- **Total**: ~$86/month
-
-### **Scaling Costs (10,000 users):**
-- **Vercel Pro**: $20/month (unlimited)
-- **Supabase Team**: $599/month (2GB database)
-- **Monitoring**: $50/month
-- **CDN**: $100/month
-- **Total**: ~$769/month
-
----
-
-**Last Updated:** November 27, 2025
+This technology stack documentation is part of the Political Accountability Platform project, licensed under the MIT License.
