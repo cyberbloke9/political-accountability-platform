@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert feedback into database
+    // Let database handle created_at, updated_at, and status defaults
     const { data, error } = await supabase
       .from('feedback')
       .insert([
@@ -36,9 +37,7 @@ export async function POST(request: NextRequest) {
           name: name.trim(),
           email: email.trim().toLowerCase(),
           subject: subject.trim(),
-          message: message.trim(),
-          created_at: new Date().toISOString(),
-          status: 'pending'
+          message: message.trim()
         }
       ])
       .select()
