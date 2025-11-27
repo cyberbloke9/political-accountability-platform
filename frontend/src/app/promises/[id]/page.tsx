@@ -15,7 +15,7 @@ import {
   Eye,
   FileText,
   ExternalLink,
-  Scale,
+  ShieldCheck,
   ArrowLeft,
   Share2,
   Tag,
@@ -211,7 +211,7 @@ export default function PromiseDetailPage() {
         <Header />
         <main className="flex-1 container py-16 flex items-center justify-center">
           <div className="text-center space-y-4">
-            <Scale className="h-16 w-16 text-muted-foreground mx-auto" />
+            <ShieldCheck className="h-16 w-16 text-muted-foreground mx-auto" />
             <h2 className="text-2xl font-bold">Promise not found</h2>
             <p className="text-muted-foreground">
               The promise you&apos;re looking for doesn&apos;t exist or has been removed

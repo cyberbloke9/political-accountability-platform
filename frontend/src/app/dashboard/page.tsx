@@ -120,7 +120,7 @@ export default function DashboardPage() {
               </Link>
               <Link href="/promises">
                 <Button className="w-full" variant="outline">
-                  <Scale className="mr-2 h-4 w-4" />
+                  <ShieldCheck className="mr-2 h-4 w-4" />
                   Browse Promises
                 </Button>
               </Link>
@@ -141,7 +141,7 @@ export default function DashboardPage() {
                 <span className="sm:hidden">Activity</span>
               </TabsTrigger>
               <TabsTrigger value="tracked" className="text-xs sm:text-sm">
-                <Scale className="mr-0 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                <ShieldCheck className="mr-0 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                 <span className="hidden sm:inline">Tracked Promises</span>
                 <span className="sm:hidden">Tracked</span>
               </TabsTrigger>
@@ -182,7 +182,7 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <Scale className="h-12 w-12 text-muted-foreground mb-4" />
+                    <ShieldCheck className="h-12 w-12 text-muted-foreground mb-4" />
                     <p className="text-muted-foreground">No tracked promises</p>
                     <Link href="/promises" className="mt-4">
                       <Button variant="outline">Browse Promises</Button>
