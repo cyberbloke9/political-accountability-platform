@@ -1,15 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-// Initialize Supabase client
+// Initialize Supabase client with service role for API routes
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+})
+
+// Test endpoint to verify API is working
+export async function GET() {
+  return NextResponse.json({
+    status: 'API is working',
+    supabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  })
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { name, email, subject, message } = body
+
+    // Log for debugging
+    console.log('Feedback submission attempt:', { name, email, subject })
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
@@ -28,6 +46,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Test database connection
+    const { error: connectionError } = await supabase.from('feedback').select('count').limit(1)
+    if (connectionError) {
+      console.error('Connection test failed:', connectionError)
+    }
+
     // Insert feedback into database
     // Let database handle created_at, updated_at, and status defaults
     const { data, error } = await supabase
@@ -43,9 +67,17 @@ export async function POST(request: NextRequest) {
       .select()
 
     if (error) {
-      console.error('Database error:', error)
+      console.error('Database error details:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      })
       return NextResponse.json(
-        { error: 'Failed to submit feedback' },
+        {
+          error: 'Failed to submit feedback',
+          details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        },
         { status: 500 }
       )
     }
