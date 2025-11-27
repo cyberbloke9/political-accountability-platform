@@ -109,9 +109,9 @@ export default function ContactPage() {
         </section>
 
         <section className="py-12 container px-4 max-w-4xl">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Feedback Form */}
-            <Card className="md:col-span-1">
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-primary" />

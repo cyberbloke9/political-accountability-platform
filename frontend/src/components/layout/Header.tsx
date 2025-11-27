@@ -55,21 +55,21 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center">
           <Image
             src="/images/logo (3).png"
             alt="Political Accountability Platform"
-            width={180}
-            height={45}
-            className="hidden sm:block"
+            width={160}
+            height={40}
+            className="hidden sm:block h-auto w-auto max-h-10"
             priority
           />
           <Image
             src="/images/logo-small.png"
             alt="PAP"
-            width={60}
-            height={45}
-            className="sm:hidden"
+            width={50}
+            height={40}
+            className="block sm:hidden h-auto w-auto max-h-9"
             priority
           />
         </Link>
