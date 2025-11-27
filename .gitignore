@@ -59,3 +59,7 @@ backend/prisma/migrations/*
 # OS
 Thumbs.db
 Desktop.ini
+
+# Launch materials (keep local only)
+LAUNCH_COPY.md
+LAUNCH_CHECKLIST.md
