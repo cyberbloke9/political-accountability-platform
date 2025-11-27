@@ -44,14 +44,17 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
 - **Ban Management**: Temporary/permanent bans with appeals system
 - **Complete Transparency**: All mod actions publicly logged
 
-### 🎯 Anti-Gaming System (Phase 1 - Anti-Gaming)
+### 🎯 Anti-Gaming System (Phase 1-2 Anti-Gaming)
 - **Trust Levels**: Admin (3.0x) → Trusted Community (2.0x) → Community (1.0x) → Untrusted (0.5x)
 - **Self-Verification Detection**: Automatic flagging with 0.1x weight penalty
 - **Weighted Scoring**: Verification points based on submitter trust level
 - **Sybil Attack Detection**: Pattern recognition for coordinated voting, rapid submissions
+- **Vote Brigade Detection**: Identifies coordinated voting groups with confidence scoring
+- **Correlation Analysis**: Tracks voting patterns between user pairs
+- **Velocity Detection**: Flags suspicious rapid voting (>10 votes in 5 minutes)
 - **Automated Flagging**: Real-time suspicious activity monitoring
 - **Trust Progression**: Clear requirements for users to advance trust levels
-- **Admin Dashboard**: Flagged accounts with severity filtering and resolution tools
+- **Admin Dashboards**: Flagged accounts and vote brigades with resolution tools
 
 ## 🚀 Quick Start
 
@@ -93,6 +96,11 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
      13. `013_self_verification_prevention.sql` - Self-verification detection
      14. `014_weighted_trust_system.sql` - Weighted trust level system
      15. `015_sybil_attack_detection.sql` - Sybil attack prevention
+     16. `016_vote_brigade_detection.sql` - Vote brigade detection schema
+     17. `016_part2_brigade_detection_functions.sql` - Brigade detection algorithms
+     18. `016_part3_brigade_rls_policies.sql` - Brigade security policies
+     19. `016_part4_fixes.sql` - Brigade function fixes
+     20. `016_part5_admin_check_fix.sql` - Admin check improvements
 
    Run each SQL file in the Supabase SQL Editor in sequential order
 
@@ -181,14 +189,22 @@ See [NEXT_PHASES.md](./NEXT_PHASES.md) for the complete development roadmap.
   - Automated flagging system with severity levels
   - Trust progression display for users
   - Admin dashboard for flagged accounts
+- ✅ Phase 2 Sprint 1 (Anti-Gaming): Vote Brigade Detection
+  - Correlation analysis between user pairs
+  - Coordinated voting group detection (>80% correlation, >5 votes in 1 min)
+  - Confidence scoring algorithm (0.0-1.0)
+  - Velocity-based detection (rapid voting patterns)
+  - Admin review dashboard for brigades
 
-**Upcoming:**
-- Phase 2 (Anti-Gaming): Additional Anti-Gaming Enhancements
-  - Vote brigade detection
-  - Trust level automation
+**In Progress:**
+- Phase 2 Sprint 2-6 (Anti-Gaming): Additional Enhancements
+  - Trust level automation (nightly auto-updates)
   - Reputation decay system
   - Advanced fraud detection
   - Rate limiting system
+  - Comprehensive audit trail
+
+**Upcoming:**
 - Phase 3: Promise Status Updates (Automated transitions)
 - Phase 10: In-App Notifications & Real-time Updates
 - Phase 11: Comments & Discussions
