@@ -45,8 +45,8 @@ export function Footer() {
               Track political promises with community verification and transparent accountability.
             </p>
             <div className="flex space-x-4">
-              <Link 
-                href="https://github.com/cyberbloke9/political-accountability-platform" 
+              <Link
+                href="https://github.com/cyberbloke9/political-accountability-platform"
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="GitHub"
               >
@@ -60,6 +60,19 @@ export function Footer() {
                 <Mail className="h-5 w-5" />
               </Link>
             </div>
+            <a
+              href="https://www.producthunt.com/products/political-accountability-platform?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-political-accountability-platform"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043424&theme=light&t=1764320839996"
+                alt="Political Accountability Platform - Track political promises. Demand accountability. For India. | Product Hunt"
+                style={{ width: '250px', height: '54px' }}
+                width={250}
+                height={54}
+              />
+            </a>
           </div>
 
           {/* Platform Links */}
