@@ -45,8 +45,8 @@ export function Header() {
 
   const navigation = [
     { name: 'Promises', href: '/promises', icon: ShieldCheck },
+    { name: 'Leaders', href: '/politicians', icon: Users },
     { name: 'Leaderboard', href: '/leaderboard', icon: TrendingUp },
-    { name: 'About', href: '/about', icon: Users },
   ]
 
   const isActive = (path: string) => pathname === path
