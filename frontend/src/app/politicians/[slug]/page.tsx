@@ -20,8 +20,12 @@ import {
   getPoliticianPromises,
   getPartyColor,
   formatPosition,
-  type Politician
+  getPoliticianStats,
+  type Politician,
+  type PoliticianStats
 } from '@/lib/politicians'
+import { FollowButton } from '@/components/FollowButton'
+import { ReportCard } from '@/components/politicians/ReportCard'
 import {
   User,
   MapPin,
@@ -82,9 +86,11 @@ export default function PoliticianProfilePage() {
     stalled: 0,
     fulfillment_rate: null
   })
+  const [politicianStats, setPoliticianStats] = useState<PoliticianStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('all')
   const [promiseCount, setPromiseCount] = useState(0)
+  const [showReportCard, setShowReportCard] = useState(false)
 
   useEffect(() => {
     if (slug) {
@@ -100,9 +106,18 @@ export default function PoliticianProfilePage() {
       setPolitician(politicianData)
 
       if (politicianData) {
-        const { data: promisesData, count } = await getPoliticianPromises(politicianData.name)
+        const [promisesResult, statsResult] = await Promise.all([
+          getPoliticianPromises(politicianData.name),
+          getPoliticianStats(politicianData.name)
+        ])
+
+        const { data: promisesData, count } = promisesResult
         setPromises(promisesData || [])
         setPromiseCount(count)
+
+        if (statsResult) {
+          setPoliticianStats(statsResult)
+        }
 
         // Calculate stats
         if (promisesData) {
@@ -301,6 +316,23 @@ export default function PoliticianProfilePage() {
                       </a>
                     )}
                   </div>
+
+                  {/* Follow & Report Card Buttons */}
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    <FollowButton
+                      targetType="politician"
+                      targetId={politician.id}
+                      targetName={politician.name}
+                      showCount={true}
+                    />
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowReportCard(!showReportCard)}
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      {showReportCard ? 'Hide Report Card' : 'View Report Card'}
+                    </Button>
+                  </div>
                 </div>
 
                 {/* Stats Summary */}
@@ -346,6 +378,21 @@ export default function PoliticianProfilePage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Report Card Section */}
+          {showReportCard && politicianStats && (
+            <ReportCard
+              politician={{
+                id: politician.id,
+                name: politician.name,
+                party: politician.party,
+                position: politician.position,
+                state: politician.state,
+                image_url: politician.image_url
+              }}
+              stats={politicianStats}
+            />
+          )}
 
           {/* Promises Section */}
           <Card>

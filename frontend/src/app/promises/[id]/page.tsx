@@ -24,6 +24,8 @@ import {
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { VerificationCard } from '@/components/verifications/VerificationCard'
+import { FollowButton } from '@/components/FollowButton'
+import { PromiseTimeline } from '@/components/promises/PromiseTimeline'
 
 interface Promise {
   id: string
@@ -250,10 +252,19 @@ export default function PromiseDetailPage() {
                 <Badge className={status.className + ' text-sm px-3 py-1'}>
                   {status.label}
                 </Badge>
-                <Button variant="outline" size="sm" onClick={handleShare}>
-                  <Share2 className="mr-2 h-4 w-4" />
-                  Share
-                </Button>
+                <div className="flex gap-2">
+                  <FollowButton
+                    targetType="promise"
+                    targetId={promise.id}
+                    targetName="this promise"
+                    variant="outline"
+                    size="sm"
+                  />
+                  <Button variant="outline" size="sm" onClick={handleShare}>
+                    <Share2 className="mr-2 h-4 w-4" />
+                    Share
+                  </Button>
+                </div>
               </div>
 
               {/* Politician Name */}
@@ -442,6 +453,13 @@ export default function PromiseDetailPage() {
               )}
             </CardContent>
           </Card>
+
+          {/* Promise Timeline */}
+          <PromiseTimeline
+            promiseId={promise.id}
+            showLifecycle={true}
+            maxEvents={10}
+          />
         </div>
       </main>
 
