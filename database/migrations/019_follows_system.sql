@@ -1,11 +1,3 @@
--- Migration 019: Follow System
--- Allows users to follow politicians, promises, tags, and other users
--- Enables personalized feeds and targeted notifications
-
--- =====================================================
--- FOLLOWS TABLE
--- =====================================================
-
 CREATE TABLE IF NOT EXISTS follows (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,

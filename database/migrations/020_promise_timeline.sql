@@ -1,11 +1,3 @@
--- Migration 020: Promise Timeline / Status History
--- Tracks every status change for promises to enable timeline visualization
--- Provides complete audit trail of promise lifecycle
-
--- =====================================================
--- PROMISE STATUS HISTORY TABLE
--- =====================================================
-
 CREATE TABLE IF NOT EXISTS promise_status_history (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   promise_id UUID NOT NULL REFERENCES promises(id) ON DELETE CASCADE,
@@ -165,12 +157,12 @@ SELECT
   'verification' as event_type,
   v.id as event_id,
   NULL as old_status,
-  v.status,
+  v.status::TEXT as status,
   'verification' as change_source,
   NULL as reason,
   v.created_at,
   u.username as actor_name,
-  v.verdict,
+  v.verdict::TEXT as verdict,
   LEFT(v.evidence_text, 100) as evidence_preview
 FROM promises p
 JOIN verifications v ON p.id = v.promise_id
