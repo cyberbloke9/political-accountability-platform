@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Github, Mail, Heart } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+import { getVersionString } from '@/lib/version'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -131,9 +132,15 @@ export function Footer() {
 
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <p className="text-sm text-muted-foreground">
-            © {currentYear} Political Accountability Platform. Built with transparency.
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+            <p className="text-sm text-muted-foreground">
+              © {currentYear} Political Accountability Platform. Built with transparency.
+            </p>
+            <span className="hidden sm:inline text-muted-foreground">•</span>
+            <span className="text-xs font-mono bg-muted px-2 py-1 rounded text-muted-foreground">
+              {getVersionString()}
+            </span>
+          </div>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-1">Made in India <Heart className="h-3 w-3 fill-red-500 text-red-500" /></span>
             <span className="hidden sm:inline">•</span>

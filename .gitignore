@@ -71,3 +71,6 @@ EMAIL_TEMPLATES.md
 SEED_PROMISES.md
 SEED_SQL.sql
 UPDATE_POLITICIANS.sql
+
+.vercel
+.env*.local
