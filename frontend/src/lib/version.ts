@@ -11,10 +11,11 @@
  * v1.3.0 - User feedback system
  * v1.4.0 - Verification detail pages with cryptographic hashing
  * v2.0.0 - Follow System, Timeline Visualization, Report Cards (Sprint 2 & 3)
+ * v2.0.1 - Bug fixes, regression testing framework (67 tests)
  */
 
-export const APP_VERSION = '2.0.0'
-export const APP_BUILD_DATE = '2026-01-05'
+export const APP_VERSION = '2.0.1'
+export const APP_BUILD_DATE = '2026-01-09'
 export const APP_CODENAME = 'Accountability'
 
 export interface VersionInfo {

@@ -119,14 +119,9 @@ export function PromiseTimeline({
     )
   }
 
+  // Hide timeline if there's an error (e.g., migrations not run yet)
   if (error) {
-    return (
-      <Card>
-        <CardContent className="py-8 text-center text-muted-foreground">
-          {error}
-        </CardContent>
-      </Card>
-    )
+    return null
   }
 
   const displayedEvents = expanded ? timeline : timeline.slice(0, maxEvents)

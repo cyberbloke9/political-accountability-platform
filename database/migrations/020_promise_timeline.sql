@@ -136,16 +136,16 @@ CREATE TRIGGER trigger_log_promise_creation
 CREATE OR REPLACE VIEW promise_timeline AS
 SELECT
   p.id as promise_id,
-  'status_change' as event_type,
+  'status_change'::TEXT as event_type,
   psh.id as event_id,
-  psh.old_status,
-  psh.new_status as status,
-  psh.change_source,
-  psh.reason,
+  psh.old_status::TEXT as old_status,
+  psh.new_status::TEXT as status,
+  psh.change_source::TEXT as change_source,
+  psh.reason::TEXT as reason,
   psh.created_at,
-  u.username as actor_name,
-  NULL as verdict,
-  NULL as evidence_preview
+  u.username::TEXT as actor_name,
+  NULL::TEXT as verdict,
+  NULL::TEXT as evidence_preview
 FROM promises p
 JOIN promise_status_history psh ON p.id = psh.promise_id
 LEFT JOIN users u ON psh.changed_by = u.id
@@ -154,16 +154,16 @@ UNION ALL
 
 SELECT
   p.id as promise_id,
-  'verification' as event_type,
+  'verification'::TEXT as event_type,
   v.id as event_id,
-  NULL as old_status,
+  NULL::TEXT as old_status,
   v.status::TEXT as status,
-  'verification' as change_source,
-  NULL as reason,
+  'verification'::TEXT as change_source,
+  NULL::TEXT as reason,
   v.created_at,
-  u.username as actor_name,
+  u.username::TEXT as actor_name,
   v.verdict::TEXT as verdict,
-  LEFT(v.evidence_text, 100) as evidence_preview
+  LEFT(v.evidence_text, 100)::TEXT as evidence_preview
 FROM promises p
 JOIN verifications v ON p.id = v.promise_id
 LEFT JOIN users u ON v.submitted_by = u.id
@@ -179,19 +179,19 @@ CREATE OR REPLACE FUNCTION get_promise_timeline(p_promise_id UUID)
 RETURNS TABLE (
   event_type TEXT,
   event_id UUID,
-  old_status VARCHAR(50),
-  new_status VARCHAR(50),
-  change_source VARCHAR(50),
+  old_status TEXT,
+  new_status TEXT,
+  change_source TEXT,
   reason TEXT,
   created_at TIMESTAMP WITH TIME ZONE,
-  actor_name VARCHAR(100),
-  verdict VARCHAR(50),
+  actor_name TEXT,
+  verdict TEXT,
   evidence_preview TEXT
 ) AS $$
 BEGIN
   RETURN QUERY
   SELECT
-    pt.event_type::TEXT,
+    pt.event_type,
     pt.event_id,
     pt.old_status,
     pt.status as new_status,
