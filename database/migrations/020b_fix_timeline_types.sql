@@ -3,6 +3,9 @@
 -- Run this if you already ran 020_promise_timeline.sql
 -- =====================================================
 
+-- Drop the existing function first (required to change return type)
+DROP FUNCTION IF EXISTS get_promise_timeline(UUID);
+
 -- Drop and recreate the view with proper type casting
 DROP VIEW IF EXISTS promise_timeline;
 
