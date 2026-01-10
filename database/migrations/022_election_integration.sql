@@ -101,6 +101,53 @@ CREATE INDEX IF NOT EXISTS idx_constituencies_district ON constituencies(state, 
 CREATE INDEX IF NOT EXISTS idx_constituencies_parent ON constituencies(parent_constituency_id);
 
 -- =====================================================
+-- PARTIES TABLE (must be before candidates)
+-- =====================================================
+
+CREATE TABLE IF NOT EXISTS parties (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  -- Identification
+  name VARCHAR(200) NOT NULL,
+  short_name VARCHAR(20) NOT NULL, -- e.g., BJP, INC, AAP
+  symbol_name VARCHAR(100), -- e.g., "Lotus", "Hand"
+
+  -- Classification
+  party_type VARCHAR(30) CHECK (party_type IN (
+    'national', 'state', 'registered_unrecognized'
+  )),
+
+  -- Branding
+  logo_url TEXT,
+  primary_color VARCHAR(7), -- Hex color
+  secondary_color VARCHAR(7),
+
+  -- Leadership
+  president_name VARCHAR(200),
+  founded_year INTEGER,
+  headquarters VARCHAR(200),
+
+  -- Online presence
+  website_url TEXT,
+  twitter_handle VARCHAR(100),
+  facebook_url TEXT,
+
+  -- Statistics (computed)
+  total_politicians_tracked INTEGER DEFAULT 0,
+  total_promises_tracked INTEGER DEFAULT 0,
+
+  -- Metadata
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+
+  UNIQUE(short_name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_parties_type ON parties(party_type);
+CREATE INDEX IF NOT EXISTS idx_parties_short ON parties(short_name);
+
+-- =====================================================
 -- CANDIDATES TABLE
 -- =====================================================
 
@@ -161,53 +208,6 @@ CREATE INDEX IF NOT EXISTS idx_candidates_constituency ON candidates(constituenc
 CREATE INDEX IF NOT EXISTS idx_candidates_politician ON candidates(politician_id);
 CREATE INDEX IF NOT EXISTS idx_candidates_party ON candidates(party_id);
 CREATE INDEX IF NOT EXISTS idx_candidates_winner ON candidates(is_winner) WHERE is_winner = true;
-
--- =====================================================
--- PARTIES TABLE (if not exists)
--- =====================================================
-
-CREATE TABLE IF NOT EXISTS parties (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-
-  -- Identification
-  name VARCHAR(200) NOT NULL,
-  short_name VARCHAR(20) NOT NULL, -- e.g., BJP, INC, AAP
-  symbol_name VARCHAR(100), -- e.g., "Lotus", "Hand"
-
-  -- Classification
-  party_type VARCHAR(30) CHECK (party_type IN (
-    'national', 'state', 'registered_unrecognized'
-  )),
-
-  -- Branding
-  logo_url TEXT,
-  primary_color VARCHAR(7), -- Hex color
-  secondary_color VARCHAR(7),
-
-  -- Leadership
-  president_name VARCHAR(200),
-  founded_year INTEGER,
-  headquarters VARCHAR(200),
-
-  -- Online presence
-  website_url TEXT,
-  twitter_handle VARCHAR(100),
-  facebook_url TEXT,
-
-  -- Statistics (computed)
-  total_politicians_tracked INTEGER DEFAULT 0,
-  total_promises_tracked INTEGER DEFAULT 0,
-
-  -- Metadata
-  is_active BOOLEAN DEFAULT true,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-
-  UNIQUE(short_name)
-);
-
-CREATE INDEX IF NOT EXISTS idx_parties_type ON parties(party_type);
-CREATE INDEX IF NOT EXISTS idx_parties_short ON parties(short_name);
 
 -- =====================================================
 -- MANIFESTOS TABLE
