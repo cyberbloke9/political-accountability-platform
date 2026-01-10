@@ -13,9 +13,10 @@
  * v2.0.0 - Follow System, Timeline Visualization, Report Cards (Sprint 2 & 3)
  * v2.0.1 - Bug fixes, regression testing framework (67 tests)
  * v2.1.0 - Discussion Threads: Comments, replies, voting, flagging (Sprint 6)
+ * v2.2.0 - Election Integration: Elections, constituencies, candidates, manifestos (Sprint 8)
  */
 
-export const APP_VERSION = '2.1.0'
+export const APP_VERSION = '2.2.0'
 export const APP_BUILD_DATE = '2026-01-10'
 export const APP_CODENAME = 'Accountability'
 
@@ -38,7 +39,10 @@ export const VERSION_INFO: VersionInfo = {
     'PDF export for report cards',
     'Status history tracking',
     'Discussion threads on promises',
-    'Comment voting and moderation'
+    'Comment voting and moderation',
+    'Election tracking and results',
+    'Constituency mapping',
+    'Party manifestos and promises'
   ]
 }
 

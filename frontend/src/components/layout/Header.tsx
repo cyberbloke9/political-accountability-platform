@@ -25,7 +25,8 @@ import {
   ShieldCheck,
   Users,
   TrendingUp,
-  Menu
+  Menu,
+  Vote
 } from 'lucide-react'
 
 export function Header() {
@@ -46,6 +47,7 @@ export function Header() {
   const navigation = [
     { name: 'Promises', href: '/promises', icon: ShieldCheck },
     { name: 'Leaders', href: '/politicians', icon: Users },
+    { name: 'Elections', href: '/elections', icon: Vote },
     { name: 'Leaderboard', href: '/leaderboard', icon: TrendingUp },
   ]
 
