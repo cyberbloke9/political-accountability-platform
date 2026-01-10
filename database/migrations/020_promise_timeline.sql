@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS promise_status_history (
 );
 
 -- Indexes for fast timeline queries
-CREATE INDEX idx_promise_history_promise ON promise_status_history(promise_id);
-CREATE INDEX idx_promise_history_created ON promise_status_history(created_at DESC);
-CREATE INDEX idx_promise_history_status ON promise_status_history(new_status);
+CREATE INDEX IF NOT EXISTS idx_promise_history_promise ON promise_status_history(promise_id);
+CREATE INDEX IF NOT EXISTS idx_promise_history_created ON promise_status_history(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_promise_history_status ON promise_status_history(new_status);
 
 -- =====================================================
 -- ROW LEVEL SECURITY
