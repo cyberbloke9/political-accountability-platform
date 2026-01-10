@@ -26,6 +26,7 @@ import { toast } from 'sonner'
 import { VerificationCard } from '@/components/verifications/VerificationCard'
 import { FollowButton } from '@/components/FollowButton'
 import { PromiseTimeline } from '@/components/promises/PromiseTimeline'
+import { DiscussionThread } from '@/components/discussions/DiscussionThread'
 
 interface Promise {
   id: string
@@ -453,6 +454,12 @@ export default function PromiseDetailPage() {
               )}
             </CardContent>
           </Card>
+
+          {/* Discussion Section */}
+          <DiscussionThread
+            targetType="promise"
+            targetId={promise.id}
+          />
 
           {/* Promise Timeline */}
           <PromiseTimeline

@@ -12,10 +12,11 @@
  * v1.4.0 - Verification detail pages with cryptographic hashing
  * v2.0.0 - Follow System, Timeline Visualization, Report Cards (Sprint 2 & 3)
  * v2.0.1 - Bug fixes, regression testing framework (67 tests)
+ * v2.1.0 - Discussion Threads: Comments, replies, voting, flagging (Sprint 6)
  */
 
-export const APP_VERSION = '2.0.1'
-export const APP_BUILD_DATE = '2026-01-09'
+export const APP_VERSION = '2.1.0'
+export const APP_BUILD_DATE = '2026-01-10'
 export const APP_CODENAME = 'Accountability'
 
 export interface VersionInfo {
@@ -35,7 +36,9 @@ export const VERSION_INFO: VersionInfo = {
     'Promise timeline visualization',
     'Politician report cards with grades',
     'PDF export for report cards',
-    'Status history tracking'
+    'Status history tracking',
+    'Discussion threads on promises',
+    'Comment voting and moderation'
   ]
 }
 
