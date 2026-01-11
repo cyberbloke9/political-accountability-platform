@@ -9,7 +9,7 @@ export default function PrivacyPage() {
       <Header />
       <main className="flex-1 container py-12 px-4 max-w-4xl">
         <h1 className="text-4xl font-bold mb-4">Privacy Policy</h1>
-        <p className="text-muted-foreground mb-8">Last updated: November 2025</p>
+        <p className="text-muted-foreground mb-8">Last updated: January 2026</p>
 
         <Card className="mb-6 border-primary/20">
           <CardContent className="pt-6">

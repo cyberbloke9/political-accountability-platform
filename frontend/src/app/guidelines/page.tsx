@@ -12,7 +12,7 @@ export default function GuidelinesPage() {
         <section className='bg-gradient-to-b from-primary/5 to-background py-16'>
           <div className='container px-4 max-w-5xl'>
             <div className='text-center space-y-4'>
-              <Badge className='text-sm px-4 py-1'>Version 1.0 - November 2025</Badge>
+              <Badge className='text-sm px-4 py-1'>Version 2.3.0 - January 2026</Badge>
               <h1 className='text-4xl md:text-5xl font-bold tracking-tight'>Community Guidelines</h1>
               <p className='text-xl text-muted-foreground max-w-3xl mx-auto'>
                 Fair, transparent, non-partisan rules for political accountability

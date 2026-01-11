@@ -46,7 +46,8 @@ export const VERSION_INFO: VersionInfo = {
     'Party manifestos and promises',
     'Evidence quality scoring (0-100)',
     'Source credibility tiers',
-    'Community notes (X-style)'
+    'Community notes (X-style)',
+    'Unique view tracking with deduplication'
   ]
 }
 
