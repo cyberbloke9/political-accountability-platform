@@ -31,7 +31,7 @@ export function Footer() {
   return (
     <footer className="border-t bg-background">
       <div className="container py-12 md:py-16">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand Section */}
           <div className="flex flex-col space-y-4">
             <Link href="/" className="flex items-center">
@@ -65,11 +65,12 @@ export function Footer() {
               href="https://www.producthunt.com/products/political-accountability-platform?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-political-accountability-platform"
               target="_blank"
               rel="noopener noreferrer"
+              className="block w-full max-w-[250px]"
             >
               <img
                 src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043424&theme=light&t=1764320839996"
                 alt="Political Accountability Platform - Track political promises. Demand accountability. For India. | Product Hunt"
-                style={{ width: '250px', height: '54px' }}
+                className="w-full h-auto"
                 width={250}
                 height={54}
               />

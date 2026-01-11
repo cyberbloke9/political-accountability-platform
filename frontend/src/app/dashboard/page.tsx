@@ -267,7 +267,7 @@ export default function DashboardPage() {
             </Button>
           </div>
 
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
             {statsCards.map((stat) => {
               const Icon = stat.icon
               return (
@@ -296,7 +296,7 @@ export default function DashboardPage() {
                 Start contributing to the platform
               </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+            <CardContent className="grid gap-4 grid-cols-2 md:grid-cols-4">
               <Link href="/promises/new">
                 <Button className="w-full" variant="outline">
                   <Plus className="mr-2 h-4 w-4" />

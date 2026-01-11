@@ -70,7 +70,7 @@ export function ElectionCard({ election, showDetails = true }: ElectionCardProps
 
       <CardContent className="space-y-4">
         {/* Timeline */}
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-muted-foreground" />
             <div>
@@ -116,7 +116,7 @@ export function ElectionCard({ election, showDetails = true }: ElectionCardProps
 
         {/* Turnout stats (for completed elections) */}
         {election.status === 'completed' && election.voter_turnout_percent && (
-          <div className="grid grid-cols-2 gap-4 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
             {election.total_votes_cast && (
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-muted-foreground" />
