@@ -14,10 +14,11 @@
  * v2.0.1 - Bug fixes, regression testing framework (67 tests)
  * v2.1.0 - Discussion Threads: Comments, replies, voting, flagging (Sprint 6)
  * v2.2.0 - Election Integration: Elections, constituencies, candidates, manifestos (Sprint 8)
+ * v2.3.0 - Evidence Quality System: Grokipedia-style scoring, community notes (Sprint 4)
  */
 
-export const APP_VERSION = '2.2.0'
-export const APP_BUILD_DATE = '2026-01-10'
+export const APP_VERSION = '2.3.0'
+export const APP_BUILD_DATE = '2026-01-11'
 export const APP_CODENAME = 'Accountability'
 
 export interface VersionInfo {
@@ -42,7 +43,10 @@ export const VERSION_INFO: VersionInfo = {
     'Comment voting and moderation',
     'Election tracking and results',
     'Constituency mapping',
-    'Party manifestos and promises'
+    'Party manifestos and promises',
+    'Evidence quality scoring (0-100)',
+    'Source credibility tiers',
+    'Community notes (X-style)'
   ]
 }
 
