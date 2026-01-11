@@ -32,6 +32,8 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { approveVerification, rejectVerification } from '@/lib/moderationActions'
 import { RejectDialog } from '@/components/admin/RejectDialog'
+import { QualityBadge, CommunityNotes } from '@/components/quality'
+import { ConfidenceLevel, SourceAnalysis } from '@/lib/evidence-quality'
 
 interface VerificationData {
   id: string
@@ -46,6 +48,10 @@ interface VerificationData {
   trust_level?: 'admin' | 'trusted_community' | 'community' | 'untrusted'
   is_self_verification?: boolean
   verification_weight?: number
+  quality_score?: number
+  confidence_level?: ConfidenceLevel
+  source_analysis?: SourceAnalysis
+  corroboration_count?: number
   promise: {
     id: string
     politician_name: string
@@ -137,6 +143,9 @@ export default function VerificationDetailPage() {
           trust_level,
           is_self_verification,
           verification_weight,
+          quality_score,
+          confidence_level,
+          source_analysis,
           promise:promises!promise_id (
             id,
             politician_name,
@@ -151,9 +160,18 @@ export default function VerificationDetailPage() {
         .eq('id', id)
         .single()
 
+      // Fetch corroboration count
+      const { count: corroborationCount } = await supabase
+        .from('evidence_corroborations')
+        .select('*', { count: 'exact', head: true })
+        .eq('verification_id', id)
+
       if (error) throw error
 
-      setVerification(data as any)
+      setVerification({
+        ...data,
+        corroboration_count: corroborationCount || 0
+      } as any)
     } catch (error) {
       console.error('Error fetching verification:', error)
       toast({
@@ -388,6 +406,23 @@ export default function VerificationDetailPage() {
             </CardContent>
           </Card>
 
+          {/* Evidence Quality Card */}
+          {verification.quality_score !== undefined && verification.confidence_level && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Evidence Quality</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <QualityBadge
+                  qualityScore={verification.quality_score}
+                  confidenceLevel={verification.confidence_level}
+                  sourceAnalysis={verification.source_analysis}
+                  corroborationCount={verification.corroboration_count}
+                />
+              </CardContent>
+            </Card>
+          )}
+
           {/* Verification Integrity Card */}
           <Card className="border-2 border-primary/20">
             <CardHeader>
@@ -532,6 +567,12 @@ export default function VerificationDetailPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Community Notes */}
+          <CommunityNotes
+            targetType="verification"
+            targetId={verification.id}
+          />
 
           {/* Admin Actions (if pending and user is admin) */}
           {isAdmin && verification.status === 'pending' && (

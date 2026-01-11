@@ -23,6 +23,8 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 import { format } from 'date-fns'
+import { QualityIndicator } from '@/components/quality/QualityBadge'
+import { ConfidenceLevel } from '@/lib/evidence-quality'
 
 interface VerificationCardProps {
   verification: {
@@ -36,6 +38,8 @@ interface VerificationCardProps {
     downvotes: number
     trust_level?: 'admin' | 'trusted_community' | 'community' | 'untrusted'
     is_self_verification?: boolean
+    quality_score?: number
+    confidence_level?: ConfidenceLevel
     submitter?: {
       username: string
       citizen_score: number
@@ -245,6 +249,12 @@ export function VerificationCard({ verification, onVoteChange }: VerificationCar
                 <AlertTriangle className="h-3 w-3 mr-1" />
                 Self-Verified
               </Badge>
+            )}
+            {verification.quality_score !== undefined && verification.confidence_level && (
+              <QualityIndicator
+                qualityScore={verification.quality_score}
+                confidenceLevel={verification.confidence_level}
+              />
             )}
           </div>
 
