@@ -12,12 +12,19 @@ CREATE TABLE IF NOT EXISTS promise_views (
   session_id TEXT, -- For anonymous users, track by session
   ip_hash TEXT, -- Hashed IP for additional deduplication
   viewed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-  -- Prevent duplicate views from same user within 24 hours
-  CONSTRAINT unique_user_view_per_day UNIQUE NULLS NOT DISTINCT (promise_id, viewer_id, (viewed_at::date)),
-  -- Prevent duplicate views from same session
-  CONSTRAINT unique_session_view UNIQUE NULLS NOT DISTINCT (promise_id, session_id)
+  view_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
+
+-- Partial unique indexes for deduplication (works with PostgreSQL < 15)
+-- For authenticated users: one view per user per promise per day
+CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_user_view_per_day
+  ON promise_views(promise_id, viewer_id, view_date)
+  WHERE viewer_id IS NOT NULL;
+
+-- For anonymous users: one view per session per promise
+CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_session_view
+  ON promise_views(promise_id, session_id)
+  WHERE session_id IS NOT NULL AND viewer_id IS NULL;
 
 -- Indexes for performance
 CREATE INDEX IF NOT EXISTS idx_promise_views_promise_id ON promise_views(promise_id);
