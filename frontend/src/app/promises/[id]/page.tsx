@@ -27,6 +27,7 @@ import { VerificationCard } from '@/components/verifications/VerificationCard'
 import { FollowButton } from '@/components/FollowButton'
 import { PromiseTimeline } from '@/components/promises/PromiseTimeline'
 import { DiscussionThread } from '@/components/discussions/DiscussionThread'
+import { recordPromiseView } from '@/lib/views'
 
 interface Promise {
   id: string
@@ -154,11 +155,8 @@ export default function PromiseDetailPage() {
 
         setPromise(promiseData)
 
-        // Increment view count
-        await supabase
-          .from('promises')
-          .update({ view_count: (promiseData.view_count || 0) + 1 })
-          .eq('id', params.id)
+        // Record view (with deduplication)
+        recordPromiseView(params.id as string)
 
         // Fetch verifications
         fetchVerifications()
