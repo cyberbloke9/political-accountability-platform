@@ -20,26 +20,32 @@ export const metadata: Metadata = {
   },
   description: 'Track political promises made by Indian politicians. Community-driven verification with transparent accountability. Hold your representatives accountable with evidence-based tracking.',
   keywords: [
-    'political accountability',
-    'india politics',
-    'election promises',
-    'politician tracker',
-    'promise tracker',
-    'indian democracy',
-    'civic engagement',
-    'government transparency',
-    'election verification',
-    'BJP promises',
-    'Congress promises',
-    'AAP promises',
-    'MP promises',
-    'MLA promises',
-    'Modi promises',
-    'state elections india',
-    'lok sabha',
-    'vidhan sabha',
-    'political promises india',
-    'neta promises'
+    // Core
+    'political accountability', 'political accountability india', 'politician tracker india',
+    'promise tracker', 'election promise tracker', 'neta tracker', 'indian democracy',
+    'government transparency india', 'hold politicians accountable', 'verify political promises',
+    // Parties
+    'BJP promises', 'Congress promises', 'AAP promises', 'TMC promises', 'SP promises',
+    'BSP promises', 'NCP promises', 'Shiv Sena promises', 'JDU promises', 'RJD promises',
+    'DMK promises', 'AIADMK promises', 'TDP promises', 'BRS promises', 'BJD promises',
+    // Politicians
+    'Modi promises', 'Narendra Modi promises', 'Rahul Gandhi promises', 'Amit Shah promises',
+    'Yogi Adityanath promises', 'Arvind Kejriwal promises', 'Mamata Banerjee promises',
+    // Elections
+    'lok sabha election promises', 'vidhan sabha promises', 'state assembly election',
+    'general election india', 'municipal election promises',
+    // States
+    'UP election promises', 'Maharashtra election promises', 'Gujarat election promises',
+    'Tamil Nadu election promises', 'Karnataka election promises', 'Delhi election promises',
+    'Bihar election promises', 'West Bengal election promises', 'Rajasthan election promises',
+    // Issues
+    'infrastructure promises', 'healthcare promises india', 'education promises india',
+    'employment promises', 'farmer promises', 'kisan promises', 'development promises',
+    // Hindi/Regional
+    'neta promises', 'chunav vaade', 'sarkar promises', 'jhootha vaada', 'broken promises india',
+    // Long-tail
+    'did modi fulfill promises', 'BJP broken promises', 'politician promise fulfillment rate',
+    'MP promises tracker', 'MLA promises tracker', 'CM promises tracker', 'PM promises tracker'
   ],
   authors: [{ name: 'Political Accountability Platform', url: SITE_URL }],
   creator: 'Political Accountability Platform',
