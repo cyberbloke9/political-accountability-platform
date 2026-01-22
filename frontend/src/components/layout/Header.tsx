@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import { supabase } from '@/lib/supabase'
+import { SearchBar } from '@/components/search'
 import {
   Sheet,
   SheetContent,
@@ -92,6 +93,15 @@ export function Header() {
             )
           })}
         </nav>
+
+        {/* Search Bar - Desktop */}
+        <div className="hidden lg:block w-64 xl:w-80 mx-4">
+          <SearchBar
+            variant="compact"
+            placeholder="Search..."
+            showPopularSearches={false}
+          />
+        </div>
 
         {/* Desktop Auth Section */}
         <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
@@ -179,6 +189,13 @@ export function Header() {
             </SheetHeader>
 
             <div className="flex flex-col space-y-6 mt-6">
+              {/* Mobile Search */}
+              <SearchBar
+                variant="default"
+                placeholder="Search promises..."
+                showPopularSearches={true}
+              />
+
               {/* Mobile Navigation Links */}
               <nav className="flex flex-col space-y-4">
                 {navigation.map((item) => {

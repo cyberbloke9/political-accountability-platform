@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { PromiseCard } from '@/components/promises/PromiseCard'
@@ -10,8 +11,9 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Search, Plus, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { searchPromises } from '@/lib/searchPromises'
+import { advancedSearch } from '@/lib/search'
 import { FilterPanel, type FilterState } from '@/components/promises/FilterPanel'
+import { highlightSearchTerms } from '@/lib/search'
 
 interface Promise {
   id: string
@@ -27,21 +29,47 @@ interface Promise {
   tags?: any[]
 }
 
-export default function PromisesPage() {
+function PromisesContent() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+  // Initialize search query from URL
+  const initialQuery = searchParams.get('search') || ''
+
   const [promises, setPromises] = useState<Promise[]>([])
   const [loading, setLoading] = useState(true)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [debouncedQuery, setDebouncedQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState(initialQuery)
+  const [debouncedQuery, setDebouncedQuery] = useState(initialQuery)
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [filters, setFilters] = useState<FilterState>({ status: [], party: [], tags: [] })
-  const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest')
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'most_viewed'>('newest')
   const [currentPage, setCurrentPage] = useState(1)
   const [totalResults, setTotalResults] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
+  const [searchTime, setSearchTime] = useState(0)
+
+  // Update search query when URL changes
+  useEffect(() => {
+    const urlQuery = searchParams.get('search') || ''
+    if (urlQuery !== searchQuery) {
+      setSearchQuery(urlQuery)
+      setDebouncedQuery(urlQuery)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(searchQuery)
+      // Update URL when query changes
+      if (searchQuery !== initialQuery) {
+        const params = new URLSearchParams(searchParams.toString())
+        if (searchQuery) {
+          params.set('search', searchQuery)
+        } else {
+          params.delete('search')
+        }
+        router.replace(`/promises?${params.toString()}`, { scroll: false })
+      }
     }, 300)
     return () => clearTimeout(timer)
   }, [searchQuery])
@@ -51,17 +79,18 @@ export default function PromisesPage() {
     try {
       const searchFilters = {
         query: debouncedQuery,
-        ...filters,
+        party: filters.party,
         status: statusFilter === 'all' ? filters.status : [statusFilter],
-        sortBy,
+        sortBy: sortBy as 'relevance' | 'newest' | 'oldest' | 'most_viewed',
         page: currentPage,
         pageSize: 12
       }
 
-      const result = await searchPromises(searchFilters)
+      const result = await advancedSearch(searchFilters)
       setPromises(result.promises)
       setTotalResults(result.total)
       setTotalPages(result.totalPages)
+      setSearchTime(result.searchTime)
     } catch (error) {
       console.error('Error fetching promises:', error)
     } finally {
@@ -75,6 +104,7 @@ export default function PromisesPage() {
 
   const clearSearch = () => {
     setSearchQuery('')
+    router.replace('/promises', { scroll: false })
   }
 
   return (
@@ -99,10 +129,11 @@ export default function PromisesPage() {
             </div>
             <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
               <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                <SelectTrigger className="w-full sm:w-[140px]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-full sm:w-[160px]"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="newest">Newest First</SelectItem>
                   <SelectItem value="oldest">Oldest First</SelectItem>
+                  <SelectItem value="most_viewed">Most Viewed</SelectItem>
                 </SelectContent>
               </Select>
               <FilterPanel filters={filters} onChange={setFilters} />
@@ -127,7 +158,14 @@ export default function PromisesPage() {
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between"><p className="text-sm text-muted-foreground">Found {totalResults} promise{totalResults !== 1 ? 's' : ''}</p></div>
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">
+                  Found {totalResults} promise{totalResults !== 1 ? 's' : ''}
+                  {debouncedQuery && searchTime > 0 && (
+                    <span className="ml-2 text-xs">({(searchTime / 1000).toFixed(2)}s)</span>
+                  )}
+                </p>
+              </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{promises.map((promise) => (<PromiseCard key={promise.id} promise={promise} />))}</div>
               {totalPages > 1 && (
                 <div className="flex items-center justify-center gap-2 mt-6">
@@ -142,5 +180,30 @@ export default function PromisesPage() {
       </main>
       <Footer />
     </div>
+  )
+}
+
+// Wrap in Suspense for useSearchParams
+export default function PromisesPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <main className="flex-1 container py-8">
+          <div className="space-y-6">
+            <div className="h-10 w-64 bg-muted rounded animate-pulse" />
+            <div className="h-10 w-full bg-muted rounded animate-pulse" />
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-64 rounded-lg border bg-card animate-pulse" />
+              ))}
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    }>
+      <PromisesContent />
+    </Suspense>
   )
 }
