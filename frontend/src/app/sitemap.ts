@@ -1,13 +1,22 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
 const SITE_URL = 'https://political-accountability.in'
 
+// Create Supabase client only if env vars are available
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseKey) {
+    return null
+  }
+
+  return createClient(supabaseUrl, supabaseKey)
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabase = createClient(supabaseUrl, supabaseKey)
+  const supabase = getSupabaseClient()
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -84,6 +93,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.3,
     },
   ]
+
+  // If no Supabase client (e.g., during CI build), return only static pages
+  if (!supabase) {
+    return staticPages
+  }
 
   // Dynamic promise pages
   let promisePages: MetadataRoute.Sitemap = []
