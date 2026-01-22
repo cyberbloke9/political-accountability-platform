@@ -17,7 +17,6 @@ import {
   ExternalLink,
   ShieldCheck,
   ArrowLeft,
-  Share2,
   Tag,
   User
 } from 'lucide-react'
@@ -28,6 +27,7 @@ import { FollowButton } from '@/components/FollowButton'
 import { PromiseTimeline } from '@/components/promises/PromiseTimeline'
 import { DiscussionThread } from '@/components/discussions/DiscussionThread'
 import { recordPromiseView } from '@/lib/views'
+import { SocialShareButtons } from '@/components/sharing'
 
 interface Promise {
   id: string
@@ -171,25 +171,6 @@ export default function PromiseDetailPage() {
     fetchPromise()
   }, [params.id, fetchVerifications])
 
-  const handleShare = async () => {
-    const url = window.location.href
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `Promise by ${promise?.politician_name}`,
-          text: promise?.promise_text,
-          url: url,
-        })
-      } catch (error) {
-        // User cancelled or share failed
-      }
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(url)
-      toast.success('Link copied to clipboard!')
-    }
-  }
-
   if (loading) {
     return (
       <div className="flex min-h-screen flex-col">
@@ -251,7 +232,7 @@ export default function PromiseDetailPage() {
                 <Badge className={status.className + ' text-sm px-3 py-1'}>
                   {status.label}
                 </Badge>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                   <FollowButton
                     targetType="promise"
                     targetId={promise.id}
@@ -259,10 +240,14 @@ export default function PromiseDetailPage() {
                     variant="outline"
                     size="sm"
                   />
-                  <Button variant="outline" size="sm" onClick={handleShare}>
-                    <Share2 className="mr-2 h-4 w-4" />
-                    Share
-                  </Button>
+                  <SocialShareButtons
+                    url={typeof window !== 'undefined' ? window.location.href : ''}
+                    title={`Promise by ${promise.politician_name}`}
+                    description={promise.promise_text.slice(0, 200)}
+                    hashtags={['PoliticalAccountability', 'PromiseTracker']}
+                    variant="dropdown"
+                    size="sm"
+                  />
                 </div>
               </div>
 

@@ -237,3 +237,151 @@ export function getVerdictLabel(verdict: string): string {
   }
   return labels[verdict] || verdict
 }
+
+// =====================================================
+// POLITICIAN TIMELINE FUNCTIONS
+// =====================================================
+
+export interface PoliticianTimelineEvent extends TimelineEvent {
+  promise_id: string
+  promise_text: string
+}
+
+export interface PoliticianTimelineStats {
+  total_events: number
+  status_changes: number
+  verifications: number
+  first_event_at: string | null
+  last_event_at: string | null
+  avg_days_between_events: number | null
+  most_active_month: string | null
+  events_this_month: number
+}
+
+export interface MonthlyTimelineGroup {
+  month: string
+  month_start: string
+  event_count: number
+  status_changes: number
+  verifications: number
+  promises_fulfilled: number
+  promises_broken: number
+}
+
+/**
+ * Get timeline for a politician (all their promises)
+ */
+export async function getPoliticianTimeline(
+  politicianName: string,
+  options?: {
+    limit?: number
+    offset?: number
+    eventTypes?: ('status_change' | 'verification')[]
+  }
+): Promise<{
+  data: PoliticianTimelineEvent[] | null
+  error?: string
+}> {
+  try {
+    const { data, error } = await supabase.rpc('get_politician_timeline', {
+      p_politician_name: politicianName,
+      p_limit: options?.limit || 50,
+      p_offset: options?.offset || 0,
+      p_event_types: options?.eventTypes || null
+    })
+
+    if (error) {
+      console.error('Error fetching politician timeline:', error)
+      return { data: null, error: error.message }
+    }
+
+    return { data: data as PoliticianTimelineEvent[] }
+  } catch (error) {
+    console.error('Error fetching politician timeline:', error)
+    return { data: null, error: 'An unexpected error occurred' }
+  }
+}
+
+/**
+ * Get timeline statistics for a politician
+ */
+export async function getPoliticianTimelineStats(
+  politicianName: string
+): Promise<{
+  data: PoliticianTimelineStats | null
+  error?: string
+}> {
+  try {
+    const { data, error } = await supabase.rpc('get_politician_timeline_stats', {
+      p_politician_name: politicianName
+    })
+
+    if (error) {
+      console.error('Error fetching timeline stats:', error)
+      return { data: null, error: error.message }
+    }
+
+    return { data: data?.[0] as PoliticianTimelineStats || null }
+  } catch (error) {
+    console.error('Error fetching timeline stats:', error)
+    return { data: null, error: 'An unexpected error occurred' }
+  }
+}
+
+/**
+ * Get timeline grouped by month for a politician
+ */
+export async function getPoliticianTimelineGrouped(
+  politicianName: string,
+  months: number = 12
+): Promise<{
+  data: MonthlyTimelineGroup[] | null
+  error?: string
+}> {
+  try {
+    const { data, error } = await supabase.rpc('get_politician_timeline_grouped', {
+      p_politician_name: politicianName,
+      p_months: months
+    })
+
+    if (error) {
+      console.error('Error fetching grouped timeline:', error)
+      return { data: null, error: error.message }
+    }
+
+    return { data: data as MonthlyTimelineGroup[] }
+  } catch (error) {
+    console.error('Error fetching grouped timeline:', error)
+    return { data: null, error: 'An unexpected error occurred' }
+  }
+}
+
+/**
+ * Group timeline events by month
+ */
+export function groupTimelineByMonth(
+  events: TimelineEvent[]
+): Map<string, TimelineEvent[]> {
+  const groups = new Map<string, TimelineEvent[]>()
+
+  events.forEach(event => {
+    const date = new Date(event.created_at)
+    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+
+    if (!groups.has(monthKey)) {
+      groups.set(monthKey, [])
+    }
+    groups.get(monthKey)!.push(event)
+  })
+
+  return groups
+}
+
+/**
+ * Format month key for display
+ */
+export function formatMonthKey(monthKey: string): string {
+  const [year, month] = monthKey.split('-')
+  const date = new Date(parseInt(year), parseInt(month) - 1)
+  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+}

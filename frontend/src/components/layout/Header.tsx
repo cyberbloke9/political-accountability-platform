@@ -27,8 +27,11 @@ import {
   Users,
   TrendingUp,
   Menu,
-  Vote
+  Vote,
+  Scale,
+  Bell
 } from 'lucide-react'
+import { NotificationBell } from '@/components/notifications'
 
 export function Header() {
   const pathname = usePathname()
@@ -48,6 +51,7 @@ export function Header() {
   const navigation = [
     { name: 'Promises', href: '/promises', icon: ShieldCheck },
     { name: 'Leaders', href: '/politicians', icon: Users },
+    { name: 'Compare', href: '/compare', icon: Scale },
     { name: 'Elections', href: '/elections', icon: Vote },
     { name: 'Leaderboard', href: '/leaderboard', icon: TrendingUp },
   ]
@@ -109,6 +113,9 @@ export function Header() {
             <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
           ) : isAuthenticated && user ? (
             <>
+              {/* Notifications */}
+              <NotificationBell />
+
               {/* Dashboard Link */}
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm">
@@ -237,6 +244,17 @@ export function Header() {
                         <span className="text-sm font-medium">Profile</span>
                         <span className="text-xs text-muted-foreground">{user.email}</span>
                       </div>
+                    </Link>
+
+                    {/* Notifications */}
+                    <Link
+                      href="/notifications"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button variant="outline" className="w-full justify-start" size="lg">
+                        <Bell className="h-5 w-5 mr-3" />
+                        Notifications
+                      </Button>
                     </Link>
 
                     {/* Dashboard */}

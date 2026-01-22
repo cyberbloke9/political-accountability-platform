@@ -26,6 +26,9 @@ import {
 } from '@/lib/politicians'
 import { FollowButton } from '@/components/FollowButton'
 import { ReportCard } from '@/components/politicians/ReportCard'
+import { SocialShareButtons } from '@/components/sharing'
+import { PoliticianTimeline } from '@/components/timeline'
+import { Scale } from 'lucide-react'
 import {
   User,
   MapPin,
@@ -91,6 +94,7 @@ export default function PoliticianProfilePage() {
   const [activeTab, setActiveTab] = useState('all')
   const [promiseCount, setPromiseCount] = useState(0)
   const [showReportCard, setShowReportCard] = useState(false)
+  const [showTimeline, setShowTimeline] = useState(false)
 
   useEffect(() => {
     if (slug) {
@@ -317,7 +321,7 @@ export default function PoliticianProfilePage() {
                     )}
                   </div>
 
-                  {/* Follow & Report Card Buttons */}
+                  {/* Follow & Action Buttons */}
                   <div className="flex flex-wrap gap-2 pt-2">
                     <FollowButton
                       targetType="politician"
@@ -332,6 +336,27 @@ export default function PoliticianProfilePage() {
                       <FileText className="h-4 w-4 mr-2" />
                       {showReportCard ? 'Hide Report Card' : 'View Report Card'}
                     </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowTimeline(!showTimeline)}
+                    >
+                      <Calendar className="h-4 w-4 mr-2" />
+                      {showTimeline ? 'Hide Timeline' : 'View Timeline'}
+                    </Button>
+                    <Link href={`/compare/${politician.slug}`}>
+                      <Button variant="outline">
+                        <Scale className="h-4 w-4 mr-2" />
+                        Compare
+                      </Button>
+                    </Link>
+                    <SocialShareButtons
+                      url={typeof window !== 'undefined' ? window.location.href : ''}
+                      title={`${politician.name} - Political Accountability`}
+                      description={politician.bio || `Track promises by ${politician.name}`}
+                      hashtags={['PoliticalAccountability', politician.party?.replace(/\s+/g, '') || 'Politics']}
+                      variant="dropdown"
+                      size="sm"
+                    />
                   </div>
                 </div>
 
@@ -391,6 +416,14 @@ export default function PoliticianProfilePage() {
                 image_url: politician.image_url
               }}
               stats={politicianStats}
+            />
+          )}
+
+          {/* Timeline Section */}
+          {showTimeline && (
+            <PoliticianTimeline
+              politicianName={politician.name}
+              maxEvents={20}
             />
           )}
 
