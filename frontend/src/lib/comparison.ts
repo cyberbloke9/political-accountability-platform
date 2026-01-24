@@ -94,10 +94,16 @@ export async function getPopularPoliticiansForComparison(
   excludeSlugs: string[] = [],
   limit: number = 8
 ): Promise<{ data: ComparisonSearchResult[] | null; error?: string }> {
-  const { data, error } = await supabase
+  let query = supabase
     .from('politician_comparison_data')
     .select('id, name, slug, party, position, state, image_url, total_promises, fulfillment_rate')
-    .not('slug', 'in', `(${excludeSlugs.join(',')})`)
+
+  // Only apply exclusion filter if there are slugs to exclude
+  if (excludeSlugs.length > 0) {
+    query = query.not('slug', 'in', `(${excludeSlugs.join(',')})`)
+  }
+
+  const { data, error } = await query
     .order('total_promises', { ascending: false })
     .limit(limit)
 
