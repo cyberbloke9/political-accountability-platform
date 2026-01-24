@@ -40,11 +40,12 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
--- Step 3: Fix existing auth users that don't have users records
+-- Step 3: Fix existing auth users - either link existing records or create new ones
 DO $$
 DECLARE
   auth_user RECORD;
   new_username TEXT;
+  existing_user_id UUID;
 BEGIN
   FOR auth_user IN
     SELECT au.id, au.email, au.raw_user_meta_data
@@ -52,38 +53,51 @@ BEGIN
     LEFT JOIN public.users u ON u.auth_id = au.id
     WHERE u.id IS NULL
   LOOP
-    -- Generate username
-    new_username := COALESCE(
-      auth_user.raw_user_meta_data->>'username',
-      SPLIT_PART(auth_user.email, '@', 1)
-    );
+    -- Check if user exists by email (but with different/null auth_id)
+    SELECT id INTO existing_user_id
+    FROM public.users
+    WHERE email = auth_user.email
+    LIMIT 1;
 
-    -- Try to insert, handle username conflicts
-    BEGIN
-      INSERT INTO public.users (auth_id, email, username, citizen_score, created_at, updated_at)
-      VALUES (
-        auth_user.id,
-        auth_user.email,
-        new_username,
-        0,
-        NOW(),
-        NOW()
+    IF existing_user_id IS NOT NULL THEN
+      -- User exists by email - just update the auth_id
+      UPDATE public.users
+      SET auth_id = auth_user.id, updated_at = NOW()
+      WHERE id = existing_user_id;
+      RAISE NOTICE 'Linked existing user record for: %', auth_user.email;
+    ELSE
+      -- No existing record - create new one
+      new_username := COALESCE(
+        auth_user.raw_user_meta_data->>'username',
+        SPLIT_PART(auth_user.email, '@', 1)
       );
-      RAISE NOTICE 'Created user record for: %', auth_user.email;
-    EXCEPTION
-      WHEN unique_violation THEN
-        -- Username conflict - add suffix
+
+      BEGIN
         INSERT INTO public.users (auth_id, email, username, citizen_score, created_at, updated_at)
         VALUES (
           auth_user.id,
           auth_user.email,
-          new_username || '_' || SUBSTR(MD5(auth_user.id::text), 1, 6),
+          new_username,
           0,
           NOW(),
           NOW()
         );
-        RAISE NOTICE 'Created user record with modified username for: %', auth_user.email;
-    END;
+        RAISE NOTICE 'Created user record for: %', auth_user.email;
+      EXCEPTION
+        WHEN unique_violation THEN
+          -- Username conflict - add suffix
+          INSERT INTO public.users (auth_id, email, username, citizen_score, created_at, updated_at)
+          VALUES (
+            auth_user.id,
+            auth_user.email,
+            new_username || '_' || SUBSTR(MD5(auth_user.id::text), 1, 6),
+            0,
+            NOW(),
+            NOW()
+          );
+          RAISE NOTICE 'Created user record with modified username for: %', auth_user.email;
+      END;
+    END IF;
   END LOOP;
 END $$;
 
