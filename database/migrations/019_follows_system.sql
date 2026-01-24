@@ -50,6 +50,18 @@ CREATE POLICY "Users can delete own follows" ON follows
     )
   );
 
+-- Users can update their own follows (for notification preferences)
+CREATE POLICY "Users can update own follows" ON follows
+  FOR UPDATE USING (
+    user_id IN (
+      SELECT id FROM users WHERE auth_id = auth.uid()
+    )
+  ) WITH CHECK (
+    user_id IN (
+      SELECT id FROM users WHERE auth_id = auth.uid()
+    )
+  );
+
 -- Public can see follow counts (for displaying "X followers")
 CREATE POLICY "Public can count follows" ON follows
   FOR SELECT USING (true);
@@ -282,7 +294,7 @@ CREATE TRIGGER trigger_notify_politician_followers
 -- GRANT PERMISSIONS
 -- =====================================================
 
-GRANT SELECT, INSERT, DELETE ON follows TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON follows TO authenticated;
 GRANT SELECT ON follow_counts TO authenticated;
 GRANT EXECUTE ON FUNCTION follow_target TO authenticated;
 GRANT EXECUTE ON FUNCTION unfollow_target TO authenticated;

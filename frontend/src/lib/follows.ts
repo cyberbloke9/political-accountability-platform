@@ -32,22 +32,33 @@ export async function followTarget(
   }
 ): Promise<{ success: boolean; followId?: string; error?: string }> {
   try {
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError) {
+      console.error('Auth error:', authError)
+      return { success: false, error: 'Authentication error: ' + authError.message }
+    }
     if (!user) {
-      return { success: false, error: 'Not authenticated' }
+      return { success: false, error: 'Not authenticated. Please log in again.' }
     }
 
     // Get user's internal ID
-    const { data: userData } = await supabase
+    const { data: userData, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('auth_id', user.id)
       .single()
 
-    if (!userData) {
-      return { success: false, error: 'User not found' }
+    if (userError) {
+      console.error('User lookup error:', userError)
+      // User might not exist in users table - this happens if the trigger failed
+      return { success: false, error: 'User profile not found. Please try logging out and back in.' }
     }
 
+    if (!userData) {
+      return { success: false, error: 'User profile not found. Please contact support.' }
+    }
+
+    // Try RPC first
     const { data, error } = await supabase.rpc('follow_target', {
       p_user_id: userData.id,
       p_follow_type: targetType,
@@ -58,14 +69,59 @@ export async function followTarget(
     })
 
     if (error) {
-      console.error('Error following:', error)
-      return { success: false, error: error.message }
+      console.error('RPC follow_target error:', error)
+
+      // Fallback to direct insert if RPC doesn't exist
+      if (error.message.includes('function') || error.code === '42883') {
+        console.log('RPC not found, using direct insert fallback')
+
+        // Check if already following first (to avoid duplicate key error)
+        const { data: existingFollow } = await supabase
+          .from('follows')
+          .select('id')
+          .eq('user_id', userData.id)
+          .eq('follow_type', targetType)
+          .eq('target_id', targetId)
+          .maybeSingle()
+
+        if (existingFollow) {
+          // Already following
+          return { success: true, followId: existingFollow.id }
+        }
+
+        // Insert new follow
+        const { data: insertData, error: insertError } = await supabase
+          .from('follows')
+          .insert({
+            user_id: userData.id,
+            follow_type: targetType,
+            target_id: targetId,
+            notify_on_update: options?.notifyOnUpdate ?? true,
+            notify_on_verification: options?.notifyOnVerification ?? true,
+            notify_on_status_change: options?.notifyOnStatusChange ?? true
+          })
+          .select('id')
+          .single()
+
+        if (insertError) {
+          console.error('Direct insert error:', insertError)
+          // Check if it's a "table does not exist" error
+          if (insertError.message.includes('relation') && insertError.message.includes('does not exist')) {
+            return { success: false, error: 'Follow feature not available. Please contact support.' }
+          }
+          return { success: false, error: 'Failed to follow: ' + insertError.message }
+        }
+
+        return { success: true, followId: insertData?.id }
+      }
+
+      return { success: false, error: 'Failed to follow: ' + error.message }
     }
 
     return { success: true, followId: data }
   } catch (error) {
-    console.error('Error following:', error)
-    return { success: false, error: 'An unexpected error occurred' }
+    console.error('Unexpected error in followTarget:', error)
+    return { success: false, error: 'An unexpected error occurred. Please try again.' }
   }
 }
 
@@ -77,36 +133,61 @@ export async function unfollowTarget(
   targetId: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError) {
+      console.error('Auth error:', authError)
+      return { success: false, error: 'Authentication error' }
+    }
     if (!user) {
       return { success: false, error: 'Not authenticated' }
     }
 
     // Get user's internal ID
-    const { data: userData } = await supabase
+    const { data: userData, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('auth_id', user.id)
       .single()
 
-    if (!userData) {
+    if (userError || !userData) {
+      console.error('User lookup error:', userError)
       return { success: false, error: 'User not found' }
     }
 
-    const { data, error } = await supabase.rpc('unfollow_target', {
+    // Try RPC first
+    const { error } = await supabase.rpc('unfollow_target', {
       p_user_id: userData.id,
       p_follow_type: targetType,
       p_target_id: targetId
     })
 
     if (error) {
-      console.error('Error unfollowing:', error)
+      console.error('RPC unfollow_target error:', error)
+
+      // Fallback to direct delete if RPC doesn't exist
+      if (error.message.includes('function') || error.code === '42883') {
+        console.log('RPC not found, using direct delete fallback')
+        const { error: deleteError } = await supabase
+          .from('follows')
+          .delete()
+          .eq('user_id', userData.id)
+          .eq('follow_type', targetType)
+          .eq('target_id', targetId)
+
+        if (deleteError) {
+          console.error('Direct delete error:', deleteError)
+          return { success: false, error: 'Failed to unfollow: ' + deleteError.message }
+        }
+
+        return { success: true }
+      }
+
       return { success: false, error: error.message }
     }
 
     return { success: true }
   } catch (error) {
-    console.error('Error unfollowing:', error)
+    console.error('Unexpected error in unfollowTarget:', error)
     return { success: false, error: 'An unexpected error occurred' }
   }
 }
@@ -119,18 +200,19 @@ export async function isFollowing(
   targetId: string
 ): Promise<boolean> {
   try {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return false
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) return false
 
     // Get user's internal ID
-    const { data: userData } = await supabase
+    const { data: userData, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('auth_id', user.id)
       .single()
 
-    if (!userData) return false
+    if (userError || !userData) return false
 
+    // Try RPC first
     const { data, error } = await supabase.rpc('is_following', {
       p_user_id: userData.id,
       p_follow_type: targetType,
@@ -138,7 +220,27 @@ export async function isFollowing(
     })
 
     if (error) {
-      console.error('Error checking follow status:', error)
+      console.error('RPC is_following error:', error)
+
+      // Fallback to direct query if RPC doesn't exist
+      if (error.message.includes('function') || error.code === '42883') {
+        console.log('RPC not found, using direct query fallback')
+        const { data: followData, error: queryError } = await supabase
+          .from('follows')
+          .select('id')
+          .eq('user_id', userData.id)
+          .eq('follow_type', targetType)
+          .eq('target_id', targetId)
+          .maybeSingle()
+
+        if (queryError) {
+          console.error('Direct query error:', queryError)
+          return false
+        }
+
+        return !!followData
+      }
+
       return false
     }
 
