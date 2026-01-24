@@ -1,0 +1,32 @@
+{
+  "name": "Political Accountability Platform",
+  "short_name": "PAP",
+  "description": "Track and verify political promises with community-driven accountability",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/logo-small.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/logo-small.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/logo-small.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["news", "politics", "social"],
+  "lang": "en-IN",
+  "dir": "ltr"
+}
