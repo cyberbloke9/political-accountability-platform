@@ -15,10 +15,11 @@
  * v2.1.0 - Discussion Threads: Comments, replies, voting, flagging (Sprint 6)
  * v2.2.0 - Election Integration: Elections, constituencies, candidates, manifestos (Sprint 8)
  * v2.3.0 - Evidence Quality System: Grokipedia-style scoring, community notes (Sprint 4)
+ * v2.4.0 - Social Sharing, Comparison Tool, Timeline Enhancements, Notifications (Sprint 5)
  */
 
-export const APP_VERSION = '2.3.0'
-export const APP_BUILD_DATE = '2026-01-11'
+export const APP_VERSION = '2.4.0'
+export const APP_BUILD_DATE = '2026-01-24'
 export const APP_CODENAME = 'Accountability'
 
 export interface VersionInfo {
@@ -47,7 +48,11 @@ export const VERSION_INFO: VersionInfo = {
     'Evidence quality scoring (0-100)',
     'Source credibility tiers',
     'Community notes (X-style)',
-    'Unique view tracking with deduplication'
+    'Unique view tracking with deduplication',
+    'Social sharing with dynamic OG images',
+    'Politician comparison tool (up to 4)',
+    'Real-time notification system',
+    'Enhanced timeline with filters'
   ]
 }
 

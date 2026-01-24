@@ -89,14 +89,14 @@ export default function NotificationsPage() {
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main className="flex-1 container py-8">
-        <div className="max-w-2xl mx-auto space-y-6">
+      <main className="flex-1 container py-4 sm:py-8 px-4 sm:px-6">
+        <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6">
           {/* Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3">
-              <Bell className="h-7 w-7" />
+              <Bell className="h-6 w-6 sm:h-7 sm:w-7" />
               <div>
-                <h1 className="text-2xl font-bold">Notifications</h1>
+                <h1 className="text-xl sm:text-2xl font-bold">Notifications</h1>
                 <p className="text-sm text-muted-foreground">
                   {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up!'}
                 </p>
@@ -110,31 +110,34 @@ export default function NotificationsPage() {
                 onClick={() => refresh()}
                 disabled={loading}
               >
-                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                Refresh
+                <RefreshCw className={`h-4 w-4 sm:mr-2 ${loading ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">Refresh</span>
               </Button>
               <Link href="/settings/notifications">
                 <Button variant="outline" size="sm">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Settings
+                  <Settings className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Settings</span>
                 </Button>
               </Link>
             </div>
           </div>
 
           {/* Filters */}
-          <div className="flex items-center justify-between gap-4">
-            <Tabs value={filter} onValueChange={(v) => setFilter(v as FilterType)}>
-              <TabsList>
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="unread">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+            <Tabs value={filter} onValueChange={(v) => setFilter(v as FilterType)} className="w-full sm:w-auto">
+              <TabsList className="w-full sm:w-auto grid grid-cols-4 sm:flex">
+                <TabsTrigger value="all" className="text-xs sm:text-sm">All</TabsTrigger>
+                <TabsTrigger value="unread" className="text-xs sm:text-sm">
                   Unread
                   {unreadCount > 0 && (
-                    <span className="ml-1 text-xs">({unreadCount})</span>
+                    <span className="ml-1 text-xs hidden sm:inline">({unreadCount})</span>
                   )}
                 </TabsTrigger>
-                <TabsTrigger value="promise">Promises</TabsTrigger>
-                <TabsTrigger value="verification">Verifications</TabsTrigger>
+                <TabsTrigger value="promise" className="text-xs sm:text-sm">Promises</TabsTrigger>
+                <TabsTrigger value="verification" className="text-xs sm:text-sm">
+                  <span className="sm:hidden">Verify</span>
+                  <span className="hidden sm:inline">Verifications</span>
+                </TabsTrigger>
               </TabsList>
             </Tabs>
 
@@ -143,7 +146,7 @@ export default function NotificationsPage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => markAllAsRead()}
-                className="text-muted-foreground"
+                className="text-muted-foreground w-full sm:w-auto"
               >
                 <CheckCheck className="h-4 w-4 mr-2" />
                 Mark all read
