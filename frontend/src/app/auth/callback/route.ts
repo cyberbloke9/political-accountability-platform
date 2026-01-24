@@ -15,25 +15,40 @@ export async function GET(request: Request) {
     if (session?.user && !sessionError) {
       const user = session.user
 
-      // Check if user already exists in users table
-      const { data: existingUser } = await supabase
+      // Check if user already exists by auth_id
+      const { data: existingByAuthId } = await supabase
         .from('users')
         .select('id')
         .eq('auth_id', user.id)
         .maybeSingle()
 
-      // Create user if they don't exist
-      if (!existingUser) {
-        const username = user.user_metadata?.username || user.email?.split('@')[0] || 'user'
-
-        await supabase
+      if (!existingByAuthId) {
+        // Check if user exists by email (needs auth_id linking)
+        const { data: existingByEmail } = await supabase
           .from('users')
-          .insert({
-            auth_id: user.id,
-            email: user.email,
-            username: username,
-            citizen_score: 0
-          })
+          .select('id')
+          .eq('email', user.email)
+          .maybeSingle()
+
+        if (existingByEmail) {
+          // Link existing user record to this auth account
+          await supabase
+            .from('users')
+            .update({ auth_id: user.id })
+            .eq('id', existingByEmail.id)
+        } else {
+          // Create new user record
+          const username = user.user_metadata?.username || user.email?.split('@')[0] || 'user'
+
+          await supabase
+            .from('users')
+            .insert({
+              auth_id: user.id,
+              email: user.email,
+              username: username,
+              citizen_score: 0
+            })
+        }
       }
     }
   }
