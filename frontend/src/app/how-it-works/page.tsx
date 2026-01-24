@@ -15,7 +15,11 @@ import {
   AlertTriangle,
   Users,
   Trophy,
-  Lock
+  Lock,
+  Share2,
+  GitCompare,
+  Bell,
+  Clock
 } from 'lucide-react'
 
 export default function HowItWorksPage() {
@@ -61,6 +65,37 @@ export default function HowItWorksPage() {
       title: 'Track Accountability',
       description: 'Watch as promises are fulfilled, broken, or stalled. Hold leaders accountable through transparent, community-verified data.',
       actions: ['Monitor promise status', 'Share on social media', 'Demand accountability']
+    }
+  ]
+
+  const newFeatures = [
+    {
+      icon: GitCompare,
+      title: 'Compare Politicians',
+      description: 'Compare up to 4 politicians side-by-side. See fulfillment rates, promise breakdowns, and auto-generated insights.',
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-500/10'
+    },
+    {
+      icon: Share2,
+      title: 'Social Sharing',
+      description: 'Share promises, politician profiles, and comparisons on Twitter, Facebook, WhatsApp, and LinkedIn with rich previews.',
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-500/10'
+    },
+    {
+      icon: Clock,
+      title: 'Enhanced Timelines',
+      description: 'View detailed activity history with filters by event type, visual time gaps, and expandable descriptions.',
+      color: 'text-green-600',
+      bgColor: 'bg-green-500/10'
+    },
+    {
+      icon: Bell,
+      title: 'Smart Notifications',
+      description: 'Get notified about promise updates, verifications on content you follow, and community responses.',
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-500/10'
     }
   ]
 
@@ -137,7 +172,7 @@ export default function HowItWorksPage() {
         <section className='bg-gradient-to-b from-primary/5 to-background py-16'>
           <div className='container px-4 max-w-5xl'>
             <div className='text-center space-y-4'>
-              <Badge className='text-sm px-4 py-1'>Platform Workflow</Badge>
+              <Badge className='text-sm px-4 py-1'>Version 2.4.0 - January 24, 2026</Badge>
               <h1 className='text-4xl md:text-5xl font-bold tracking-tight'>How It Works</h1>
               <p className='text-xl text-muted-foreground max-w-2xl mx-auto'>
                 A simple, transparent process for tracking political accountability with advanced anti-gaming protections
@@ -192,6 +227,51 @@ export default function HowItWorksPage() {
                   </div>
                 )
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* New Features */}
+        <section className='border-t bg-gradient-to-b from-purple-50/30 to-background py-16'>
+          <div className='container px-4 max-w-5xl'>
+            <div className='text-center mb-12'>
+              <Badge className='mb-4' variant='secondary'>New in v2.4</Badge>
+              <h2 className='text-3xl font-bold mb-4'>Latest Features</h2>
+              <p className='text-lg text-muted-foreground max-w-2xl mx-auto'>
+                New tools to help you track, compare, and share political accountability data
+              </p>
+            </div>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              {newFeatures.map((feature, index) => {
+                const Icon = feature.icon
+                return (
+                  <Card key={index} className='border-2 hover:border-primary/50 transition-colors'>
+                    <CardHeader>
+                      <div className='flex items-center gap-3 mb-2'>
+                        <div className={`p-2 rounded-lg ${feature.bgColor}`}>
+                          <Icon className={`h-5 w-5 ${feature.color}`} />
+                        </div>
+                        <CardTitle className='text-xl'>{feature.title}</CardTitle>
+                      </div>
+                      <CardDescription className='text-base'>{feature.description}</CardDescription>
+                    </CardHeader>
+                  </Card>
+                )
+              })}
+            </div>
+
+            <div className='mt-8 p-6 bg-primary/5 border border-primary/20 rounded-lg'>
+              <div className='flex items-start gap-3'>
+                <Share2 className='h-5 w-5 text-primary mt-0.5 flex-shrink-0' />
+                <div>
+                  <h4 className='font-semibold mb-1'>Share Everywhere</h4>
+                  <p className='text-sm text-muted-foreground'>
+                    Every promise, politician profile, and comparison can be shared directly to social media with auto-generated preview images.
+                    On mobile, use the native share button for seamless sharing to any app on your device.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>

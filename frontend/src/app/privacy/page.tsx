@@ -1,15 +1,19 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Card, CardContent } from '@/components/ui/card'
-import { Shield, Lock, Database, Ban, Eye, Server, GitBranch } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Shield, Lock, Database, Ban, Eye, Server, GitBranch, Share2, Bell } from 'lucide-react'
 
 export default function PrivacyPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1 container py-12 px-4 max-w-4xl">
-        <h1 className="text-4xl font-bold mb-4">Privacy Policy</h1>
-        <p className="text-muted-foreground mb-8">Last updated: January 2026</p>
+        <div className="flex items-center gap-3 mb-4">
+          <h1 className="text-4xl font-bold">Privacy Policy</h1>
+          <Badge className="text-xs">v2.4.0</Badge>
+        </div>
+        <p className="text-muted-foreground mb-8">Last updated: January 24, 2026</p>
 
         <Card className="mb-6 border-primary/20">
           <CardContent className="pt-6">
@@ -241,15 +245,78 @@ export default function PrivacyPage() {
           </section>
 
           <section>
+            <div className="flex items-center gap-3 mb-4">
+              <Share2 className="h-5 w-5 text-primary" />
+              <h2 className="text-2xl font-bold">Social Sharing & External Platforms</h2>
+            </div>
+            <Card>
+              <CardContent className="pt-6 space-y-3">
+                <p className="text-muted-foreground">
+                  When you use our social sharing features (Twitter/X, Facebook, WhatsApp, LinkedIn):
+                </p>
+                <ul className="text-muted-foreground space-y-1 ml-6 text-sm">
+                  <li className="list-disc">We only share the link URL and publicly available content metadata</li>
+                  <li className="list-disc">We do not send any personal data to social platforms</li>
+                  <li className="list-disc">Preview images (Open Graph) are generated server-side and contain only public platform data</li>
+                  <li className="list-disc">Your interaction with external platforms is governed by their privacy policies</li>
+                  <li className="list-disc">We do not track which content you share or to which platforms</li>
+                </ul>
+                <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-900">
+                    <strong>Native Share:</strong> On mobile devices, we use the native share API which keeps data within your device's sharing system.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+
+          <section>
+            <div className="flex items-center gap-3 mb-4">
+              <Bell className="h-5 w-5 text-primary" />
+              <h2 className="text-2xl font-bold">Notification Data</h2>
+            </div>
+            <Card>
+              <CardContent className="pt-6 space-y-3">
+                <p className="text-muted-foreground">
+                  Our notification system stores the following data:
+                </p>
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="font-semibold mb-1">In-App Notifications</h3>
+                    <ul className="text-muted-foreground space-y-1 ml-6 text-sm">
+                      <li className="list-disc">Notification content, type, and timestamps</li>
+                      <li className="list-disc">Read/unread status</li>
+                      <li className="list-disc">Related promise or politician references</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">Notification Settings (User-Controlled)</h3>
+                    <ul className="text-muted-foreground space-y-1 ml-6 text-sm">
+                      <li className="list-disc">Your notification preferences for each category</li>
+                      <li className="list-disc">Email notification opt-in status</li>
+                      <li className="list-disc">Email frequency preference (instant/daily digest)</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-sm text-green-900">
+                    <strong>Your Control:</strong> You can disable all notifications or customize by category in Settings → Notifications.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+
+          <section>
             <h2 className="text-2xl font-bold mb-4">Third-Party Services</h2>
             <Card>
               <CardContent className="pt-6 space-y-2">
                 <p className="text-muted-foreground">
-                  <strong>Supabase:</strong> Database, authentication, and file storage (read their{' '}
+                  <strong>Supabase:</strong> Database, authentication, file storage, and real-time notifications (read their{' '}
                   <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">privacy policy</a>)
                 </p>
                 <p className="text-muted-foreground">
-                  <strong>Vercel:</strong> Frontend hosting (read their{' '}
+                  <strong>Vercel:</strong> Frontend hosting and OG image generation (read their{' '}
                   <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">privacy policy</a>)
                 </p>
                 <p className="text-muted-foreground mt-3 text-sm">

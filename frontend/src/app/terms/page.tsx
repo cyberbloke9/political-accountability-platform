@@ -1,15 +1,19 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ShieldCheck, UserCheck, Ban, Scale, AlertTriangle, Lock } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { ShieldCheck, UserCheck, Ban, Scale, AlertTriangle, Lock, Share2, GitCompare, Bell, Clock } from 'lucide-react'
 
 export default function TermsPage() {
   return (
     <div className='flex min-h-screen flex-col'>
       <Header />
       <main className='flex-1 container py-12 px-4 max-w-4xl'>
-        <h1 className='text-4xl font-bold mb-4'>Terms of Use</h1>
-        <p className='text-muted-foreground mb-8'>Last updated: January 2026</p>
+        <div className='flex items-center gap-3 mb-4'>
+          <h1 className='text-4xl font-bold'>Terms of Use</h1>
+          <Badge className='text-xs'>v2.4.0</Badge>
+        </div>
+        <p className='text-muted-foreground mb-8'>Last updated: January 24, 2026</p>
 
         <Card className='mb-6 border-primary/20'>
           <CardContent className='pt-6'>
@@ -158,6 +162,86 @@ export default function TermsPage() {
                 <p className='text-muted-foreground'>
                   Evidence files and images must be properly sourced. Do not upload copyrighted material without permission.
                 </p>
+              </CardContent>
+            </Card>
+          </section>
+
+          <section>
+            <div className='flex items-center gap-3 mb-4'>
+              <Share2 className='h-5 w-5 text-primary' />
+              <h2 className='text-2xl font-bold'>Social Sharing</h2>
+            </div>
+            <Card>
+              <CardContent className='pt-6 space-y-3'>
+                <p className='text-muted-foreground'>
+                  Our platform provides social sharing capabilities for promises, politician profiles, and comparisons via Twitter/X, Facebook, WhatsApp, and LinkedIn.
+                </p>
+                <ul className='space-y-2 text-muted-foreground ml-6'>
+                  <li className='list-disc'>Shared content includes publicly visible platform data and links only</li>
+                  <li className='list-disc'>We generate preview images (Open Graph) for shared links showing promise status, politician stats, or comparison summaries</li>
+                  <li className='list-disc'>You are responsible for any additional commentary you add when sharing</li>
+                  <li className='list-disc'>Do not use social sharing to spread misinformation or harass others</li>
+                  <li className='list-disc'>Sharing to external platforms is subject to those platforms' terms of service</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </section>
+
+          <section>
+            <div className='flex items-center gap-3 mb-4'>
+              <GitCompare className='h-5 w-5 text-primary' />
+              <h2 className='text-2xl font-bold'>Comparison Tool</h2>
+            </div>
+            <Card>
+              <CardContent className='pt-6 space-y-3'>
+                <p className='text-muted-foreground'>
+                  The politician comparison tool allows users to compare up to 4 politicians side-by-side based on their promise fulfillment data.
+                </p>
+                <ul className='space-y-2 text-muted-foreground ml-6'>
+                  <li className='list-disc'>Comparisons are based on community-verified data and may not reflect complete records</li>
+                  <li className='list-disc'>Shareable comparison URLs preserve your selection for easy sharing</li>
+                  <li className='list-disc'>Comparison insights are auto-generated based on available metrics</li>
+                  <li className='list-disc'>Do not misrepresent comparison data when sharing externally</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </section>
+
+          <section>
+            <div className='flex items-center gap-3 mb-4'>
+              <Clock className='h-5 w-5 text-primary' />
+              <h2 className='text-2xl font-bold'>Timeline & Activity History</h2>
+            </div>
+            <Card>
+              <CardContent className='pt-6 space-y-3'>
+                <p className='text-muted-foreground'>
+                  Promise timelines and politician activity histories are publicly visible to all users.
+                </p>
+                <ul className='space-y-2 text-muted-foreground ml-6'>
+                  <li className='list-disc'>All status changes, verifications, and votes are recorded with timestamps</li>
+                  <li className='list-disc'>Historical data cannot be deleted once submitted (for accountability integrity)</li>
+                  <li className='list-disc'>Filtered views do not affect the underlying data record</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </section>
+
+          <section>
+            <div className='flex items-center gap-3 mb-4'>
+              <Bell className='h-5 w-5 text-primary' />
+              <h2 className='text-2xl font-bold'>Notifications</h2>
+            </div>
+            <Card>
+              <CardContent className='pt-6 space-y-3'>
+                <p className='text-muted-foreground'>
+                  The platform provides in-app notifications to keep you informed about relevant activity.
+                </p>
+                <ul className='space-y-2 text-muted-foreground ml-6'>
+                  <li className='list-disc'>Notifications include updates on promises you follow, verification activity, and community responses</li>
+                  <li className='list-disc'>You can customize notification preferences in your account settings</li>
+                  <li className='list-disc'>Email notifications (if enabled) are sent only for categories you opt into</li>
+                  <li className='list-disc'>We will never send promotional or third-party marketing notifications</li>
+                </ul>
               </CardContent>
             </Card>
           </section>

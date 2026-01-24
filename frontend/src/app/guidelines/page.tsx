@@ -2,7 +2,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { AlertTriangle, Shield, Ban, Users, Target, CheckCircle2, Scale } from 'lucide-react'
+import { AlertTriangle, Shield, Ban, Users, Target, CheckCircle2, Scale, Share2, GitCompare, Bell } from 'lucide-react'
 
 export default function GuidelinesPage() {
   return (
@@ -12,7 +12,7 @@ export default function GuidelinesPage() {
         <section className='bg-gradient-to-b from-primary/5 to-background py-16'>
           <div className='container px-4 max-w-5xl'>
             <div className='text-center space-y-4'>
-              <Badge className='text-sm px-4 py-1'>Version 2.3.0 - January 2026</Badge>
+              <Badge className='text-sm px-4 py-1'>Version 2.4.0 - January 24, 2026</Badge>
               <h1 className='text-4xl md:text-5xl font-bold tracking-tight'>Community Guidelines</h1>
               <p className='text-xl text-muted-foreground max-w-3xl mx-auto'>
                 Fair, transparent, non-partisan rules for political accountability
@@ -272,6 +272,86 @@ export default function GuidelinesPage() {
                       </ul>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div>
+              <h2 className='text-3xl font-bold mb-6 flex items-center gap-3'>
+                <Share2 className='h-8 w-8 text-blue-600' />
+                Social Sharing Guidelines
+              </h2>
+              <Card>
+                <CardContent className='pt-6 space-y-4'>
+                  <p className='text-muted-foreground'>
+                    Share content responsibly to spread awareness about political accountability:
+                  </p>
+                  <div className='space-y-3'>
+                    <div className='p-4 bg-green-50 border border-green-200 rounded-lg'>
+                      <h3 className='font-semibold text-green-900 mb-2'>Do:</h3>
+                      <ul className='text-sm text-muted-foreground space-y-1 ml-4'>
+                        <li className='list-disc'>Share promises and verifications to increase transparency</li>
+                        <li className='list-disc'>Use the comparison tool to highlight accountability differences</li>
+                        <li className='list-disc'>Provide context when sharing on social media</li>
+                        <li className='list-disc'>Share direct links to allow others to verify claims</li>
+                      </ul>
+                    </div>
+                    <div className='p-4 bg-red-50 border border-red-200 rounded-lg'>
+                      <h3 className='font-semibold text-red-900 mb-2'>Don't:</h3>
+                      <ul className='text-sm text-muted-foreground space-y-1 ml-4'>
+                        <li className='list-disc'>Spam social media with repeated shares</li>
+                        <li className='list-disc'>Misrepresent platform data when sharing externally</li>
+                        <li className='list-disc'>Use shares to harass or target individuals</li>
+                        <li className='list-disc'>Add false claims when sharing platform content</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div>
+              <h2 className='text-3xl font-bold mb-6 flex items-center gap-3'>
+                <GitCompare className='h-8 w-8 text-purple-600' />
+                Comparison Tool Guidelines
+              </h2>
+              <Card>
+                <CardContent className='pt-6 space-y-4'>
+                  <p className='text-muted-foreground'>
+                    The politician comparison tool helps citizens make informed decisions. Use it fairly:
+                  </p>
+                  <ul className='text-muted-foreground space-y-2 ml-6 text-sm'>
+                    <li className='list-disc'>Comparisons are based on available community-verified data only</li>
+                    <li className='list-disc'>Missing data doesn't imply wrongdoing - politicians may have untracked promises</li>
+                    <li className='list-disc'>Share comparison URLs to let others verify the data themselves</li>
+                    <li className='list-disc'>Auto-generated insights are informational, not editorial judgments</li>
+                    <li className='list-disc'>Do not manipulate comparison context to mislead others</li>
+                  </ul>
+                  <div className='p-4 bg-purple-50 border border-purple-200 rounded-lg'>
+                    <p className='text-sm text-purple-900'>
+                      <strong>Fair Use:</strong> Compare politicians objectively based on evidence. Use comparison data to demand accountability, not for political attacks.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div>
+              <h2 className='text-3xl font-bold mb-6 flex items-center gap-3'>
+                <Bell className='h-8 w-8 text-amber-600' />
+                Notification Etiquette
+              </h2>
+              <Card>
+                <CardContent className='pt-6 space-y-3'>
+                  <p className='text-muted-foreground'>
+                    Notifications keep you informed about platform activity relevant to you:
+                  </p>
+                  <ul className='text-muted-foreground space-y-2 ml-6 text-sm'>
+                    <li className='list-disc'>Notifications are for genuine platform activity only</li>
+                    <li className='list-disc'>Do not attempt to trigger excessive notifications to other users</li>
+                    <li className='list-disc'>Customize your notification preferences to reduce noise</li>
+                    <li className='list-disc'>Report any notification-related abuse through the contact page</li>
+                  </ul>
                 </CardContent>
               </Card>
             </div>
