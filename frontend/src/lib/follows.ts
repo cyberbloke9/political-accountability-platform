@@ -41,17 +41,37 @@ export async function followTarget(
       return { success: false, error: 'Not authenticated. Please log in again.' }
     }
 
-    // Get user's internal ID
-    const { data: userData, error: userError } = await supabase
+    // Get user's internal ID (use maybeSingle to avoid 406 error)
+    let { data: userData, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('auth_id', user.id)
-      .single()
+      .maybeSingle()
 
     if (userError) {
       console.error('User lookup error:', userError)
-      // User might not exist in users table - this happens if the trigger failed
-      return { success: false, error: 'User profile not found. Please try logging out and back in.' }
+      return { success: false, error: 'User profile lookup failed. Please try again.' }
+    }
+
+    // If user doesn't exist in users table, create them
+    if (!userData) {
+      console.log('User not found in users table, creating...')
+      const { data: newUser, error: createError } = await supabase
+        .from('users')
+        .insert({
+          auth_id: user.id,
+          email: user.email,
+          username: user.user_metadata?.username || user.email?.split('@')[0] || 'user'
+        })
+        .select('id')
+        .single()
+
+      if (createError) {
+        console.error('User creation error:', createError)
+        return { success: false, error: 'Failed to create user profile. Please contact support.' }
+      }
+
+      userData = newUser
     }
 
     if (!userData) {
@@ -142,16 +162,20 @@ export async function unfollowTarget(
       return { success: false, error: 'Not authenticated' }
     }
 
-    // Get user's internal ID
+    // Get user's internal ID (use maybeSingle to avoid 406 error)
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('auth_id', user.id)
-      .single()
+      .maybeSingle()
 
-    if (userError || !userData) {
+    if (userError) {
       console.error('User lookup error:', userError)
-      return { success: false, error: 'User not found' }
+      return { success: false, error: 'User lookup failed' }
+    }
+
+    if (!userData) {
+      return { success: false, error: 'User profile not found' }
     }
 
     // Try RPC first
@@ -203,12 +227,12 @@ export async function isFollowing(
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) return false
 
-    // Get user's internal ID
+    // Get user's internal ID (use maybeSingle to avoid 406 error)
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('auth_id', user.id)
-      .single()
+      .maybeSingle()
 
     if (userError || !userData) return false
 

@@ -42,8 +42,9 @@ export function Header() {
 
   useEffect(() => {
     if (user) {
-      supabase.from('users').select('username').eq('auth_id', user.id).single().then(({ data }) => {
+      supabase.from('users').select('username').eq('auth_id', user.id).maybeSingle().then(({ data }) => {
         if (data) setUsername(data.username)
+        else setUsername(user.user_metadata?.username || user.email?.split('@')[0] || 'User')
       })
     }
   }, [user])
