@@ -224,8 +224,8 @@ export function Header() {
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-            <SheetHeader>
+          <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col">
+            <SheetHeader className="flex-shrink-0">
               <SheetTitle className="flex items-center">
                 <Image
                   src="/images/logo (3).png"
@@ -236,7 +236,7 @@ export function Header() {
               </SheetTitle>
             </SheetHeader>
 
-            <div className="flex flex-col space-y-6 mt-6">
+            <div className="flex flex-col space-y-6 mt-6 flex-1 overflow-y-auto pb-6">
               {/* Mobile Search */}
               <SearchBar
                 variant="default"
