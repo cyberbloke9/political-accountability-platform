@@ -164,13 +164,17 @@ export default function ComparePage() {
                   maxSelections={4}
                 />
 
-                {politicians.length > 0 && (
+                {/* Show selected slugs immediately, with names from politicians if available */}
+                {selectedSlugs.length > 0 && (
                   <SelectedPoliticians
-                    politicians={politicians.map(p => ({
-                      slug: p.slug,
-                      name: p.name,
-                      party: p.party
-                    }))}
+                    politicians={selectedSlugs.map(slug => {
+                      const politician = politicians.find(p => p.slug === slug)
+                      return {
+                        slug,
+                        name: politician?.name || slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                        party: politician?.party || null
+                      }
+                    })}
                     onRemove={handleRemove}
                   />
                 )}
