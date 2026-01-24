@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -36,17 +36,26 @@ import Link from 'next/link'
 export default function ComparePage() {
   const router = useRouter()
   const params = useParams()
+  const isInitialized = useRef(false)
+  const lastUrlUpdate = useRef<string>('')
 
-  const [selectedSlugs, setSelectedSlugs] = useState<string[]>([])
+  // Initialize from URL params
+  const initialSlugs = parseComparisonSlugs(params.slugs as string[] | undefined)
+  const [selectedSlugs, setSelectedSlugs] = useState<string[]>(initialSlugs)
   const [politicians, setPoliticians] = useState<ComparisonPolitician[]>([])
   const [insights, setInsights] = useState<ComparisonInsight[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Parse slugs from URL on mount
+  // Sync from URL when params change (e.g., browser back/forward)
   useEffect(() => {
+    if (!isInitialized.current) {
+      isInitialized.current = true
+      return
+    }
     const slugsFromUrl = parseComparisonSlugs(params.slugs as string[] | undefined)
-    if (slugsFromUrl.length > 0) {
+    const currentUrl = generateComparisonUrl(slugsFromUrl)
+    if (currentUrl !== lastUrlUpdate.current) {
       setSelectedSlugs(slugsFromUrl)
     }
   }, [params.slugs])
@@ -85,17 +94,19 @@ export default function ComparePage() {
     fetchComparison()
   }, [fetchComparison])
 
-  // Update URL when selection changes
+  // Update URL when selection changes (debounced to prevent loops)
   useEffect(() => {
     const newUrl = generateComparisonUrl(selectedSlugs)
-    if (newUrl !== window.location.pathname) {
-      router.replace(newUrl, { scroll: false })
+    if (newUrl !== window.location.pathname && newUrl !== lastUrlUpdate.current) {
+      lastUrlUpdate.current = newUrl
+      // Use window.history to avoid triggering re-renders
+      window.history.replaceState(null, '', newUrl)
     }
-  }, [selectedSlugs, router])
+  }, [selectedSlugs])
 
   const handleSelect = (slug: string) => {
     if (!selectedSlugs.includes(slug) && selectedSlugs.length < 4) {
-      setSelectedSlugs([...selectedSlugs, slug])
+      setSelectedSlugs(prev => [...prev, slug])
     }
   }
 
