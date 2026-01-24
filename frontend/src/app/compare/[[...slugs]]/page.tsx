@@ -120,37 +120,37 @@ export default function ComparePage() {
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main className="flex-1 container py-8">
-        <div className="space-y-8">
+      <main className="flex-1 container py-4 sm:py-8 px-4 sm:px-6">
+        <div className="space-y-6 sm:space-y-8">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <Link href="/politicians">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Politicians
-                </Button>
-              </Link>
+          <div className="flex flex-col gap-4">
+            <Link href="/politicians">
+              <Button variant="ghost" size="sm" className="w-fit">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Politicians
+              </Button>
+            </Link>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight flex items-center gap-2">
-                  <Scale className="h-7 w-7" />
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight flex items-center gap-2">
+                  <Scale className="h-6 w-6 sm:h-7 sm:w-7" />
                   Compare Politicians
                 </h1>
-                <p className="text-muted-foreground">
-                  Select up to 4 politicians to compare their promise records
+                <p className="text-sm sm:text-base text-muted-foreground mt-1">
+                  Select up to 4 politicians to compare
                 </p>
               </div>
-            </div>
 
-            {politicians.length >= 2 && (
-              <SocialShareButtons
-                url={shareUrl}
-                title={shareTitle}
-                description="Compare political promise fulfillment rates"
-                variant="dropdown"
-                showLabels
-              />
-            )}
+              {politicians.length >= 2 && (
+                <SocialShareButtons
+                  url={shareUrl}
+                  title={shareTitle}
+                  description="Compare political promise fulfillment rates"
+                  variant="dropdown"
+                  showLabels
+                />
+              )}
+            </div>
           </div>
 
           {/* Selector */}
@@ -215,7 +215,7 @@ export default function ComparePage() {
           {!loading && politicians.length >= 2 && (
             <>
               {/* Comparison Cards */}
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {politicians.map((politician) => (
                   <ComparisonCard
                     key={politician.slug}
@@ -230,7 +230,7 @@ export default function ComparePage() {
               <Separator />
 
               {/* Visual Comparisons */}
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
                 {/* Fulfillment Rate Comparison */}
                 <Card>
                   <CardHeader>
