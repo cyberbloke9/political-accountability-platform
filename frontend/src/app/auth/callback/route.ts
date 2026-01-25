@@ -15,41 +15,11 @@ export async function GET(request: Request) {
     if (session?.user && !sessionError) {
       const user = session.user
 
-      // Check if user already exists by auth_id
-      const { data: existingByAuthId } = await supabase
-        .from('users')
-        .select('id')
-        .eq('auth_id', user.id)
-        .maybeSingle()
-
-      if (!existingByAuthId) {
-        // Check if user exists by email (needs auth_id linking)
-        const { data: existingByEmail } = await supabase
-          .from('users')
-          .select('id')
-          .eq('email', user.email)
-          .maybeSingle()
-
-        if (existingByEmail) {
-          // Link existing user record to this auth account
-          await supabase
-            .from('users')
-            .update({ auth_id: user.id })
-            .eq('id', existingByEmail.id)
-        } else {
-          // Create new user record
-          const username = user.user_metadata?.username || user.email?.split('@')[0] || 'user'
-
-          await supabase
-            .from('users')
-            .insert({
-              auth_id: user.id,
-              email: user.email,
-              username: username,
-              citizen_score: 0
-            })
-        }
-      }
+      // Use RPC to link/create user (bypasses RLS issues)
+      await supabase.rpc('link_user_auth_id', {
+        p_auth_id: user.id,
+        p_email: user.email
+      })
     }
   }
 

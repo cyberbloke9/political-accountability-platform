@@ -46,43 +46,30 @@ export function Header() {
         if (data) {
           setUsername(data.username)
         } else {
-          // User doesn't exist by auth_id - check if they exist by email
-          const { data: existingByEmail } = await supabase
+          // User doesn't exist by auth_id - use RPC to link/create
+          const { data: linkedUserId, error: linkError } = await supabase.rpc('link_user_auth_id', {
+            p_auth_id: user.id,
+            p_email: user.email
+          })
+
+          if (linkError) {
+            console.error('Failed to link user:', linkError)
+            // Fallback to email prefix
+            setUsername(user.user_metadata?.username || user.email?.split('@')[0] || 'User')
+            return
+          }
+
+          // Fetch the username after linking
+          const { data: linkedUser } = await supabase
             .from('users')
-            .select('id, username')
-            .eq('email', user.email)
-            .maybeSingle()
+            .select('username')
+            .eq('id', linkedUserId)
+            .single()
 
-          if (existingByEmail) {
-            // User exists by email - link auth_id to existing record
-            await supabase
-              .from('users')
-              .update({ auth_id: user.id })
-              .eq('id', existingByEmail.id)
-
-            setUsername(existingByEmail.username)
+          if (linkedUser) {
+            setUsername(linkedUser.username)
           } else {
-            // No user exists - create new record
-            const fallbackUsername = user.user_metadata?.username || user.email?.split('@')[0] || 'user'
-            const uniqueUsername = `${fallbackUsername}_${Math.random().toString(36).substring(2, 8)}`
-
-            const { data: newUser, error: createError } = await supabase
-              .from('users')
-              .insert({
-                auth_id: user.id,
-                email: user.email,
-                username: uniqueUsername,
-                citizen_score: 0
-              })
-              .select('username')
-              .single()
-
-            if (createError) {
-              console.error('Failed to create user profile:', createError)
-              setUsername(fallbackUsername)
-            } else if (newUser) {
-              setUsername(newUser.username)
-            }
+            setUsername(user.user_metadata?.username || user.email?.split('@')[0] || 'User')
           }
         }
       })

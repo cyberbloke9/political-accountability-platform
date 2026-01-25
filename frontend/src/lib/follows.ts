@@ -53,25 +53,21 @@ export async function followTarget(
       return { success: false, error: 'User profile lookup failed. Please try again.' }
     }
 
-    // If user doesn't exist in users table, create them
+    // If user doesn't exist by auth_id, use RPC to link/create
     if (!userData) {
-      console.log('User not found in users table, creating...')
-      const { data: newUser, error: createError } = await supabase
-        .from('users')
-        .insert({
-          auth_id: user.id,
-          email: user.email,
-          username: user.user_metadata?.username || user.email?.split('@')[0] || 'user'
-        })
-        .select('id')
-        .single()
+      console.log('User not found by auth_id, linking via RPC...')
 
-      if (createError) {
-        console.error('User creation error:', createError)
-        return { success: false, error: 'Failed to create user profile. Please contact support.' }
+      const { data: linkedUserId, error: linkError } = await supabase.rpc('link_user_auth_id', {
+        p_auth_id: user.id,
+        p_email: user.email
+      })
+
+      if (linkError) {
+        console.error('Link user error:', linkError)
+        return { success: false, error: 'Failed to link user profile. Please try again.' }
       }
 
-      userData = newUser
+      userData = { id: linkedUserId }
     }
 
     if (!userData) {
