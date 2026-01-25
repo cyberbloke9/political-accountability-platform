@@ -297,28 +297,28 @@ export default function DashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4 grid-cols-2 md:grid-cols-4">
-              <Link href="/promises/new">
-                <Button className="w-full" variant="outline">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Submit Promise
+              <Link href="/promises/new" className="block">
+                <Button className="w-full h-auto py-3 flex flex-col sm:flex-row items-center justify-center gap-2" variant="default">
+                  <Plus className="h-5 w-5" />
+                  <span className="text-sm">Submit Promise</span>
                 </Button>
               </Link>
-              <Link href="/promises">
-                <Button className="w-full" variant="outline">
-                  <ShieldCheck className="mr-2 h-4 w-4" />
-                  Browse Promises
+              <Link href="/promises" className="block">
+                <Button className="w-full h-auto py-3 flex flex-col sm:flex-row items-center justify-center gap-2" variant="outline">
+                  <ShieldCheck className="h-5 w-5" />
+                  <span className="text-sm">Browse Promises</span>
                 </Button>
               </Link>
-              <Link href="/politicians">
-                <Button className="w-full" variant="outline">
-                  <Users className="mr-2 h-4 w-4" />
-                  Browse Politicians
+              <Link href="/politicians" className="block">
+                <Button className="w-full h-auto py-3 flex flex-col sm:flex-row items-center justify-center gap-2" variant="outline">
+                  <Users className="h-5 w-5" />
+                  <span className="text-sm">Browse Politicians</span>
                 </Button>
               </Link>
-              <Link href="/leaderboard">
-                <Button className="w-full" variant="outline">
-                  <TrendingUp className="mr-2 h-4 w-4" />
-                  View Leaderboard
+              <Link href="/leaderboard" className="block">
+                <Button className="w-full h-auto py-3 flex flex-col sm:flex-row items-center justify-center gap-2" variant="outline">
+                  <TrendingUp className="h-5 w-5" />
+                  <span className="text-sm">View Leaderboard</span>
                 </Button>
               </Link>
             </CardContent>
