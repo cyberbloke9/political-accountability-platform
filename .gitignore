@@ -59,6 +59,7 @@ backend/prisma/migrations/*
 *.pem
 .puttamachine/
 .claude/
+md/
 
 # OS
 Thumbs.db
