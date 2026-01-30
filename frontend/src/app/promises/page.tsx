@@ -110,8 +110,8 @@ function PromisesContent() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1 container py-8">
-        <div className="space-y-6">
+      <main className="flex-1 container py-4 sm:py-8 px-4 sm:px-6">
+        <div className="space-y-4 sm:space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Political Promises</h1>
@@ -140,13 +140,15 @@ function PromisesContent() {
             </div>
           </div>
           <Tabs defaultValue="all" onValueChange={setStatusFilter}>
-            <TabsList className="w-full sm:w-auto grid grid-cols-3 sm:grid-cols-5 gap-1">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="pending">Pending</TabsTrigger>
-              <TabsTrigger value="in_progress" className="text-xs sm:text-sm">In Progress</TabsTrigger>
-              <TabsTrigger value="fulfilled">Fulfilled</TabsTrigger>
-              <TabsTrigger value="broken">Broken</TabsTrigger>
-            </TabsList>
+            <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+              <TabsList className="w-full sm:w-auto inline-flex min-w-max">
+                <TabsTrigger value="all" className="text-xs sm:text-sm">All</TabsTrigger>
+                <TabsTrigger value="pending" className="text-xs sm:text-sm">Pending</TabsTrigger>
+                <TabsTrigger value="in_progress" className="text-xs sm:text-sm">In Progress</TabsTrigger>
+                <TabsTrigger value="fulfilled" className="text-xs sm:text-sm">Fulfilled</TabsTrigger>
+                <TabsTrigger value="broken" className="text-xs sm:text-sm">Broken</TabsTrigger>
+              </TabsList>
+            </div>
           </Tabs>
           {loading ? (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{[...Array(6)].map((_, i) => (<div key={i} className="h-64 rounded-lg border bg-card animate-pulse" />))}</div>
@@ -166,12 +168,34 @@ function PromisesContent() {
                   )}
                 </p>
               </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{promises.map((promise) => (<PromiseCard key={promise.id} promise={promise} />))}</div>
+              <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">{promises.map((promise) => (<PromiseCard key={promise.id} promise={promise} />))}</div>
               {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-6">
-                  <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}><ChevronLeft className="h-4 w-4 mr-1" />Previous</Button>
-                  <div className="flex items-center gap-1">{[...Array(Math.min(5, totalPages))].map((_, i) => {const pageNum = i + 1; return (<Button key={pageNum} variant={currentPage === pageNum ? 'default' : 'outline'} size="sm" onClick={() => setCurrentPage(pageNum)} className="w-9">{pageNum}</Button>)})}{totalPages > 5 && <span className="text-muted-foreground px-2">...</span>}</div>
-                  <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>Next<ChevronRight className="h-4 w-4 ml-1" /></Button>
+                <div className="flex items-center justify-center gap-1 sm:gap-2 mt-6 flex-wrap">
+                  <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="px-2 sm:px-3">
+                    <ChevronLeft className="h-4 w-4" />
+                    <span className="hidden sm:inline ml-1">Previous</span>
+                  </Button>
+                  <div className="flex items-center gap-1">
+                    {[...Array(Math.min(5, totalPages))].map((_, i) => {
+                      const pageNum = i + 1
+                      return (
+                        <Button
+                          key={pageNum}
+                          variant={currentPage === pageNum ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setCurrentPage(pageNum)}
+                          className="w-8 sm:w-9 px-0"
+                        >
+                          {pageNum}
+                        </Button>
+                      )
+                    })}
+                    {totalPages > 5 && <span className="text-muted-foreground px-1 sm:px-2">...</span>}
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="px-2 sm:px-3">
+                    <span className="hidden sm:inline mr-1">Next</span>
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
                 </div>
               )}
             </>

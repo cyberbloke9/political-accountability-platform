@@ -48,24 +48,24 @@ export function PromiseCard({ promise }: PromiseCardProps) {
 
   return (
     <Card className="hover:shadow-md transition-shadow">
-      <CardHeader>
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 space-y-1">
-            <CardTitle className="text-lg line-clamp-2">
+      <CardHeader className="p-4 sm:p-6">
+        <div className="flex items-start justify-between gap-2 sm:gap-4">
+          <div className="flex-1 space-y-1 min-w-0">
+            <CardTitle className="text-base sm:text-lg line-clamp-2">
               {promise.politician_name}
             </CardTitle>
-            <CardDescription className="line-clamp-2">
+            <CardDescription className="line-clamp-2 text-sm">
               {promise.promise_text}
             </CardDescription>
           </div>
-          <Badge className={status.className}>
+          <Badge className={`${status.className} text-xs sm:text-sm shrink-0`}>
             {status.label}
           </Badge>
         </div>
       </CardHeader>
 
-      <CardContent>
-        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+      <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
+        <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4" />
             <span>
@@ -99,9 +99,9 @@ export function PromiseCard({ promise }: PromiseCardProps) {
         )}
       </CardContent>
 
-      <CardFooter>
+      <CardFooter className="p-4 sm:p-6 pt-0 sm:pt-0">
         <Link href={`/promises/${promise.id}`} className="w-full">
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full text-sm">
             <ExternalLink className="mr-2 h-4 w-4" />
             View Details
           </Button>

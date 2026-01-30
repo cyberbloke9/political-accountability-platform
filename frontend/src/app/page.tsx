@@ -53,28 +53,28 @@ export default function HomePage() {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="container py-24 md:py-32">
-          <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 text-center">
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+        <section className="container py-12 sm:py-16 md:py-24 lg:py-32 px-4 sm:px-6">
+          <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 sm:gap-8 text-center">
+            <div className="space-y-3 sm:space-y-4">
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
                 Political Accountability
-                <span className="block text-primary mt-2">Through Transparency</span>
+                <span className="block text-primary mt-1 sm:mt-2">Through Transparency</span>
               </h1>
-              <p className="mx-auto max-w-2xl text-lg text-muted-foreground sm:text-xl">
-                Track political promises with community verification and transparent accountability. 
+              <p className="mx-auto max-w-2xl text-base sm:text-lg text-muted-foreground md:text-xl px-4 sm:px-0">
+                Track political promises with community verification and transparent accountability.
                 Empower citizens to hold leaders responsible.
               </p>
             </div>
-            
-            <div className="flex flex-col gap-4 sm:flex-row">
+
+            <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row w-full sm:w-auto">
               {!loading && !isAuthenticated && (
-                <Link href="/auth/signup">
+                <Link href="/auth/signup" className="w-full sm:w-auto">
                   <Button size="lg" className="w-full sm:w-auto">
                     Get Started
                   </Button>
                 </Link>
               )}
-              <Link href="/promises">
+              <Link href="/promises" className="w-full sm:w-auto">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto">
                   Browse Promises
                 </Button>
@@ -84,19 +84,19 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section className="border-t bg-muted/50 py-24">
-          <div className="container">
+        <section className="border-t bg-muted/50 py-12 sm:py-16 md:py-24">
+          <div className="container px-4 sm:px-6">
             <div className="mx-auto max-w-5xl">
-              <div className="text-center space-y-4 mb-16">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              <div className="text-center space-y-3 sm:space-y-4 mb-8 sm:mb-12 md:mb-16">
+                <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
                   How It Works
                 </h2>
-                <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+                <p className="mx-auto max-w-2xl text-base sm:text-lg text-muted-foreground">
                   A community-driven platform for tracking and verifying political promises
                 </p>
               </div>
-              
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+
+              <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 md:grid-cols-3">
                 {features.map((feature) => {
                   const Icon = feature.icon
                   return (
@@ -119,19 +119,19 @@ export default function HomePage() {
         </section>
 
         {/* Values Section */}
-        <section className="py-24">
-          <div className="container">
+        <section className="py-12 sm:py-16 md:py-24">
+          <div className="container px-4 sm:px-6">
             <div className="mx-auto max-w-5xl">
-              <div className="text-center space-y-4 mb-16">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              <div className="text-center space-y-3 sm:space-y-4 mb-8 sm:mb-12 md:mb-16">
+                <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
                   Built on Core Values
                 </h2>
-                <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+                <p className="mx-auto max-w-2xl text-base sm:text-lg text-muted-foreground">
                   Transparency and accountability drive everything we do
                 </p>
               </div>
-              
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+
+              <div className="grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-2 md:grid-cols-3">
                 {values.map((value) => {
                   const Icon = value.icon
                   return (
@@ -151,17 +151,17 @@ export default function HomePage() {
 
         {/* CTA Section */}
         {!loading && !isAuthenticated && (
-          <section className="border-t bg-primary py-16">
-            <div className="container">
-              <div className="mx-auto max-w-3xl text-center space-y-6">
-                <h2 className="text-3xl font-bold tracking-tighter text-primary-foreground sm:text-4xl">
+          <section className="border-t bg-primary py-10 sm:py-12 md:py-16">
+            <div className="container px-4 sm:px-6">
+              <div className="mx-auto max-w-3xl text-center space-y-4 sm:space-y-6">
+                <h2 className="text-2xl font-bold tracking-tighter text-primary-foreground sm:text-3xl md:text-4xl">
                   Ready to Make a Difference?
                 </h2>
-                <p className="text-lg text-primary-foreground/90">
+                <p className="text-base sm:text-lg text-primary-foreground/90">
                   Join our community of engaged citizens working toward greater political accountability
                 </p>
                 <Link href="/auth/signup">
-                  <Button size="lg" variant="secondary" className="mt-4">
+                  <Button size="lg" variant="secondary" className="mt-2 sm:mt-4">
                     Create Your Account
                   </Button>
                 </Link>

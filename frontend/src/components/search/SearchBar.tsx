@@ -265,7 +265,7 @@ export function SearchBar({
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 max-h-[400px] overflow-y-auto"
+          className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 max-h-[60vh] sm:max-h-[400px] overflow-y-auto"
         >
           {/* No query - show popular searches */}
           {query.length === 0 && popularSearches.length > 0 && (

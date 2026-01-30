@@ -253,7 +253,7 @@ export default function PromiseDetailPage() {
 
               {/* Politician Name */}
               <div>
-                <CardTitle className="text-3xl md:text-4xl">
+                <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl">
                   {promise.politician_name}
                 </CardTitle>
                 <CardDescription className="text-base mt-2">

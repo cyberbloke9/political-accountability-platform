@@ -267,7 +267,7 @@ export default function DashboardPage() {
             </Button>
           </div>
 
-          <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
+          <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
             {statsCards.map((stat) => {
               const Icon = stat.icon
               return (
@@ -325,28 +325,29 @@ export default function DashboardPage() {
           </Card>
 
           <Tabs defaultValue="feed" className="space-y-4">
-            <TabsList className="w-full sm:w-auto grid grid-cols-4 sm:inline-grid">
-              <TabsTrigger value="feed" className="text-xs sm:text-sm">
-                <Activity className="mr-0 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">Your Feed</span>
-                <span className="sm:hidden">Feed</span>
-              </TabsTrigger>
-              <TabsTrigger value="politicians" className="text-xs sm:text-sm">
-                <Users className="mr-0 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">Politicians</span>
-                <span className="sm:hidden">People</span>
-              </TabsTrigger>
-              <TabsTrigger value="tracked" className="text-xs sm:text-sm">
-                <ShieldCheck className="mr-0 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">Tracked</span>
-                <span className="sm:hidden">Tracked</span>
-              </TabsTrigger>
-              <TabsTrigger value="notifications" className="text-xs sm:text-sm">
-                <Bell className="mr-0 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">Notifications</span>
-                <span className="sm:hidden">Alerts</span>
-              </TabsTrigger>
-            </TabsList>
+            <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+              <TabsList className="w-full sm:w-auto inline-flex">
+                <TabsTrigger value="feed" className="text-xs sm:text-sm flex-1 sm:flex-none">
+                  <Activity className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Your Feed</span>
+                  <span className="sm:hidden">Feed</span>
+                </TabsTrigger>
+                <TabsTrigger value="politicians" className="text-xs sm:text-sm flex-1 sm:flex-none">
+                  <Users className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Politicians</span>
+                  <span className="sm:hidden">People</span>
+                </TabsTrigger>
+                <TabsTrigger value="tracked" className="text-xs sm:text-sm flex-1 sm:flex-none">
+                  <ShieldCheck className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span>Tracked</span>
+                </TabsTrigger>
+                <TabsTrigger value="notifications" className="text-xs sm:text-sm flex-1 sm:flex-none">
+                  <Bell className="mr-1.5 sm:mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Alerts</span>
+                  <span className="sm:hidden">Alerts</span>
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
             {/* Personalized Feed */}
             <TabsContent value="feed" className="space-y-4">

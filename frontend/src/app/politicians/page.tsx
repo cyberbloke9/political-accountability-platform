@@ -97,50 +97,50 @@ export default function PoliticiansPage() {
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main className="flex-1 container py-8">
-        <div className="space-y-6">
+      <main className="flex-1 container py-4 sm:py-8 px-4 sm:px-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <Users className="h-10 w-10 text-primary" />
-              <h1 className="text-3xl md:text-4xl font-bold">Political Leaders</h1>
+            <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+              <Users className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Political Leaders</h1>
             </div>
-            <p className="text-muted-foreground">
+            <p className="text-sm sm:text-base text-muted-foreground px-4 sm:px-0">
               Browse all political leaders and view their promise fulfillment records.
               Click on any leader to see their detailed profile and all tracked promises.
             </p>
           </div>
 
           {/* Stats Overview */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <Card>
-              <CardContent className="pt-4 text-center">
-                <p className="text-3xl font-bold">{politicians.length}</p>
-                <p className="text-sm text-muted-foreground">Total Leaders</p>
+              <CardContent className="pt-3 sm:pt-4 text-center">
+                <p className="text-2xl sm:text-3xl font-bold">{politicians.length}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Total Leaders</p>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="pt-4 text-center">
-                <p className="text-3xl font-bold text-green-600">
+              <CardContent className="pt-3 sm:pt-4 text-center">
+                <p className="text-2xl sm:text-3xl font-bold text-green-600">
                   {politicians.reduce((acc, p) => acc + p.fulfilled_count, 0)}
                 </p>
-                <p className="text-sm text-muted-foreground">Promises Fulfilled</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Fulfilled</p>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="pt-4 text-center">
-                <p className="text-3xl font-bold text-blue-600">
+              <CardContent className="pt-3 sm:pt-4 text-center">
+                <p className="text-2xl sm:text-3xl font-bold text-blue-600">
                   {politicians.reduce((acc, p) => acc + p.in_progress_count, 0)}
                 </p>
-                <p className="text-sm text-muted-foreground">In Progress</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">In Progress</p>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="pt-4 text-center">
-                <p className="text-3xl font-bold text-red-600">
+              <CardContent className="pt-3 sm:pt-4 text-center">
+                <p className="text-2xl sm:text-3xl font-bold text-red-600">
                   {politicians.reduce((acc, p) => acc + p.broken_count, 0)}
                 </p>
-                <p className="text-sm text-muted-foreground">Promises Broken</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Broken</p>
               </CardContent>
             </Card>
           </div>
@@ -233,7 +233,7 @@ export default function PoliticiansPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {filteredPoliticians.map(politician => (
                   <Link
                     key={politician.politician_name}
@@ -241,17 +241,17 @@ export default function PoliticiansPage() {
                   >
                     <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
                       <CardContent className="pt-6">
-                        <div className="flex items-start gap-4">
+                        <div className="flex items-start gap-3 sm:gap-4">
                           {/* Avatar */}
                           {politician.image_url ? (
                             <img
                               src={politician.image_url}
                               alt={politician.politician_name}
-                              className="w-16 h-16 rounded-full object-cover"
+                              className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover flex-shrink-0"
                             />
                           ) : (
-                            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                              <User className="h-8 w-8 text-primary/40" />
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                              <User className="h-6 w-6 sm:h-8 sm:w-8 text-primary/40" />
                             </div>
                           )}
 
