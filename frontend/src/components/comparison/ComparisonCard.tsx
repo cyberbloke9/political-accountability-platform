@@ -34,6 +34,12 @@ const STATUS_ICONS = {
   stalled: { icon: AlertTriangle, color: 'text-yellow-500', bg: 'bg-yellow-500' },
 }
 
+// Safely parse numeric values to prevent NaN
+const safeNumber = (val: number | null | undefined): number => {
+  if (val === null || val === undefined || isNaN(Number(val))) return 0
+  return Number(val)
+}
+
 export function ComparisonCard({
   politician,
   onRemove,
@@ -42,7 +48,13 @@ export function ComparisonCard({
   className
 }: ComparisonCardProps) {
   const gradeConfig = getGradeConfig(politician.grade)
-  const fulfillmentRate = politician.fulfillment_rate || 0
+  const fulfillmentRate = safeNumber(politician.fulfillment_rate)
+  const totalPromises = safeNumber(politician.total_promises)
+  const fulfilledCount = safeNumber(politician.fulfilled_count)
+  const brokenCount = safeNumber(politician.broken_count)
+  const inProgressCount = safeNumber(politician.in_progress_count)
+  const pendingCount = safeNumber(politician.pending_count)
+  const stalledCount = safeNumber(politician.stalled_count)
 
   return (
     <Card className={cn(
@@ -119,7 +131,7 @@ export function ComparisonCard({
         {/* Promise Stats */}
         <div className="space-y-2">
           <div className="text-sm font-medium text-center mb-3">
-            {politician.total_promises} Promises Tracked
+            {totalPromises} Promises Tracked
           </div>
 
           {/* Status Breakdown */}
@@ -128,34 +140,34 @@ export function ComparisonCard({
               icon={STATUS_ICONS.fulfilled.icon}
               color={STATUS_ICONS.fulfilled.color}
               label="Fulfilled"
-              count={politician.fulfilled_count}
+              count={fulfilledCount}
             />
             <StatItem
               icon={STATUS_ICONS.broken.icon}
               color={STATUS_ICONS.broken.color}
               label="Broken"
-              count={politician.broken_count}
+              count={brokenCount}
             />
             <StatItem
               icon={STATUS_ICONS.in_progress.icon}
               color={STATUS_ICONS.in_progress.color}
               label="In Progress"
-              count={politician.in_progress_count}
+              count={inProgressCount}
             />
             <StatItem
               icon={STATUS_ICONS.pending.icon}
               color={STATUS_ICONS.pending.color}
               label="Pending"
-              count={politician.pending_count}
+              count={pendingCount}
             />
           </div>
-          {politician.stalled_count > 0 && (
+          {stalledCount > 0 && (
             <div className="flex justify-center pt-1">
               <StatItem
                 icon={STATUS_ICONS.stalled.icon}
                 color={STATUS_ICONS.stalled.color}
                 label="Stalled"
-                count={politician.stalled_count}
+                count={stalledCount}
               />
             </div>
           )}
@@ -204,15 +216,18 @@ export function ComparisonBar({ politicians, metric, className }: ComparisonBarP
   if (metric === 'rate') {
     return (
       <div className={cn('space-y-3', className)}>
-        {politicians.map((p) => (
-          <div key={p.slug} className="space-y-1">
-            <div className="flex justify-between text-sm">
-              <span className="font-medium truncate">{p.name}</span>
-              <span>{Math.round(p.fulfillment_rate || 0)}%</span>
+        {politicians.map((p) => {
+          const rate = safeNumber(p.fulfillment_rate)
+          return (
+            <div key={p.slug} className="space-y-1">
+              <div className="flex justify-between text-sm">
+                <span className="font-medium truncate">{p.name}</span>
+                <span>{Math.round(rate)}%</span>
+              </div>
+              <Progress value={rate} className="h-3" />
             </div>
-            <Progress value={p.fulfillment_rate || 0} className="h-3" />
-          </div>
-        ))}
+          )
+        })}
       </div>
     )
   }
@@ -221,20 +236,26 @@ export function ComparisonBar({ politicians, metric, className }: ComparisonBarP
   return (
     <div className={cn('space-y-3', className)}>
       {politicians.map((p) => {
-        const total = p.total_promises || 1
+        const total = safeNumber(p.total_promises) || 1
+        const fulfilled = safeNumber(p.fulfilled_count)
+        const inProgress = safeNumber(p.in_progress_count)
+        const pending = safeNumber(p.pending_count)
+        const stalled = safeNumber(p.stalled_count)
+        const broken = safeNumber(p.broken_count)
+
         const segments = [
-          { color: 'bg-green-500', width: (p.fulfilled_count / total) * 100, label: 'Fulfilled' },
-          { color: 'bg-blue-500', width: (p.in_progress_count / total) * 100, label: 'In Progress' },
-          { color: 'bg-gray-400', width: (p.pending_count / total) * 100, label: 'Pending' },
-          { color: 'bg-yellow-500', width: (p.stalled_count / total) * 100, label: 'Stalled' },
-          { color: 'bg-red-500', width: (p.broken_count / total) * 100, label: 'Broken' },
+          { color: 'bg-green-500', width: (fulfilled / total) * 100, label: 'Fulfilled' },
+          { color: 'bg-blue-500', width: (inProgress / total) * 100, label: 'In Progress' },
+          { color: 'bg-gray-400', width: (pending / total) * 100, label: 'Pending' },
+          { color: 'bg-yellow-500', width: (stalled / total) * 100, label: 'Stalled' },
+          { color: 'bg-red-500', width: (broken / total) * 100, label: 'Broken' },
         ]
 
         return (
           <div key={p.slug} className="space-y-1">
             <div className="flex justify-between text-sm">
               <span className="font-medium truncate">{p.name}</span>
-              <span className="text-muted-foreground">{p.total_promises} promises</span>
+              <span className="text-muted-foreground">{total} promises</span>
             </div>
             <div className="h-4 bg-muted rounded-full overflow-hidden flex">
               {segments.map((seg, i) => (

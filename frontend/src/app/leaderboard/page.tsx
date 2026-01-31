@@ -87,14 +87,14 @@ export default function LeaderboardPage() {
 
                         <Avatar className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0">
                           <AvatarFallback className="bg-primary text-primary-foreground">
-                            {entry.username[0].toUpperCase()}
+                            {(entry.username || 'U')[0].toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
                             <h3 className="font-semibold text-base sm:text-lg truncate">
-                              {entry.username}
+                              {entry.username || 'Unknown User'}
                             </h3>
                             {entry.title && (
                               <Badge variant="secondary" className="text-xs">{entry.title}</Badge>
@@ -102,18 +102,18 @@ export default function LeaderboardPage() {
                           </div>
                           <div className="flex flex-wrap gap-2 sm:gap-4 mt-1 text-xs sm:text-sm text-muted-foreground">
                             <span className="whitespace-nowrap">
-                              {entry.total_promises_created} promises
+                              {entry.total_promises_created || 0} promises
                             </span>
                             <span className="whitespace-nowrap">
-                              {entry.total_verifications_submitted} verifications
+                              {entry.total_verifications_submitted || 0} verifications
                             </span>
-                            <span className="whitespace-nowrap">{entry.total_votes_cast} votes</span>
+                            <span className="whitespace-nowrap">{entry.total_votes_cast || 0} votes</span>
                           </div>
                         </div>
 
                         <div className="text-right flex-shrink-0">
                           <div className="text-xl sm:text-2xl font-bold text-primary">
-                            {entry.total_score.toLocaleString()}
+                            {(entry.total_score || 0).toLocaleString()}
                           </div>
                           <div className="text-xs text-muted-foreground">
                             points

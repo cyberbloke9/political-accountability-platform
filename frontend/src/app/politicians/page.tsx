@@ -122,7 +122,7 @@ export default function PoliticiansPage() {
             <Card>
               <CardContent className="pt-3 sm:pt-4 text-center">
                 <p className="text-2xl sm:text-3xl font-bold text-green-600">
-                  {politicians.reduce((acc, p) => acc + p.fulfilled_count, 0)}
+                  {politicians.reduce((acc, p) => acc + (p.fulfilled_count || 0), 0)}
                 </p>
                 <p className="text-xs sm:text-sm text-muted-foreground">Fulfilled</p>
               </CardContent>
@@ -130,7 +130,7 @@ export default function PoliticiansPage() {
             <Card>
               <CardContent className="pt-3 sm:pt-4 text-center">
                 <p className="text-2xl sm:text-3xl font-bold text-blue-600">
-                  {politicians.reduce((acc, p) => acc + p.in_progress_count, 0)}
+                  {politicians.reduce((acc, p) => acc + (p.in_progress_count || 0), 0)}
                 </p>
                 <p className="text-xs sm:text-sm text-muted-foreground">In Progress</p>
               </CardContent>
@@ -138,7 +138,7 @@ export default function PoliticiansPage() {
             <Card>
               <CardContent className="pt-3 sm:pt-4 text-center">
                 <p className="text-2xl sm:text-3xl font-bold text-red-600">
-                  {politicians.reduce((acc, p) => acc + p.broken_count, 0)}
+                  {politicians.reduce((acc, p) => acc + (p.broken_count || 0), 0)}
                 </p>
                 <p className="text-xs sm:text-sm text-muted-foreground">Broken</p>
               </CardContent>
@@ -279,10 +279,10 @@ export default function PoliticiansPage() {
                         <div className="mt-4 space-y-3">
                           <div className="flex items-center justify-between text-sm">
                             <span className="text-muted-foreground">Total Promises</span>
-                            <span className="font-medium">{politician.total_promises}</span>
+                            <span className="font-medium">{politician.total_promises || 0}</span>
                           </div>
 
-                          {politician.fulfillment_rate !== null && (
+                          {politician.fulfillment_rate !== null && politician.fulfillment_rate !== undefined && !isNaN(politician.fulfillment_rate) && (
                             <div className="space-y-1">
                               <div className="flex items-center justify-between text-sm">
                                 <span className="text-muted-foreground">Fulfillment Rate</span>
@@ -295,15 +295,15 @@ export default function PoliticiansPage() {
                           <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
                             <div className="flex items-center gap-1">
                               <CheckCircle className="h-3 w-3 text-green-600" />
-                              {politician.fulfilled_count}
+                              {politician.fulfilled_count || 0}
                             </div>
                             <div className="flex items-center gap-1">
                               <Clock className="h-3 w-3 text-blue-600" />
-                              {politician.in_progress_count}
+                              {politician.in_progress_count || 0}
                             </div>
                             <div className="flex items-center gap-1">
                               <XCircle className="h-3 w-3 text-red-600" />
-                              {politician.broken_count}
+                              {politician.broken_count || 0}
                             </div>
                             <div className="flex items-center gap-1">
                               <TrendingUp className="h-3 w-3" />

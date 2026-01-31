@@ -39,9 +39,20 @@ export function ReportCard({ politician, stats, showActions = true }: ReportCard
   const reportRef = useRef<HTMLDivElement>(null)
   const { toast } = useToast()
 
-  const fulfillmentRate = stats.fulfillment_rate || 0
-  const totalResolved = stats.fulfilled_count + stats.broken_count
-  const totalPromises = stats.total_promises
+  // Safely parse numeric values to prevent NaN
+  const safeNumber = (val: number | null | undefined): number => {
+    if (val === null || val === undefined || isNaN(Number(val))) return 0
+    return Number(val)
+  }
+
+  const fulfillmentRate = safeNumber(stats.fulfillment_rate)
+  const fulfilledCount = safeNumber(stats.fulfilled_count)
+  const brokenCount = safeNumber(stats.broken_count)
+  const inProgressCount = safeNumber(stats.in_progress_count)
+  const stalledCount = safeNumber(stats.stalled_count)
+  const pendingCount = safeNumber(stats.pending_count)
+  const totalPromises = safeNumber(stats.total_promises)
+  const totalResolved = fulfilledCount + brokenCount
 
   // Calculate grade
   const getGrade = (rate: number): { grade: string; color: string; description: string } => {
@@ -183,19 +194,19 @@ export function ReportCard({ politician, stats, showActions = true }: ReportCard
 
           <div class="stats-grid">
             <div class="stat-box stat-fulfilled">
-              <div class="stat-value">${stats.fulfilled_count}</div>
+              <div class="stat-value">${fulfilledCount}</div>
               <div class="stat-label">Promises Fulfilled</div>
             </div>
             <div class="stat-box stat-broken">
-              <div class="stat-value">${stats.broken_count}</div>
+              <div class="stat-value">${brokenCount}</div>
               <div class="stat-label">Promises Broken</div>
             </div>
             <div class="stat-box stat-progress">
-              <div class="stat-value">${stats.in_progress_count}</div>
+              <div class="stat-value">${inProgressCount}</div>
               <div class="stat-label">In Progress</div>
             </div>
             <div class="stat-box stat-stalled">
-              <div class="stat-value">${stats.stalled_count + stats.pending_count}</div>
+              <div class="stat-value">${stalledCount + pendingCount}</div>
               <div class="stat-label">Pending/Stalled</div>
             </div>
           </div>
@@ -206,20 +217,20 @@ export function ReportCard({ politician, stats, showActions = true }: ReportCard
               <span style="color: #6b7280;">${totalResolved} of ${totalPromises} resolved</span>
             </div>
             <div class="progress-bar">
-              <div class="progress-fill progress-green" style="width: ${totalPromises > 0 ? (stats.fulfilled_count / totalPromises) * 100 : 0}%"></div>
+              <div class="progress-fill progress-green" style="width: ${totalPromises > 0 ? (fulfilledCount / totalPromises) * 100 : 0}%"></div>
             </div>
             <div style="display: flex; gap: 20px; font-size: 12px; color: #6b7280;">
               <span style="display: flex; align-items: center; gap: 4px;">
                 <span style="width: 12px; height: 12px; background: #16a34a; border-radius: 2px;"></span>
-                Fulfilled (${stats.fulfilled_count})
+                Fulfilled (${fulfilledCount})
               </span>
               <span style="display: flex; align-items: center; gap: 4px;">
                 <span style="width: 12px; height: 12px; background: #dc2626; border-radius: 2px;"></span>
-                Broken (${stats.broken_count})
+                Broken (${brokenCount})
               </span>
               <span style="display: flex; align-items: center; gap: 4px;">
                 <span style="width: 12px; height: 12px; background: #e5e7eb; border-radius: 2px;"></span>
-                Other (${totalPromises - stats.fulfilled_count - stats.broken_count})
+                Other (${totalPromises - fulfilledCount - brokenCount})
               </span>
             </div>
           </div>
@@ -311,22 +322,22 @@ export function ReportCard({ politician, stats, showActions = true }: ReportCard
           <div className="h-4 bg-muted rounded-full overflow-hidden flex">
             <div
               className="bg-green-500 transition-all"
-              style={{ width: `${totalPromises > 0 ? (stats.fulfilled_count / totalPromises) * 100 : 0}%` }}
+              style={{ width: `${totalPromises > 0 ? (fulfilledCount / totalPromises) * 100 : 0}%` }}
             />
             <div
               className="bg-red-500 transition-all"
-              style={{ width: `${totalPromises > 0 ? (stats.broken_count / totalPromises) * 100 : 0}%` }}
+              style={{ width: `${totalPromises > 0 ? (brokenCount / totalPromises) * 100 : 0}%` }}
             />
           </div>
           <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
-              <span className="w-3 h-3 bg-green-500 rounded" /> Fulfilled ({stats.fulfilled_count})
+              <span className="w-3 h-3 bg-green-500 rounded" /> Fulfilled ({fulfilledCount})
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-3 h-3 bg-red-500 rounded" /> Broken ({stats.broken_count})
+              <span className="w-3 h-3 bg-red-500 rounded" /> Broken ({brokenCount})
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-3 h-3 bg-muted rounded" /> Other ({totalPromises - stats.fulfilled_count - stats.broken_count})
+              <span className="w-3 h-3 bg-muted rounded" /> Other ({totalPromises - fulfilledCount - brokenCount})
             </span>
           </div>
         </div>
@@ -335,22 +346,22 @@ export function ReportCard({ politician, stats, showActions = true }: ReportCard
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
           <div className="text-center p-4 bg-green-50 rounded-lg">
             <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-green-600">{stats.fulfilled_count}</p>
+            <p className="text-2xl font-bold text-green-600">{fulfilledCount}</p>
             <p className="text-xs text-muted-foreground">Fulfilled</p>
           </div>
           <div className="text-center p-4 bg-red-50 rounded-lg">
             <XCircle className="h-6 w-6 text-red-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-red-600">{stats.broken_count}</p>
+            <p className="text-2xl font-bold text-red-600">{brokenCount}</p>
             <p className="text-xs text-muted-foreground">Broken</p>
           </div>
           <div className="text-center p-4 bg-blue-50 rounded-lg">
             <Clock className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-blue-600">{stats.in_progress_count}</p>
+            <p className="text-2xl font-bold text-blue-600">{inProgressCount}</p>
             <p className="text-xs text-muted-foreground">In Progress</p>
           </div>
           <div className="text-center p-4 bg-yellow-50 rounded-lg">
             <AlertCircle className="h-6 w-6 text-yellow-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-yellow-600">{stats.stalled_count + stats.pending_count}</p>
+            <p className="text-2xl font-bold text-yellow-600">{stalledCount + pendingCount}</p>
             <p className="text-xs text-muted-foreground">Pending/Stalled</p>
           </div>
         </div>
@@ -381,7 +392,15 @@ export function ReportCard({ politician, stats, showActions = true }: ReportCard
 
 // Compact version for listings
 export function ReportCardCompact({ stats }: { stats: PoliticianStats }) {
-  const fulfillmentRate = stats.fulfillment_rate || 0
+  // Safely parse numeric values to prevent NaN
+  const safeNumber = (val: number | null | undefined): number => {
+    if (val === null || val === undefined || isNaN(Number(val))) return 0
+    return Number(val)
+  }
+
+  const fulfillmentRate = safeNumber(stats.fulfillment_rate)
+  const fulfilledCount = safeNumber(stats.fulfilled_count)
+  const totalPromises = safeNumber(stats.total_promises)
 
   const getGradeColor = (rate: number) => {
     if (rate >= 80) return 'bg-green-500'
@@ -403,7 +422,7 @@ export function ReportCardCompact({ stats }: { stats: PoliticianStats }) {
         />
       </div>
       <span className="text-xs text-muted-foreground">
-        {stats.fulfilled_count}/{stats.total_promises}
+        {fulfilledCount}/{totalPromises}
       </span>
     </div>
   )
