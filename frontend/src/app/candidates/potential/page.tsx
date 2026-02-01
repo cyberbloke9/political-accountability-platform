@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
@@ -28,7 +28,7 @@ import {
 } from '@/lib/candidates'
 import { toast } from 'sonner'
 
-export default function PotentialCandidatesPage() {
+function PotentialCandidatesContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -289,5 +289,29 @@ export default function PotentialCandidatesPage() {
 
       <Footer />
     </div>
+  )
+}
+
+// Wrap in Suspense for useSearchParams
+export default function PotentialCandidatesPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <main className="flex-1 container py-8">
+          <div className="space-y-6">
+            <div className="h-10 w-64 bg-muted rounded animate-pulse" />
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-64 rounded-lg border bg-card animate-pulse" />
+              ))}
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    }>
+      <PotentialCandidatesContent />
+    </Suspense>
   )
 }
