@@ -647,12 +647,40 @@ export function getIndianStates(): string[] {
  */
 export function formatElectionType(type: ElectionType): string {
   const labels: Record<ElectionType, string> = {
+    // India-specific
     lok_sabha: 'Lok Sabha',
     rajya_sabha: 'Rajya Sabha',
     state_assembly: 'State Assembly',
     municipal: 'Municipal',
     panchayat: 'Panchayat',
-    by_election: 'By-Election'
+    by_election: 'By-Election',
+    // National level
+    presidential: 'Presidential',
+    parliamentary: 'Parliamentary',
+    senate: 'Senate',
+    house_of_representatives: 'House of Representatives',
+    // State level
+    gubernatorial: 'Gubernatorial',
+    state_senate: 'State Senate',
+    state_legislative: 'State Legislative',
+    // Regional/District level
+    regional_council: 'Regional Council',
+    district_council: 'District Council',
+    zilla_parishad: 'Zilla Parishad',
+    // Municipal level
+    mayoral: 'Mayoral',
+    municipal_corporation: 'Municipal Corporation',
+    municipal_council: 'Municipal Council',
+    town_council: 'Town Council',
+    // Local level
+    gram_sabha: 'Gram Sabha',
+    ward_council: 'Ward Council',
+    block_council: 'Block Council',
+    // Special
+    referendum: 'Referendum',
+    recall: 'Recall',
+    primary: 'Primary',
+    runoff: 'Runoff'
   }
   return labels[type] || type
 }

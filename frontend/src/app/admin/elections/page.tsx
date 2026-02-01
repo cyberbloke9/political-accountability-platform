@@ -67,7 +67,7 @@ import {
   getReliabilityBadge,
   DATA_SOURCE_INFO
 } from '@/lib/data-sources'
-import { createClient } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { format } from 'date-fns'
 
@@ -129,8 +129,6 @@ export default function AdminElectionsPage() {
 
   const handleAddElection = async () => {
     try {
-      const supabase = createClient()
-
       // Get India country ID
       const { data: countries } = await supabase
         .from('countries')

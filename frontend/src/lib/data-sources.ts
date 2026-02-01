@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/client'
+import { supabase } from './supabase'
 
 // Data source types
 export type DataSourceType =
@@ -50,7 +50,6 @@ export async function getDataSources(activeOnly: boolean = true): Promise<{
   data: ElectionDataSource[] | null
   error: string | undefined
 }> {
-  const supabase = createClient()
 
   const { data, error } = await supabase.rpc('get_election_data_sources', {
     p_active_only: activeOnly
@@ -67,7 +66,6 @@ export async function getDataSourceById(id: string): Promise<{
   data: ElectionDataSource | null
   error: string | undefined
 }> {
-  const supabase = createClient()
 
   const { data, error } = await supabase
     .from('election_data_sources')
@@ -89,7 +87,6 @@ export async function getImportHistory(
   data: ElectionDataImport[] | null
   error: string | undefined
 }> {
-  const supabase = createClient()
 
   let query = supabase
     .from('election_data_imports')
@@ -118,7 +115,6 @@ export async function startImport(
   importId: string | null
   error: string | undefined
 }> {
-  const supabase = createClient()
 
   const { data, error } = await supabase.rpc('start_data_import', {
     p_source_id: sourceId,
@@ -144,7 +140,6 @@ export async function updateImportProgress(
     status?: 'pending' | 'running' | 'completed' | 'failed'
   }
 ): Promise<{ error: string | undefined }> {
-  const supabase = createClient()
 
   const { error } = await supabase.rpc('update_import_progress', {
     p_import_id: importId,
