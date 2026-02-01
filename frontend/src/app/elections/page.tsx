@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ElectionCard } from '@/components/elections/ElectionCard'
+import { ElectionLevelTabs } from '@/components/elections/ElectionLevelTabs'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -27,11 +28,14 @@ import {
 import {
   Election,
   ElectionType,
+  ElectionLevel,
   ElectionStatus,
   getElections,
   getUpcomingElections,
+  getUpcomingElectionsByLevel,
   getIndianStates,
-  formatElectionType
+  formatElectionType,
+  getElectionLevels
 } from '@/lib/elections'
 import { toast } from 'sonner'
 
@@ -42,6 +46,7 @@ export default function ElectionsPage() {
   const [totalCount, setTotalCount] = useState(0)
 
   // Filters
+  const [levelFilter, setLevelFilter] = useState<ElectionLevel | 'all'>('all')
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [stateFilter, setStateFilter] = useState<string>('all')
@@ -88,7 +93,7 @@ export default function ElectionsPage() {
     }
 
     fetchData()
-  }, [typeFilter, statusFilter, stateFilter, page])
+  }, [levelFilter, typeFilter, statusFilter, stateFilter, page])
 
   const filteredElections = elections.filter(election =>
     election.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -113,6 +118,15 @@ export default function ElectionsPage() {
               Hold politicians accountable to their campaign promises.
             </p>
           </div>
+
+          {/* Election Level Tabs */}
+          <ElectionLevelTabs
+            selectedLevel={levelFilter}
+            onLevelChange={(level) => {
+              setLevelFilter(level)
+              setPage(0) // Reset pagination when level changes
+            }}
+          />
 
           {/* Stats Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

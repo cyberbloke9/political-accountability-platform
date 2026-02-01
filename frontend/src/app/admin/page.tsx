@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useAdmin } from '@/hooks/useAdmin'
 import { supabase } from '@/lib/supabase'
-import { Shield, FileText, Users, TrendingUp, CheckCircle, XCircle, Clock, AlertTriangle, Award, UserX } from 'lucide-react'
+import { Shield, FileText, Users, TrendingUp, CheckCircle, XCircle, Clock, AlertTriangle, Award, UserX, Vote } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { getFraudStats } from '@/lib/fraudDetection'
@@ -169,6 +169,13 @@ export default function AdminDashboard() {
       icon: UserX,
       href: '/admin/bans',
       permission: 'ban_user'
+    },
+    {
+      title: 'Elections Data',
+      description: 'Manage elections, data sources & imports',
+      icon: Vote,
+      href: '/admin/elections',
+      permission: 'manage_admins'
     },
     {
       title: 'Manage Users',

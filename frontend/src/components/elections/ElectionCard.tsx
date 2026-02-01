@@ -16,8 +16,11 @@ import {
   Election,
   formatElectionType,
   formatElectionStatus,
-  getElectionStatusColor
+  getElectionStatusColor,
+  formatElectionLevel,
+  getElectionLevelColor
 } from '@/lib/elections'
+import { ElectionLevelBadge } from './ElectionLevelTabs'
 
 interface ElectionCardProps {
   election: Election
@@ -50,7 +53,10 @@ export function ElectionCard({ election, showDetails = true }: ElectionCardProps
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1">
             <CardTitle className="text-lg line-clamp-2">{election.name}</CardTitle>
-            <CardDescription className="flex items-center gap-2">
+            <CardDescription className="flex items-center flex-wrap gap-2">
+              {election.election_level && (
+                <ElectionLevelBadge level={election.election_level} showIcon={false} />
+              )}
               <Badge variant="outline" className="font-normal">
                 {formatElectionType(election.election_type)}
               </Badge>

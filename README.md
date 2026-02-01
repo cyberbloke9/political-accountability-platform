@@ -1,12 +1,12 @@
 # Political Accountability Platform
 
-A citizen-driven platform to track political promises with community verification and transparent accountability across India.
+A citizen-driven platform to track political promises with community verification and transparent accountability — starting with India, expanding globally.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)](https://supabase.com/)
-[![Version](https://img.shields.io/badge/Version-2.4.0-blue)](https://github.com/cyberbloke9/political-accountability-platform)
+[![Version](https://img.shields.io/badge/Version-2.5.0-blue)](https://github.com/cyberbloke9/political-accountability-platform)
 
 ## Mission
 
@@ -19,12 +19,20 @@ Break the cycle of broken promises. Empower citizens to hold political leaders a
 ## Features
 
 ### Core Features
-- **Promise Tracking** - Submit, browse, and search political promises with filters
+- **Promise Tracking** - Submit, browse, and search political promises with advanced filters
 - **Community Verification** - Upload evidence and vote on verification accuracy
 - **Politician Profiles** - Detailed report cards with fulfillment grades (A-F)
 - **Real-time Status** - Track promises as pending, in-progress, fulfilled, or broken
 
-### v2.4.0 Features (Latest)
+### v2.5.0 Features (Latest)
+- **Global Elections System** - Multi-country election tracking with 50+ democracies
+- **Election Levels** - National, State, Municipal, and Local election categorization
+- **Potential Candidates** - Track who could run before nominations
+- **Election Calendar** - Timeline view of election milestones
+- **State/Province Support** - Regional filtering for all countries
+- **Data Source Tracking** - Auditable imports from official sources (ECI, DataMeet, etc.)
+
+### v2.4.0 Features
 - **Social Sharing** - Share promises and politicians on Twitter, Facebook, WhatsApp, LinkedIn
 - **Comparison Tool** - Compare up to 4 politicians side-by-side
 - **Follow System** - Follow politicians and promises for personalized updates
@@ -80,7 +88,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Database Setup
 
-Run the migrations in `database/migrations/` in order (001-031) in your Supabase SQL Editor.
+Run the migrations in `database/migrations/` in order (001-043) in your Supabase SQL Editor.
 
 ## Project Structure
 
@@ -88,42 +96,63 @@ Run the migrations in `database/migrations/` in order (001-031) in your Supabase
 political-accountability-platform/
 ├── frontend/                 # Next.js 14 application
 │   ├── src/
-│   │   ├── app/             # App router pages
-│   │   ├── components/      # React components
+│   │   ├── app/             # App router pages (58 pages)
+│   │   │   ├── admin/       # Admin dashboard (13 pages)
+│   │   │   ├── elections/   # Election pages (6 pages)
+│   │   │   ├── candidates/  # Candidate pages (3 pages)
+│   │   │   ├── promises/    # Promise pages
+│   │   │   ├── politicians/ # Politician pages
+│   │   │   └── ...
+│   │   ├── components/      # React components (60+)
 │   │   │   ├── ui/          # shadcn/ui components
+│   │   │   ├── admin/       # Admin components
+│   │   │   ├── elections/   # Election components
+│   │   │   ├── candidates/  # Candidate components
 │   │   │   ├── comparison/  # Comparison tool
 │   │   │   ├── notifications/ # Notification system
 │   │   │   ├── sharing/     # Social sharing
 │   │   │   ├── timeline/    # Timeline components
 │   │   │   └── ...
-│   │   ├── hooks/           # Custom React hooks
-│   │   └── lib/             # Utilities and configs
+│   │   ├── hooks/           # Custom React hooks (6)
+│   │   └── lib/             # Utilities and configs (27 files)
 │   └── public/              # Static assets
 ├── database/
-│   └── migrations/          # SQL migration files (001-031)
-└── .github/                 # GitHub workflows
+│   └── migrations/          # SQL migration files (001-043)
+├── scripts/                 # Utility scripts
+└── .planning/               # Development planning
 ```
 
 ## Technology Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | Next.js 14 (App Router), React 18, TypeScript |
-| Styling | Tailwind CSS, shadcn/ui |
+| Frontend | Next.js 14 (App Router), React 18, TypeScript 5 |
+| Styling | Tailwind CSS 3.4, shadcn/ui, Radix UI |
 | Backend | Supabase (PostgreSQL + Auth + Storage + Realtime) |
-| Deployment | Vercel (Frontend), Supabase (Backend) |
-| State | React Hooks, Context API |
+| Deployment | Vercel (Frontend), Supabase Cloud (Backend) |
+| State | React Hooks, Context API, TanStack Query |
+
+## Database Schema
+
+### Core Tables (43 migrations)
+- **User Management** - users, auth, trust_levels, reputation_history
+- **Promises** - promises, promise_tags, verifications, evidence_files
+- **Elections** - elections, election_calendar, constituencies, candidates
+- **Global Expansion** - countries (50+), states_provinces, potential_candidates
+- **Anti-Gaming** - vote_brigade_patterns, fraud_reports, user_flags
+- **Admin** - moderation_actions, activity_logs, admin_roles
 
 ## Version History
 
-| Version | Features |
-|---------|----------|
-| v2.4.0 | Social Sharing, Comparison Tool, Notifications, Timeline Filters |
-| v2.3.0 | Evidence Quality System, Community Notes |
-| v2.2.0 | Election Integration, Constituencies, Manifestos |
-| v2.1.0 | Discussion Threads, Comments, Voting |
-| v2.0.0 | Follow System, Personalized Dashboard |
-| v1.0.0 | Core Platform, Verification System |
+| Version | Date | Features |
+|---------|------|----------|
+| v2.5.0 | Feb 2026 | Global Elections, Multi-country, Election Levels, Candidates |
+| v2.4.0 | Jan 2026 | Social Sharing, Comparison Tool, Notifications, Timeline |
+| v2.3.0 | Jan 2026 | Evidence Quality System, Community Notes |
+| v2.2.0 | Jan 2026 | Election Integration, Constituencies, Manifestos |
+| v2.1.0 | Jan 2026 | Discussion Threads, Comments, Voting |
+| v2.0.0 | Dec 2025 | Follow System, Personalized Dashboard |
+| v1.0.0 | Nov 2025 | Core Platform, Verification System |
 
 ## Contributing
 
@@ -143,6 +172,7 @@ Ways to contribute:
 - **Open Source** - Transparent, auditable code
 - **Encrypted** - HTTPS/SSL for all data
 - **Secure Auth** - Supabase authentication
+- **RLS Policies** - Row-level security on all tables
 
 See our [Privacy Policy](https://www.political-accountability.in/privacy) for details.
 
@@ -158,6 +188,6 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-**Made for the citizens of India**
+**Made for citizens of democracies worldwide**
 
 *Empowering democratic accountability through technology*
