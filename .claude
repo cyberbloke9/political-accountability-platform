@@ -1,0 +1,67 @@
+# Claude Project Configuration
+
+## Quick Start
+
+Read `.claude-context/SESSION.md` first for current state.
+
+## Project: Political Accountability Platform
+
+**Version:** 2.5.0
+**Live:** https://www.political-accountability.in
+**Repo:** https://github.com/cyberbloke9/political-accountability-platform
+
+## Key Files
+
+- `.claude-context/SESSION.md` - Current session state (READ FIRST)
+- `.claude-context/ARCHITECTURE.md` - Codebase structure
+- `.claude-context/DECISIONS.md` - Key decisions log
+- `NEXT_PHASES.md` - Development roadmap
+- `TECH_STACK.md` - Technology details
+
+## Common Tasks
+
+### Resume Work
+1. Read `.claude-context/SESSION.md`
+2. Check `git status`
+3. Check GitHub Actions for CI status
+
+### Fix CI Failures
+1. Run `cd frontend && npm run type-check`
+2. Run `npm test -- --passWithNoTests`
+3. Check for useSearchParams without Suspense
+4. Verify all ElectionType values in Records
+
+### Add New Election Page
+1. Create page in `frontend/src/app/elections/`
+2. Use ElectionLevelTabs component
+3. Import from `@/lib/elections`
+4. Follow Suspense pattern if using useSearchParams
+
+## Patterns
+
+### Supabase Import
+```typescript
+// In lib files:
+import { supabase } from './supabase'
+
+// In app files:
+import { supabase } from '@/lib/supabase'
+```
+
+### Search Params
+```typescript
+// Always wrap in Suspense
+export default function Page() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Content />
+    </Suspense>
+  )
+}
+```
+
+## Anti-Patterns (Avoid)
+
+- `import { createClient } from '@/lib/supabase/client'` (wrong path)
+- `useSearchParams()` without Suspense wrapper
+- Incomplete `Record<ElectionType, string>` (must have all 27 types)
